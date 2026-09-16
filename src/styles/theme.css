@@ -1,0 +1,425 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 16px;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  
+  /* SkyLang Palette: Sky Blue & Amber Honey */
+  --primary: #0284c7;
+  --primary-foreground: #ffffff;
+  --secondary: #fef3c7;
+  --secondary-foreground: #92400e;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #e0f2fe;
+  --accent-foreground: #0369a1;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  
+  --amber-primary: #f59e0b;
+  --amber-shadow: #b45309;
+  --sky-primary: #0ea5e9;
+  --sky-shadow: #0369a1;
+  --emerald-primary: #10b981;
+  --emerald-shadow: #047857;
+  --rose-primary: #f43f5e;
+  --rose-shadow: #be123c;
+  --purple-primary: #8b5cf6;
+  --purple-shadow: #6d28d9;
+
+  --border: #e2e8f0;
+  --input: transparent;
+  --input-background: #f8fafc;
+  --switch-background: #cbd5e1;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #38bdf8;
+  --radius: 1rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #0284c7;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f0f9ff;
+  --sidebar-accent-foreground: #0369a1;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #38bdf8;
+}
+
+.dark {
+  --background: #0b1120;
+  --foreground: #f8fafc;
+  --card: #131d31;
+  --card-foreground: #f8fafc;
+  --popover: #131d31;
+  --popover-foreground: #f8fafc;
+  --primary: #38bdf8;
+  --primary-foreground: #082f49;
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #1e293b;
+  --accent-foreground: #38bdf8;
+  --destructive: #f43f5e;
+  --destructive-foreground: #ffffff;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #38bdf8;
+  --sidebar: #0f172a;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #38bdf8;
+  --sidebar-primary-foreground: #082f49;
+  --sidebar-accent: #1e293b;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: #1e293b;
+  --sidebar-ring: #38bdf8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 3px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 12px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Outfit', 'Nunito', sans-serif;
+  }
+
+  html {
+    font-size: var(--font-size);
+  }
+}
+
+/* ==========================================================================
+   DUOLINGO-INSPIRED CHUNKY 3D UI & BUTTONS
+   ========================================================================== */
+
+/* Base 3D Button Style */
+.btn-duo-3d {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 1rem;
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  cursor: pointer;
+  border-width: 0 0 4px 0;
+  border-style: solid;
+}
+
+.btn-duo-3d:active:not(:disabled) {
+  transform: translateY(3px);
+  border-bottom-width: 1px !important;
+  margin-bottom: 3px;
+}
+
+.btn-duo-3d:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-bottom-width: 4px;
+}
+
+/* Amber / Honey 3D Button (Primary Action) */
+.btn-duo-amber {
+  background-color: #f59e0b;
+  border-color: #b45309;
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+.btn-duo-amber:hover:not(:disabled) {
+  background-color: #fbbf24;
+}
+
+/* Sky Blue 3D Button (Secondary Primary Action) */
+.btn-duo-sky {
+  background-color: #0ea5e9;
+  border-color: #0369a1;
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+.btn-duo-sky:hover:not(:disabled) {
+  background-color: #38bdf8;
+}
+
+/* Emerald Green 3D Button (Success / Check / Continue) */
+.btn-duo-emerald {
+  background-color: #10b981;
+  border-color: #047857;
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+.btn-duo-emerald:hover:not(:disabled) {
+  background-color: #34d399;
+}
+
+/* Coral / Rose 3D Button (Streak / Attention) */
+.btn-duo-rose {
+  background-color: #f43f5e;
+  border-color: #be123c;
+  color: #ffffff;
+}
+.btn-duo-rose:hover:not(:disabled) {
+  background-color: #fb7185;
+}
+
+/* White / Outline 3D Button */
+.btn-duo-white {
+  background-color: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-bottom: 4px solid #cbd5e1;
+  color: #475569;
+}
+.btn-duo-white:hover:not(:disabled) {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+.btn-duo-white:active:not(:disabled) {
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+/* Selection Tile for Exercises */
+.tile-choice {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background-color: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-bottom: 4px solid #cbd5e1;
+  border-radius: 1.25rem;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  user-select: none;
+}
+.tile-choice:hover {
+  background-color: #f0f9ff;
+  border-color: #bae6fd;
+  border-bottom-color: #7dd3fc;
+  transform: translateY(-2px);
+}
+.tile-choice:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+.tile-choice.selected {
+  background-color: #e0f2fe;
+  border-color: #0284c7;
+  border-bottom: 4px solid #0369a1;
+  color: #0369a1;
+}
+
+/* Speech Bubble for Mascot */
+.mascot-bubble {
+  position: relative;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 0.875rem 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.mascot-bubble::after {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 6px 10px 6px 0;
+  border-style: solid;
+  border-color: transparent #ffffff transparent transparent;
+  display: block;
+  width: 0;
+}
+.mascot-bubble::before {
+  content: '';
+  position: absolute;
+  left: -13px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 8px 12px 8px 0;
+  border-style: solid;
+  border-color: transparent #e2e8f0 transparent transparent;
+  display: block;
+  width: 0;
+}
+
+/* Animations */
+@keyframes bee-hover {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+@keyframes bee-bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06) translateY(-4px);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(245, 158, 11, 0);
+  }
+}
+
+.animate-bee-float {
+  animation: bee-hover 3s ease-in-out infinite;
+}
+
+.animate-bee-bounce {
+  animation: bee-bounce 1.5s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* SkyLang game surfaces: keep interactive activities aligned with the core app. */
+.skylang-game {
+  border-color: #e2e8f0 !important;
+  border-radius: 1rem !important;
+}
+
+.skylang-game .bg-gradient-to-br.from-purple-500.to-indigo-600,
+.skylang-game .bg-gradient-to-r.from-purple-600.via-indigo-600.to-purple-700,
+.skylang-game .bg-gradient-to-br.from-rose-500.to-red-600 {
+  background: #4DA6FF !important;
+}
+
+.skylang-game .bg-gradient-to-r.from-purple-50.to-indigo-50,
+.skylang-game .bg-gradient-to-r.from-slate-50.to-purple-50\/40,
+.skylang-game .bg-purple-50,
+.skylang-game .bg-purple-50\/50,
+.skylang-game .bg-purple-50\/60,
+.skylang-game .bg-purple-50\/80,
+.skylang-game .bg-purple-100,
+.skylang-game .bg-purple-100\/80,
+.skylang-game .bg-indigo-50 {
+  background: rgba(77, 166, 255, 0.08) !important;
+}
+
+.skylang-game .bg-gradient-to-br.from-slate-900.to-purple-950 {
+  background: #111827 !important;
+}
+
+.skylang-game .bg-purple-600,
+.skylang-game .bg-purple-500,
+.skylang-game .hover\:bg-purple-700:hover {
+  background: #4DA6FF !important;
+}
+
+.skylang-game .bg-purple-900\/60 {
+  background: rgba(77, 166, 255, 0.15) !important;
+}
+
+.skylang-game .border-purple-100,
+.skylang-game .border-purple-200,
+.skylang-game .border-purple-300,
+.skylang-game .border-purple-400,
+.skylang-game .border-purple-600,
+.skylang-game .border-purple-700\/50,
+.skylang-game .border-purple-800,
+.skylang-game .border-indigo-100 {
+  border-color: rgba(77, 166, 255, 0.28) !important;
+}
+
+.skylang-game .text-purple-300,
+.skylang-game .text-purple-400,
+.skylang-game .text-purple-600,
+.skylang-game .text-purple-700,
+.skylang-game .text-purple-800,
+.skylang-game .text-purple-900,
+.skylang-game .text-purple-950,
+.skylang-game .text-indigo-700,
+.skylang-game .text-indigo-950 {
+  color: #2d7fd6 !important;
+}
+
+.skylang-game .focus\:ring-purple-400:focus {
+  --tw-ring-color: rgba(77, 166, 255, 0.45) !important;
+}
+
+.skylang-game .hover\:border-purple-200:hover,
+.skylang-game .hover\:border-purple-300:hover,
+.skylang-game .hover\:border-purple-400:hover {
+  border-color: #4DA6FF !important;
+}
+
+.skylang-game .hover\:bg-purple-50:hover,
+.skylang-game .hover\:bg-purple-50\/50:hover,
+.skylang-game .hover\:bg-purple-100:hover,
+.skylang-game .hover\:bg-purple-100\/50:hover {
+  background: rgba(77, 166, 255, 0.12) !important;
+}

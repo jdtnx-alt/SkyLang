@@ -1,0 +1,20 @@
+
+  <!DOCTYPE html>
+  <html lang="es" translate="no">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>SkyLang</title>
+      <!-- El traductor automático del navegador reescribe los nodos de texto y
+           rompe el DOM que React controla (NotFoundError: insertBefore). La
+           interfaz ya está en español donde importa; se desactiva la traducción. -->
+      <meta name="google" content="notranslate" />
+      <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
+    </head>
+
+    <body>
+      <div id="root"></div>
+      <script type="module" src="/src/main.tsx"></script>
+    </body>
+  </html>
+  
