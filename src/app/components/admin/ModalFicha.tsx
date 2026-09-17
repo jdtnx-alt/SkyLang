@@ -32,7 +32,7 @@ export const ModalFicha: React.FC<Props> = ({ programaId, ficha, onCerrar, onGua
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/instructores')
+    fetch('/api/instructores/solo')
       .then((r) => (r.ok ? r.json() : []))
       .then((d) => setInstructores(Array.isArray(d) ? d : []))
       .catch(() => setInstructores([]));

@@ -79,7 +79,7 @@ router.get('/api/fichas', async (req, res) => {
   }
 });
 
-// Obtener instructores
+// Get instructors (includes admin roles — used for internal assignments)
 router.get('/api/instructores', async (req, res) => {
   try {
     const result = await pool.query(
@@ -91,6 +91,20 @@ router.get('/api/instructores', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener instructores' });
   }
 });
+
+// Get only instructor-role users (used for ficha assignment — excludes admins)
+router.get('/api/instructores/solo', async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT id, nombre as name, correo as email FROM usuarios WHERE rol::text = 'instructor' AND activo = true ORDER BY nombre ASC`
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error al obtener instructores:', error);
+    res.status(500).json({ error: 'Error al obtener instructores' });
+  }
+});
+
 
 
 // Registro de Usuario

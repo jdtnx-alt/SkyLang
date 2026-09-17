@@ -44,11 +44,11 @@ export function LoginPage() {
         }
       } else {
         soundEffects.playIncorrect();
-        setError(data.message || "Credenciales inválidas");
+        setError(data.message || "Invalid credentials");
       }
     } catch (err) {
       soundEffects.playIncorrect();
-      setError("Error de conexión con el servidor");
+      setError("Connection error. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +73,7 @@ export function LoginPage() {
             size="md"
             mood="happy"
             animate
-            message="Bienvenido a SkyLang. Continúa tu formación en inglés clínico."
+            message="Welcome to SkyLang. Continue your clinical English training."
             messagePosition="top"
           />
 
@@ -97,7 +97,7 @@ export function LoginPage() {
         <form onSubmit={handleLogin} className="space-y-3.5">
           <div className="space-y-1">
             <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
-              Correo Electrónico
+              Email Address
             </label>
             <div className="relative">
               <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -114,7 +114,7 @@ export function LoginPage() {
 
           <div className="space-y-1">
             <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
-              Contraseña
+              Password
             </label>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -135,20 +135,20 @@ export function LoginPage() {
             className="btn-duo-3d btn-duo-amber w-full py-3 text-xs sm:text-sm flex items-center justify-center gap-2 mt-1"
           >
             <LogIn size={16} />
-            <span>{isLoading ? "Iniciando sesión..." : "Ingresar a Estudiar"}</span>
+            <span>{isLoading ? "Signing in..." : "Sign In"}</span>
           </button>
         </form>
 
-        {/* Enlace de Registro */}
+        {/* Registration Link */}
         <div className="text-center pt-2 border-t-2 border-slate-100">
           <p className="text-xs font-bold text-slate-500">
-            ¿No tienes una cuenta aún?{" "}
+            Don't have an account yet?{" "}
             <Link
               to="/register"
               onClick={() => soundEffects.playPop()}
               className="text-sky-600 font-black hover:underline"
             >
-              Crear cuenta aquí
+              Create one here
             </Link>
           </p>
         </div>
