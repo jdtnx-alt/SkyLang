@@ -102,11 +102,11 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({
             <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
               Spelling Game
               <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700 font-extrabold">
-                {filledCount}/{termsList.length} terminos
+                {filledCount}/{termsList.length} terms
               </span>
             </h3>
             <p className="text-xs text-slate-500 font-medium">
-              {data?.description || data?.instrucciones || data?.instructions || 'Escucha, revisa la pista cuando la necesites y escribe el termino medico en ingles.'}
+              {data?.description || data?.instrucciones || data?.instructions || 'Listen, check the hint if needed, and write the medical term in English.'}
             </p>
           </div>
         </div>
@@ -116,7 +116,7 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({
           onClick={handleReset}
           className="flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-purple-700 bg-slate-100 hover:bg-purple-50 px-3 py-1.5 rounded-xl transition-all font-bold border border-slate-200"
         >
-          <RotateCcw size={14} /> Reiniciar
+          <RotateCcw size={14} /> Reset
         </button>
       </div>
 
@@ -138,7 +138,7 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({
                       : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-purple-300'
                 }`}
               >
-                <span>Termino {idx + 1}</span>
+                <span>Term {idx + 1}</span>
                 {isFilled && <CheckCircle2 size={15} />}
               </button>
             );
@@ -149,10 +149,10 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <span className="text-[11px] font-extrabold text-purple-700 uppercase tracking-wider block">
-                Reto #{activeIndex + 1}
+                Challenge #{activeIndex + 1}
               </span>
               <p className="text-xs text-slate-600 font-semibold">
-                {revealedHints[activeIndex] && activeTerm?.hint ? activeTerm.hint : 'Usa el audio y escribe la palabra que escuchas.'}
+                {revealedHints[activeIndex] && activeTerm?.hint ? activeTerm.hint : 'Use the audio and type the word you hear.'}
               </p>
             </div>
             <div className="flex gap-2">
@@ -161,14 +161,14 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({
                 onClick={() => handleSpeakWord(activeTerm.term)}
                 className="text-xs text-purple-700 hover:text-purple-900 font-bold flex items-center gap-1 bg-purple-50 px-3 py-2 rounded-xl cursor-pointer"
               >
-                <Volume2 size={14} /> Escuchar
+                <Volume2 size={14} /> Listen
               </button>
               <button
                 type="button"
                 onClick={() => setRevealedHints((prev) => ({ ...prev, [activeIndex]: !prev[activeIndex] }))}
                 className="text-xs text-slate-700 hover:text-purple-900 font-bold flex items-center gap-1 bg-white border border-slate-200 px-3 py-2 rounded-xl cursor-pointer"
               >
-                {revealedHints[activeIndex] ? <EyeOff size={14} /> : <Eye size={14} />} Pista
+                {revealedHints[activeIndex] ? <EyeOff size={14} /> : <Eye size={14} />} Hint
               </button>
             </div>
           </div>
@@ -177,7 +177,7 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({
             type="text"
             value={inputs[activeIndex] || ''}
             onChange={(event) => setInputs({ ...inputs, [activeIndex]: event.target.value })}
-            placeholder="Escribe la palabra en ingles..."
+            placeholder="Type the word in English..."
             disabled={submitted}
             className="w-full px-4 py-4 bg-white border border-slate-300 rounded-2xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-purple-400 disabled:bg-slate-100"
           />
@@ -189,7 +189,7 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({
               disabled={activeIndex === 0}
               className="sm:w-32 py-3 rounded-2xl border border-slate-200 bg-white text-xs font-bold text-slate-700 disabled:opacity-40"
             >
-              Anterior
+              Previous
             </button>
             <button
               type="button"
@@ -197,7 +197,7 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({
               disabled={activeIndex === termsList.length - 1}
               className="sm:w-32 py-3 rounded-2xl border border-slate-200 bg-white text-xs font-bold text-slate-700 disabled:opacity-40"
             >
-              Siguiente
+              Next
             </button>
           </div>
         </div>
@@ -214,7 +214,7 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({
         }`}
       >
         <Send size={15} />
-        {submitted ? 'Respuestas enviadas' : 'Enviar ortografia'}
+        {submitted ? 'Answers submitted' : 'Submit spelling'}
       </button>
     </div>
   );

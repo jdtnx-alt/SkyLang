@@ -136,7 +136,7 @@ export const EmergencySimulator: React.FC<EmergencySimulatorProps> = ({
               </span>
             </h3>
             <p className="text-xs text-slate-500 font-medium">
-              Toma decisiones secuenciales y observa como cambia el estado del paciente.
+              Make sequential decisions and observe how the patient's condition changes.
             </p>
           </div>
         </div>
@@ -146,22 +146,22 @@ export const EmergencySimulator: React.FC<EmergencySimulatorProps> = ({
           onClick={handleReset}
           className="flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-rose-700 bg-slate-100 hover:bg-rose-50 px-3 py-1.5 rounded-xl transition-all font-bold border border-slate-200"
         >
-          <RotateCcw size={14} /> Reiniciar
+          <RotateCcw size={14} /> Reset
         </button>
       </div>
 
       <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <span className="text-xs font-black text-rose-900 uppercase tracking-wider flex items-center gap-1.5">
-            <Activity size={16} className="text-rose-600" /> Paciente: {patient.name} ({patient.age} anos)
+            <Activity size={16} className="text-rose-600" /> Patient: {patient.name} ({patient.age} years old)
           </span>
-          <span className="text-[10px] font-extrabold bg-rose-200 text-rose-800 px-2.5 py-0.5 rounded-full">ALERTA ALTA</span>
+          <span className="text-[10px] font-extrabold bg-rose-200 text-rose-800 px-2.5 py-0.5 rounded-full">HIGH ALERT</span>
         </div>
         <p className="text-xs text-rose-950 font-medium">{patient.context}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="bg-white rounded-xl border border-rose-100 p-3">
             <span className="text-[11px] font-extrabold uppercase text-slate-500 flex items-center gap-1.5">
-              <HeartPulse size={14} /> Estabilidad
+              <HeartPulse size={14} /> Stability
             </span>
             <div className="mt-2 h-2 rounded-full bg-slate-200 overflow-hidden">
               <div className="h-full bg-emerald-500 transition-all" style={{ width: `${stability}%` }} />
@@ -169,7 +169,7 @@ export const EmergencySimulator: React.FC<EmergencySimulatorProps> = ({
           </div>
           <div className="bg-white rounded-xl border border-rose-100 p-3">
             <span className="text-[11px] font-extrabold uppercase text-slate-500 flex items-center gap-1.5">
-              <Siren size={14} /> Urgencia
+              <Siren size={14} /> Urgency
             </span>
             <div className="mt-2 h-2 rounded-full bg-slate-200 overflow-hidden">
               <div className="h-full bg-rose-500 transition-all" style={{ width: `${urgency}%` }} />
@@ -179,7 +179,7 @@ export const EmergencySimulator: React.FC<EmergencySimulatorProps> = ({
       </div>
 
       <div className="space-y-3">
-        <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Acciones disponibles</h4>
+        <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Available Actions</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {actions.map((act, index) => {
             const isTaken = selectedActions.includes(String(act.id));
@@ -211,7 +211,7 @@ export const EmergencySimulator: React.FC<EmergencySimulatorProps> = ({
       {consequencesLog.length > 0 && (
         <div className="space-y-3 pt-2">
           <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-            <ClipboardList size={14} /> Historial clinico
+            <ClipboardList size={14} /> Clinical History
           </h4>
           <div className="space-y-2">
             {consequencesLog.map((log, idx) => (
@@ -221,8 +221,8 @@ export const EmergencySimulator: React.FC<EmergencySimulatorProps> = ({
                 animate={{ opacity: 1, x: 0 }}
                 className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-0.5"
               >
-                <span className="font-extrabold text-slate-900 block">Accion {idx + 1}: {log.label}</span>
-                <span className="text-slate-600 font-medium block">Consecuencia: {log.consequence}</span>
+                <span className="font-extrabold text-slate-900 block">Action {idx + 1}: {log.label}</span>
+                <span className="text-slate-600 font-medium block">Consequence: {log.consequence}</span>
               </motion.div>
             ))}
           </div>
@@ -231,7 +231,7 @@ export const EmergencySimulator: React.FC<EmergencySimulatorProps> = ({
 
       {isFinished && (
         <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 text-emerald-900 text-xs font-bold flex items-center gap-2">
-          <CheckCircle2 size={18} /> Simulacion completada y registrada.
+          <CheckCircle2 size={18} /> Simulation completed and recorded.
         </div>
       )}
     </div>

@@ -12,6 +12,7 @@ import {
   Sparkles,
   ChevronRight
 } from "lucide-react";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface Actividad {
   id: number;
@@ -59,6 +60,7 @@ interface Student {
 }
 
 export function InstructorFichaDetail() {
+  const { tr } = useLanguage();
   const { fichaId } = useParams();
   const navigate = useNavigate();
 
@@ -150,7 +152,7 @@ export function InstructorFichaDetail() {
         fetchEstructura();
       } else {
         const errData = await res.json();
-        alert(errData.error || "Error creating activity.");
+        alert(errData.error || tr("Error al crear la actividad.", "Error creating activity."));
       }
     } catch (err) {
       console.error("Error saving activity:", err);
@@ -175,7 +177,7 @@ export function InstructorFichaDetail() {
         setActivityToDelete(null);
         fetchEstructura();
       } else {
-        alert("Error deleting activity.");
+        alert(tr("Error al eliminar la actividad.", "Error deleting activity."));
       }
     } catch (err) {
       console.error("Error deleting activity:", err);
@@ -211,7 +213,7 @@ export function InstructorFichaDetail() {
           onClick={() => navigate("/instructor/programs")}
           className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#4DA6FF] mb-6 transition-colors font-medium"
         >
-          <ArrowLeft size={16} /> Back to Programs & Fichas
+          <ArrowLeft size={16} /> {tr("Volver a Programas y Fichas", "Back to Programs & Fichas")}
         </button>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
@@ -226,22 +228,22 @@ export function InstructorFichaDetail() {
                     Ficha #{fichaInfo?.numero_ficha || fichaId}
                   </h1>
                   <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
-                    Active
+                    {tr("Activa", "Active")}
                   </span>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Program: <strong>{fichaInfo?.programa_nombre || "Nursing English"}</strong>
+                  {tr("Programa:", "Program:")} <strong>{fichaInfo?.programa_nombre || "Nursing English"}</strong>
                 </p>
               </div>
             </div>
 
             <div className="flex gap-3">
               <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-2 text-center">
-                <span className="block text-xs text-gray-500 font-medium">Students</span>
+                <span className="block text-xs text-gray-500 font-medium">{tr("Aprendices", "Students")}</span>
                 <span className="text-lg font-bold text-[#4DA6FF]">{students.length}</span>
               </div>
               <div className="bg-purple-50 border border-purple-100 rounded-xl px-4 py-2 text-center">
-                <span className="block text-xs text-gray-500 font-medium">Modules</span>
+                <span className="block text-xs text-gray-500 font-medium">{tr("Módulos", "Modules")}</span>
                 <span className="text-lg font-bold text-purple-600">{modulos.length}</span>
               </div>
             </div>
@@ -257,7 +259,7 @@ export function InstructorFichaDetail() {
                   : "border-transparent text-gray-500 hover:text-gray-700"
               }`}
             >
-              <BookOpen size={18} /> Curriculum & Ficha Activities
+              <BookOpen size={18} /> {tr("Currículo y Actividades de la Ficha", "Curriculum & Ficha Activities")}
             </button>
             <button
               onClick={() => setActiveTab("estudiantes")}
@@ -267,7 +269,7 @@ export function InstructorFichaDetail() {
                   : "border-transparent text-gray-500 hover:text-gray-700"
               }`}
             >
-              <Users size={18} /> Enrolled Students ({students.length})
+              <Users size={18} /> {tr("Aprendices Matriculados", "Enrolled Students")} ({students.length})
             </button>
           </div>
         </div>
@@ -279,17 +281,17 @@ export function InstructorFichaDetail() {
               <Sparkles className="text-[#4DA6FF] shrink-0" size={18} />
               <div>
                 <h3 className="font-bold text-gray-900 text-xs">
-                  Isolated Academic Management by Ficha
+                  {tr("Gestión Académica Aislada por Ficha", "Isolated Academic Management by Ficha")}
                 </h3>
                 <p className="text-[11px] text-gray-500">
-                  Activities created here belong exclusively to Ficha #{fichaInfo?.numero_ficha}.
+                  {tr(`Las actividades creadas aquí pertenecen exclusivamente a la Ficha #${fichaInfo?.numero_ficha}.`, `Activities created here belong exclusively to Ficha #${fichaInfo?.numero_ficha}.`)}
                 </p>
               </div>
             </div>
 
             {modulos.length === 0 ? (
               <div className="bg-white rounded-xl p-8 text-center border border-gray-200">
-                <p className="text-gray-500 text-sm">No modules registered in this Ficha.</p>
+                <p className="text-gray-500 text-sm">{tr("No hay módulos registrados en esta Ficha.", "No modules registered in this Ficha.")}</p>
               </div>
             ) : (
               modulos.map((mod) => (
@@ -300,7 +302,7 @@ export function InstructorFichaDetail() {
                   <div className="bg-[#4DA6FF]/10 border-b border-[#4DA6FF]/20 px-5 py-3 flex justify-between items-center">
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-[#4DA6FF]">
-                        {mod.fase || "Training Phase"}
+                        {mod.fase || tr("Fase de Formación", "Training Phase")}
                       </span>
                       <h2 className="text-base font-bold text-gray-900">{mod.titulo}</h2>
                     </div>
@@ -330,10 +332,10 @@ export function InstructorFichaDetail() {
                             </div>
                             <div className="flex items-center gap-4 text-xs text-gray-500 pl-8">
                               <span className="flex items-center gap-1 font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
-                                <Layers size={12} /> 4 Pedagogical Moments
+                                <Layers size={12} /> {tr("4 Momentos Pedagógicos", "4 Pedagogical Moments")}
                               </span>
                               <span>
-                                <strong>{totalActividadesRap}</strong> Activities Created
+                                <strong>{totalActividadesRap}</strong> {tr("Actividades creadas", "Activities Created")}
                               </span>
                             </div>
                           </div>
@@ -342,7 +344,7 @@ export function InstructorFichaDetail() {
                             onClick={() => navigate(`/instructor/ficha/${fichaId}/rap/${rap.id}`)}
                             className="px-5 py-2.5 bg-[#4DA6FF] hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-xs shrink-0"
                           >
-                            Manage Moments & Activities <ChevronRight size={16} />
+                            {tr("Gestionar Momentos y Actividades", "Manage Moments & Activities")} <ChevronRight size={16} />
                           </button>
                         </div>
                       );
@@ -359,13 +361,13 @@ export function InstructorFichaDetail() {
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-bold text-gray-900">
-                Students Enrolled in Ficha #{fichaInfo?.numero_ficha}
+                {tr("Aprendices Matriculados en Ficha", "Students Enrolled in Ficha")} #{fichaInfo?.numero_ficha}
               </h2>
               <div className="relative w-64">
                 <Search size={16} className="absolute left-3 top-3 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search student..."
+                  placeholder={tr("Buscar aprendiz...", "Search student...")}
                   value={studentSearch}
                   onChange={(e) => setStudentSearch(e.target.value)}
                   className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
@@ -375,17 +377,17 @@ export function InstructorFichaDetail() {
 
             {filteredStudents.length === 0 ? (
               <p className="text-center text-gray-400 text-sm py-8">
-                No students enrolled in this Ficha.
+                {tr("No hay aprendices matriculados en esta Ficha.", "No students enrolled in this Ficha.")}
               </p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs text-gray-600">
                   <thead className="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200 uppercase">
                     <tr>
-                      <th className="py-3 px-4">Student</th>
-                      <th className="py-3 px-4">Email</th>
-                      <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-4 text-center">Actions</th>
+                      <th className="py-3 px-4">{tr("Aprendiz", "Student")}</th>
+                      <th className="py-3 px-4">{tr("Correo", "Email")}</th>
+                      <th className="py-3 px-4">{tr("Estado", "Status")}</th>
+                      <th className="py-3 px-4 text-center">{tr("Acciones", "Actions")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
@@ -395,11 +397,11 @@ export function InstructorFichaDetail() {
                         <td className="py-3.5 px-4 text-gray-500">{s.email}</td>
                         <td className="py-3.5 px-4">
                           <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-green-100 text-green-700">
-                            {s.estado === "Activo" ? "Active" : s.estado}
+                            {s.estado === "Activo" || s.estado === "Active" ? tr("Activo", "Active") : tr("Inactivo", "Inactive")}
                           </span>
                         </td>
                         <td className="py-3.5 px-4 text-center">
-                          <span className="text-gray-400">Active</span>
+                          <span className="text-gray-400">{tr("Activo", "Active")}</span>
                         </td>
                       </tr>
                     ))}
@@ -416,39 +418,39 @@ export function InstructorFichaDetail() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4">
             <h3 className="text-lg font-bold text-gray-900 border-b pb-2">
-              New Activity for Ficha #{fichaInfo?.numero_ficha}
+              {tr("Nueva Actividad para Ficha", "New Activity for Ficha")} #{fichaInfo?.numero_ficha}
             </h3>
 
             <form onSubmit={handleSaveActivity} className="space-y-4">
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Activity Type
+                  {tr("Tipo de Actividad", "Activity Type")}
                 </label>
                 <select
                   value={actTipo}
                   onChange={(e) => setActTipo(e.target.value)}
                   className="w-full border border-gray-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-[#4DA6FF] outline-none"
                 >
-                  <option value="formulario">Quiz / Form</option>
-                  <option value="grabacion_audio">Audio Recording</option>
-                  <option value="grabacion_video">Video Recording</option>
-                  <option value="caso_clinico">Clinical Case</option>
-                  <option value="vocabulario">Vocabulary / Flashcards</option>
-                  <option value="spelling">Spelling</option>
-                  <option value="grammar_pill">Grammar Pill</option>
-                  <option value="storybook">Storybook / Reading</option>
-                  <option value="warm_up">Warm-up Activity</option>
+                  <option value="formulario">{tr("Cuestionario / Formulario", "Quiz / Form")}</option>
+                  <option value="grabacion_audio">{tr("Grabación de Audio", "Audio Recording")}</option>
+                  <option value="grabacion_video">{tr("Grabación de Video", "Video Recording")}</option>
+                  <option value="caso_clinico">{tr("Caso Clínico", "Clinical Case")}</option>
+                  <option value="vocabulario">{tr("Vocabulario / Tarjetas", "Vocabulary / Flashcards")}</option>
+                  <option value="spelling">{tr("Ortografía (Spelling)", "Spelling")}</option>
+                  <option value="grammar_pill">{tr("Píldora Gramatical", "Grammar Pill")}</option>
+                  <option value="storybook">{tr("Lectura / Cuento", "Storybook / Reading")}</option>
+                  <option value="warm_up">{tr("Actividad de Calentamiento", "Warm-up Activity")}</option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Activity Title *
+                  {tr("Título de la Actividad *", "Activity Title *")}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g., Clinical Evaluation Quiz"
+                  placeholder={tr("ej., Cuestionario de Evaluación Clínica", "e.g., Clinical Evaluation Quiz")}
                   value={actTitulo}
                   onChange={(e) => setActTitulo(e.target.value)}
                   className="w-full border border-gray-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-[#4DA6FF] outline-none"
@@ -457,11 +459,11 @@ export function InstructorFichaDetail() {
 
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Instructions
+                  {tr("Instrucciones", "Instructions")}
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="Student instructions..."
+                  placeholder={tr("Instrucciones para el aprendiz...", "Student instructions...")}
                   value={actInstrucciones}
                   onChange={(e) => setActInstrucciones(e.target.value)}
                   className="w-full border border-gray-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-[#4DA6FF] outline-none"
@@ -477,7 +479,7 @@ export function InstructorFichaDetail() {
                   className="rounded text-[#4DA6FF]"
                 />
                 <label htmlFor="obligatoria" className="text-xs text-gray-700">
-                  Mandatory Activity (Affects RAP Progress)
+                  {tr("Actividad Obligatoria (Afecta el progreso del RAP)", "Mandatory Activity (Affects RAP Progress)")}
                 </label>
               </div>
 
@@ -487,14 +489,14 @@ export function InstructorFichaDetail() {
                   onClick={() => setShowAddActivityModal(false)}
                   className="px-4 py-2 border border-gray-300 rounded-xl text-xs font-medium text-gray-600 hover:bg-gray-50"
                 >
-                  Cancel
+                  {tr("Cancelar", "Cancel")}
                 </button>
                 <button
                   type="submit"
                   disabled={isSavingActivity}
                   className="px-4 py-2 bg-[#4DA6FF] hover:bg-blue-600 text-white rounded-xl text-xs font-medium"
                 >
-                  {isSavingActivity ? "Saving..." : "Create Activity"}
+                  {isSavingActivity ? tr("Guardando...", "Saving...") : tr("Crear Actividad", "Create Activity")}
                 </button>
               </div>
             </form>
@@ -511,9 +513,9 @@ export function InstructorFichaDetail() {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Delete this activity?</h3>
+              <h3 className="text-lg font-bold text-gray-900">{tr("¿Eliminar esta actividad?", "Delete this activity?")}</h3>
               <p className="text-xs text-gray-500 mt-1.5 leading-relaxed">
-                This action is permanent and cannot be undone. All data and history associated with this activity will be removed.
+                {tr("Esta acción es permanente y no se puede deshacer. Todos los datos e historial asociados se eliminarán.", "This action is permanent and cannot be undone. All data and history associated with this activity will be removed.")}
               </p>
             </div>
 
@@ -523,7 +525,7 @@ export function InstructorFichaDetail() {
                 onClick={() => setActivityToDelete(null)}
                 className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-semibold transition-colors"
               >
-                Cancel
+                {tr("Cancelar", "Cancel")}
               </button>
               <button
                 type="button"
@@ -531,7 +533,7 @@ export function InstructorFichaDetail() {
                 onClick={confirmDeleteActivity}
                 className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-xs disabled:opacity-50"
               >
-                {isDeletingActivity ? "Deleting..." : "Yes, delete"}
+                {isDeletingActivity ? tr("Eliminando...", "Deleting...") : tr("Sí, eliminar", "Yes, delete")}
               </button>
             </div>
           </div>

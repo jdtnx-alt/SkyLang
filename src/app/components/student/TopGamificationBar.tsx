@@ -75,7 +75,15 @@ export const TopGamificationBar: React.FC<TopGamificationBarProps> = ({
   const level = propLevel !== undefined ? propLevel : (autoData?.level ?? 1);
   const levelProgress = propLevelProgress !== undefined ? propLevelProgress : (autoData?.levelProgress ?? 0);
   const ficha = propFicha !== undefined ? propFicha : (autoData?.ficha ?? '3142784');
-  const program = propProgram !== undefined ? propProgram : (autoData?.program ?? 'Nursing English');
+  const rawProgram = propProgram !== undefined ? propProgram : (autoData?.program ?? 'Nursing English');
+  const program = (() => {
+    if (!rawProgram) return 'Technical Nursing English';
+    const lower = rawProgram.toLowerCase();
+    if (lower.includes('enfermer') || lower.includes('nursing')) {
+      return 'Nursing - Technical English';
+    }
+    return rawProgram;
+  })();
 
   const handleToggleMute = () => {
     const isMuted = soundEffects.toggleMute();
@@ -91,7 +99,7 @@ export const TopGamificationBar: React.FC<TopGamificationBarProps> = ({
           <div className="flex items-center gap-2 px-3 py-1.5 bg-sky-50 border-2 border-sky-100 rounded-xl">
             <BookOpen size={16} className="text-sky-600" />
             <span className="text-xs font-black text-sky-800 uppercase tracking-wide">
-              Ficha {ficha}
+              Cohort {ficha}
             </span>
           </div>
           <span className="hidden md:inline text-xs font-bold text-slate-500 truncate max-w-xs">
@@ -107,7 +115,7 @@ export const TopGamificationBar: React.FC<TopGamificationBarProps> = ({
             whileTap={{ scale: 0.95 }}
             onClick={() => soundEffects.playPop()}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-amber-200 bg-amber-50 cursor-pointer select-none group"
-            title="Días de racha consecutiva"
+            title="Consecutive streak days"
           >
             <Flame
               size={20}
@@ -130,7 +138,7 @@ export const TopGamificationBar: React.FC<TopGamificationBarProps> = ({
             whileTap={{ scale: 0.95 }}
             onClick={() => soundEffects.playPop()}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-sky-200 bg-sky-50 cursor-pointer select-none"
-            title="Puntos de Miel / Experiencia (XP)"
+            title="Honey Points / Experience (XP)"
           >
             <Zap size={18} className="text-sky-500 fill-sky-500" />
             <span className="text-xs sm:text-sm font-black text-sky-700">
@@ -142,12 +150,12 @@ export const TopGamificationBar: React.FC<TopGamificationBarProps> = ({
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl border-2 border-purple-200 bg-purple-50 select-none"
-            title={`Nivel ${level} (${levelProgress}% completado)`}
+            title={`Level ${level} (${levelProgress}% completed)`}
           >
             <Award size={18} className="text-purple-600" />
             <div className="flex flex-col">
               <span className="text-[10px] font-black uppercase text-purple-700 leading-none">
-                Nivel {level}
+                Level {level}
               </span>
               <div className="w-12 h-1.5 bg-purple-200 rounded-full mt-1 overflow-hidden">
                 <div
@@ -162,7 +170,7 @@ export const TopGamificationBar: React.FC<TopGamificationBarProps> = ({
           <button
             onClick={handleToggleMute}
             className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-all"
-            title={muted ? 'Activar efectos de sonido' : 'Silenciar efectos de sonido'}
+            title={muted ? 'Enable sound effects' : 'Mute sound effects'}
           >
             {muted ? <VolumeX size={18} /> : <Volume2 size={18} className="text-sky-600" />}
           </button>

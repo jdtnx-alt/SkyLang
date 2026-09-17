@@ -21,20 +21,20 @@ VALUES
 -- 1. Iniciación y Primeros Pasos
 -- ──────────────────────────────────────────────────────
 (
-  'Primer Vuelo',
-  'Aprobaste exitosamente tu primera actividad interactiva en SkyLang. ¡El viaje comienza aquí!',
+  'First Flight',
+  'Successfully passed your first interactive activity in SkyLang. The journey begins here!',
   'PRIMER_PASO',
   'bronze'
 ),
 (
-  'Expediente Completo',
-  'Completaste todos los campos de tu perfil: nombre, identificación y teléfono. ¡Ya te conocemos bien!',
+  'Complete Record',
+  'Completed all fields of your profile: name, ID, and phone number. Now we know you well!',
   'PERFIL_COMPLETO',
   'bronze'
 ),
 (
-  'Primer Momento',
-  'Completaste todas las actividades de un momento pedagógico completo (Preparación, Absorción, Práctica o Cierre).',
+  'First Learning Moment',
+  'Completed all activities in a full learning moment (Preparation, Absorption, Practice, or Closure).',
   'PRIMER_MOMENTO',
   'bronze'
 ),
@@ -43,32 +43,32 @@ VALUES
 -- 2. Destrezas y Habilidades Clínicas
 -- ──────────────────────────────────────────────────────
 (
-  'Memoria Médica',
-  'Superaste 3 juegos de emparejamiento de vocabulario de terminología hospitalaria en inglés.',
+  'Medical Memory',
+  'Passed 3 hospital vocabulary matching games in clinical English.',
   'MEMORY_MASTER',
   'silver'
 ),
 (
-  'Oído Clínico',
-  'Aprobaste 3 cuestionarios de comprensión auditiva de diálogos enfermero-paciente con nota ≥ 80%.',
+  'Clinical Ear',
+  'Passed 3 listening comprehension quizzes of nurse-patient dialogues with a score >= 80%.',
   'LISTENING_NURSE',
   'silver'
 ),
 (
-  'Glosario Hospitalario',
-  'Completaste 5 actividades de vocabulario técnico de enfermería (equipos, suministros, signos vitales).',
+  'Hospital Glossary',
+  'Completed 5 nursing technical vocabulary activities (equipment, supplies, vital signs).',
   'VOCABULARIO_PRO',
   'gold'
 ),
 (
-  'Puntería Impecable',
-  'Obtuviste una calificación perfecta de 100% en cualquier evaluación o quiz de momento de cierre.',
+  'Flawless Score',
+  'Achieved a perfect score of 100% on any evaluation or closing moment quiz.',
   'NOTA_PERFECTA',
   'gold'
 ),
 (
-  'Código de Emergencias',
-  'Aprobaste todas las actividades del RAP 6: Emergency Procedures & Critical Care.',
+  'Emergency Code',
+  'Passed all activities of RAP 6: Emergency Procedures & Critical Care.',
   'EMERGENCY_READY',
   'diamond'
 ),
@@ -77,20 +77,20 @@ VALUES
 -- 3. Hábitos, Disciplina y Rachas
 -- ──────────────────────────────────────────────────────
 (
-  'Chispa de Estudio',
-  'Mantuviste una racha de estudio activo durante 3 días consecutivos. ¡El hábito está tomando forma!',
+  'Study Spark',
+  'Maintained an active study streak for 3 consecutive days. The habit is taking shape!',
   'RACHA_3_DIAS',
   'bronze'
 ),
 (
-  'Racha de Guardia',
-  'Mantuviste la racha activa durante 7 días continuos. ¡Disciplina de enfermería!',
+  'Shift Streak',
+  'Kept your streak active for 7 consecutive days. Nursing discipline!',
   'RACHA_7_DIAS',
   'silver'
 ),
 (
-  'Guardia Extensa',
-  'Acumulaste más de 2 horas (120 minutos) de tiempo efectivo resolviendo actividades en la plataforma.',
+  'Extended Shift',
+  'Accumulated more than 2 hours (120 minutes) of active time completing activities on the platform.',
   'TIEMPO_ESTUDIO_2H',
   'gold'
 ),
@@ -99,26 +99,26 @@ VALUES
 -- 4. Avance Curricular y RAPs (SENA)
 -- ──────────────────────────────────────────────────────
 (
-  'Iniciación de Enfermería',
-  'Completaste al 100% el RAP 1: Basic Nursing English. ¡Los fundamentos están sólidos!',
+  'Nursing Initiation',
+  'Completed RAP 1: Basic Nursing English at 100%. Fundamentals are rock solid!',
   'RAP_1_COMPLETO',
   'silver'
 ),
 (
-  'Comunicación Asistencial',
-  'Completaste al 100% los RAPs 2 y 3: Patient Interaction y Clinical Communication.',
+  'Clinical Communication',
+  'Completed RAPs 2 and 3: Patient Interaction and Clinical Communication at 100%.',
   'RAP_2_3_COMPLETO',
   'gold'
 ),
 (
-  'Documentación y Reportes',
-  'Completaste al 100% los RAPs 4 y 5: Medical Documentation y Advanced Terminology.',
+  'Documentation & Reports',
+  'Completed RAPs 4 and 5: Medical Documentation and Advanced Terminology at 100%.',
   'RAP_4_5_COMPLETO',
   'gold'
 ),
 (
-  'Enfermero Bilingüe SkyLang',
-  '¡Completaste los 6 RAPs del programa de Inglés Técnico para Enfermería! Eres un profesional bilingüe.',
+  'SkyLang Bilingual Nurse',
+  'Completed all 6 RAPs of the Nursing Technical English program! You are a certified bilingual professional.',
   'PROGRAMA_COMPLETO',
   'diamond'
 ),
@@ -127,20 +127,20 @@ VALUES
 -- 5. Puntos de Miel y Rango (Honey XP)
 -- ──────────────────────────────────────────────────────
 (
-  'Recolector de Miel',
-  'Acumulaste 500 Puntos de Miel (XP). ¡La colmena empieza a llenarse!',
+  'Honey Collector',
+  'Accumulated 500 Honey Points (XP). The hive is starting to fill up!',
   'XP_500',
   'bronze'
 ),
 (
-  'Panal Dorado',
-  'Acumulaste 1.500 Puntos de Miel (XP). ¡La reina abeja está orgullosa!',
+  'Golden Honeycomb',
+  'Accumulated 1,500 Honey Points (XP). The queen bee is proud!',
   'XP_1500',
   'silver'
 ),
 (
-  'Maestro de la Colmena',
-  'Acumulaste 3.000 Puntos de Miel (XP). ¡Eres el guardián de la colmena SkyLang!',
+  'Hive Master',
+  'Accumulated 3,000 Honey Points (XP). You are the guardian of the SkyLang hive!',
   'XP_3000',
   'gold'
 )

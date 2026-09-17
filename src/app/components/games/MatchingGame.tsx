@@ -96,14 +96,14 @@ export const MatchingGame: React.FC<MatchingGameProps> = ({
     if (isCorrect) {
       const updated = { ...matches, [leftText]: rightText };
       setMatches(updated);
-      setLastPair(`${leftText} ➔ ${rightText} (¡Correcto!)`);
-      setFeedbackMsg({ type: 'success', text: `¡Pareja correcta! «${leftText}» coincide con «${rightText}».` });
+      setLastPair(`${leftText} ➔ ${rightText} (Correct!)`);
+      setFeedbackMsg({ type: 'success', text: `Correct match! "${leftText}" matches "${rightText}".` });
       setSelectedLeftIndex(null);
       setWrongMatch(null);
       completeIfReady(updated);
     } else {
-      setLastPair(`${leftText} ✗ ${rightText} (Incorrecto)`);
-      setFeedbackMsg({ type: 'error', text: `«${rightText}» no es la pareja correcta de «${leftText}». ¡Intenta de nuevo!` });
+      setLastPair(`${leftText} ✗ ${rightText} (Incorrect)`);
+      setFeedbackMsg({ type: 'error', text: `"${rightText}" is not the correct match for "${leftText}". Try again!` });
       setWrongMatch({ left: leftText, right: rightText });
       setTimeout(() => {
         setWrongMatch(null);
@@ -132,11 +132,11 @@ export const MatchingGame: React.FC<MatchingGameProps> = ({
             <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
               Matching Game
               <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700 font-extrabold">
-                {matchedCount}/{cleanPairs.length} parejas
+                {matchedCount}/{cleanPairs.length} pairs
               </span>
             </h3>
             <p className="text-xs text-slate-500 font-medium">
-              Elige un termino y conectalo con su traduccion o definicion.
+              Choose a term and connect it with its translation or definition.
             </p>
           </div>
         </div>
@@ -146,20 +146,20 @@ export const MatchingGame: React.FC<MatchingGameProps> = ({
           onClick={handleReset}
           className="flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-purple-700 bg-slate-100 hover:bg-purple-50 px-3 py-1.5 rounded-xl transition-all font-bold border border-slate-200"
         >
-          <RotateCcw size={14} /> Reiniciar
+          <RotateCcw size={14} /> Reset
         </button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="rounded-2xl bg-slate-50 border border-slate-200 p-3">
           <span className="text-[11px] font-extrabold uppercase text-slate-500 flex items-center gap-1.5">
-            <Link2 size={14} /> Conexiones
+            <Link2 size={14} /> Connections
           </span>
-          <strong className="text-sm text-slate-950">{matchedCount} realizadas</strong>
+          <strong className="text-sm text-slate-950">{matchedCount} completed</strong>
         </div>
         <div className="rounded-2xl bg-indigo-50 border border-indigo-100 p-3">
           <span className="text-[11px] font-extrabold uppercase text-indigo-700 flex items-center gap-1.5">
-            <Zap size={14} /> Intentos
+            <Zap size={14} /> Attempts
           </span>
           <strong className="text-sm text-indigo-950">{attempts}</strong>
         </div>
@@ -169,9 +169,9 @@ export const MatchingGame: React.FC<MatchingGameProps> = ({
           className="rounded-2xl bg-emerald-50 border border-emerald-100 p-3 text-left hover:bg-emerald-100 transition-colors"
         >
           <span className="text-[11px] font-extrabold uppercase text-emerald-700 flex items-center gap-1.5">
-            <Shuffle size={14} /> Mezclar
+            <Shuffle size={14} /> Shuffle
           </span>
-          <strong className="text-sm text-emerald-950">Reordenar columna</strong>
+          <strong className="text-sm text-emerald-950">Reorder column</strong>
         </button>
       </div>
 
@@ -191,7 +191,7 @@ export const MatchingGame: React.FC<MatchingGameProps> = ({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div className="space-y-3">
-          <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider text-center">Terminos</h4>
+          <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider text-center">Terms</h4>
           {cleanPairs.map((pair, idx) => {
             const isSelected = selectedLeftIndex === idx;
             const isMatched = Boolean(matches[pair.left]);
@@ -219,7 +219,7 @@ export const MatchingGame: React.FC<MatchingGameProps> = ({
         </div>
 
         <div className="space-y-3">
-          <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider text-center">Definiciones / Traducciones</h4>
+          <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider text-center">Definitions / Translations</h4>
           {rightOptions.map((rightText) => {
             const isMatchedWithLeft = Object.values(matches).includes(rightText);
             const isWrong = wrongMatch?.right === rightText;
@@ -249,7 +249,7 @@ export const MatchingGame: React.FC<MatchingGameProps> = ({
 
       {isFinished && (
         <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 text-emerald-900 text-xs font-bold flex items-center gap-2">
-          <CheckCircle2 size={18} /> Actividad completada: todas las parejas fueron conectadas.
+          <CheckCircle2 size={18} /> Activity completed: all pairs have been connected.
         </div>
       )}
     </div>

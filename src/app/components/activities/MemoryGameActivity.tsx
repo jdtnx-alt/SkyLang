@@ -245,18 +245,18 @@ export const MemoryGameActivity: React.FC<MemoryGameActivityProps> = ({
             <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
               Memory Game
               <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700 font-extrabold">
-                {cleanPairs.length} parejas
+                {cleanPairs.length} pairs
               </span>
             </h3>
             <p className="text-xs text-slate-500 font-medium">
-              {data?.description || data?.instrucciones || data?.instructions || 'Voltea las cartas para encontrar cada término en inglés con su traducción en español.'}
+              {data?.description || data?.instrucciones || data?.instructions || 'Flip the cards to match each English term with its Spanish translation.'}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="text-xs font-bold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
-            <span>Errores:</span>
+            <span>Mistakes:</span>
             <span className={`font-black ${attemptsCount === 0 ? 'text-emerald-600' : 'text-rose-500'}`}>
               {attemptsCount}
             </span>
@@ -266,7 +266,7 @@ export const MemoryGameActivity: React.FC<MemoryGameActivityProps> = ({
             onClick={resetGame}
             className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-purple-700 bg-slate-100 hover:bg-purple-50 px-3 py-1.5 rounded-xl transition-all font-bold cursor-pointer border border-slate-200 hover:border-purple-200"
           >
-            <RotateCcw size={14} /> Reiniciar juego
+            <RotateCcw size={14} /> Reset Game
           </button>
         </div>
       </div>
@@ -283,11 +283,11 @@ export const MemoryGameActivity: React.FC<MemoryGameActivityProps> = ({
               <Sparkles size={24} />
             </div>
             <div>
-              <h4 className="font-extrabold text-base">¡Excelente trabajo!</h4>
+              <h4 className="font-extrabold text-base">Excellent work!</h4>
               <p className="text-xs opacity-90 font-medium">
                 {attemptsCount === 0
-                  ? `¡Perfecto! Encontraste las ${cleanPairs.length} parejas sin ningún error. 🌟`
-                  : `Encontraste las ${cleanPairs.length} parejas con ${attemptsCount} error${attemptsCount === 1 ? '' : 'es'}.`
+                  ? `Perfect! You found all ${cleanPairs.length} pairs without any mistakes. 🌟`
+                  : `You found all ${cleanPairs.length} pairs with ${attemptsCount} mistake${attemptsCount === 1 ? '' : 's'}.`
                 }
               </p>
             </div>
@@ -342,7 +342,7 @@ export const MemoryGameActivity: React.FC<MemoryGameActivityProps> = ({
                   style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                 >
                   <span className="text-[9px] uppercase font-bold tracking-wider mb-1 px-2 py-0.5 rounded-full bg-purple-100/80 text-purple-800">
-                    {card.type === 'english' ? 'English' : 'Español'}
+                    {card.type === 'english' ? 'English' : 'Spanish'}
                   </span>
                   <p className="font-extrabold text-xs sm:text-sm leading-tight text-slate-900">{card.content}</p>
                   {isMatched && (

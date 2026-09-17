@@ -1,5 +1,6 @@
 import React from 'react';
 import { Plus, Trash2, Check } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 /**
  * Editor del contenido de una actividad, según su tipo.
@@ -22,6 +23,8 @@ const itemRespuestaCorta = () => ({ tipo: 'respuesta_corta', enunciado: '', espe
 const campoVacio = () => ({ label: '', expected: '', placeholder: '' });
 
 export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
+  const { tr } = useLanguage();
+
   // ── 1. Evaluación: mezcla los dos tipos de pregunta en la misma prueba ──
   if (tipo === 'evaluacion') {
     const items = datos?.items?.length ? datos.items : [];
@@ -32,27 +35,27 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
     return (
       <div className="space-y-4">
         <p className="text-[10px] text-gray-500 font-medium">
-          Añade las preguntas que necesites, de uno u otro tipo. Todas valen lo mismo.
+          {tr("Añade las preguntas que necesites, de uno u otro tipo. Todas valen lo mismo.", "Add as many questions as you need, of either type. All are worth the same.")}
         </p>
 
         {items.map((item: any, i: number) => (
           <fieldset key={i} className="border border-gray-200 rounded-xl p-3 space-y-2">
             <legend className="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1">
-              {i + 1} · {item.tipo === 'respuesta_corta' ? 'Respuesta corta' : 'Opción múltiple'}
+              {i + 1} · {item.tipo === 'respuesta_corta' ? tr('Respuesta corta', 'Short answer') : tr('Opción múltiple', 'Multiple choice')}
             </legend>
 
             <div className="flex gap-2">
               <input
                 type="text"
                 required
-                placeholder="Enunciado de la pregunta"
+                placeholder={tr("Enunciado de la pregunta", "Question statement")}
                 value={item.enunciado || ''}
                 onChange={(e) => cambiar(i, { enunciado: e.target.value })}
                 className="flex-1 border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
               />
               <button
                 type="button"
-                title="Eliminar pregunta"
+                title={tr("Eliminar pregunta", "Delete question")}
                 onClick={() => actualizar(items.filter((_: any, k: number) => k !== i))}
                 className="px-2 text-rose-600 hover:bg-rose-50 rounded-lg"
               >
@@ -64,7 +67,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
               <input
                 type="text"
                 required
-                placeholder="Respuesta correcta esperada"
+                placeholder={tr("Respuesta correcta esperada", "Expected correct answer")}
                 value={item.esperada || ''}
                 onChange={(e) => cambiar(i, { esperada: e.target.value })}
                 className="w-full border border-emerald-200 bg-emerald-50/40 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-emerald-400"
@@ -72,7 +75,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
             ) : (
               <>
                 <p className="text-[10px] text-gray-500 font-medium">
-                  Marca la opción correcta con el círculo de la izquierda.
+                  {tr("Marca la opción correcta con el círculo de la izquierda.", "Mark the correct option with the circle on the left.")}
                 </p>
                 {(item.opciones || []).map((opt: string, j: number) => (
                   <div key={j} className="flex items-center gap-2">
@@ -86,7 +89,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
                     <input
                       type="text"
                       required
-                      placeholder={`Opción ${j + 1}`}
+                      placeholder={`${tr("Opción", "Option")} ${j + 1}`}
                       value={opt}
                       onChange={(e) =>
                         cambiar(i, { opciones: item.opciones.map((o: string, k: number) => (k === j ? e.target.value : o)) })
@@ -116,7 +119,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
                   onClick={() => cambiar(i, { opciones: [...(item.opciones || []), ''] })}
                   className="text-[11px] font-bold text-[#4DA6FF] hover:underline flex items-center gap-1"
                 >
-                  <Plus size={12} /> Añadir opción
+                  <Plus size={12} /> {tr("Añadir opción", "Add option")}
                 </button>
               </>
             )}
@@ -129,14 +132,14 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
             onClick={() => actualizar([...items, itemOpcionMultiple()])}
             className="py-2 border border-dashed border-[#4DA6FF] text-[#4DA6FF] rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-blue-50"
           >
-            <Plus size={14} /> Agregar opción múltiple
+            <Plus size={14} /> {tr("Agregar opción múltiple", "Add multiple choice")}
           </button>
           <button
             type="button"
             onClick={() => actualizar([...items, itemRespuestaCorta()])}
             className="py-2 border border-dashed border-emerald-500 text-emerald-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-emerald-50"
           >
-            <Plus size={14} /> Agregar respuesta corta
+            <Plus size={14} /> {tr("Agregar respuesta corta", "Add short answer")}
           </button>
         </div>
       </div>
@@ -156,14 +159,14 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
         {preguntas.map((p: any, i: number) => (
           <fieldset key={i} className="border border-gray-200 rounded-xl p-3 space-y-2">
             <legend className="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1">
-              Pregunta {i + 1}
+              {tr("Pregunta", "Question")} {i + 1}
             </legend>
 
             <div className="flex gap-2">
               <input
                 type="text"
                 required
-                placeholder="Enunciado de la pregunta"
+                placeholder={tr("Enunciado de la pregunta", "Question statement")}
                 value={p.question || ''}
                 onChange={(e) => cambiarPregunta(i, { question: e.target.value })}
                 className="flex-1 border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
@@ -171,7 +174,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
               {preguntas.length > 1 && (
                 <button
                   type="button"
-                  title="Eliminar pregunta"
+                  title={tr("Eliminar pregunta", "Delete question")}
                   onClick={() => actualizar(preguntas.filter((_: any, k: number) => k !== i))}
                   className="px-2 text-rose-600 hover:bg-rose-50 rounded-lg"
                 >
@@ -181,7 +184,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
             </div>
 
             <p className="text-[10px] text-gray-500 font-medium">
-              Marca la opción correcta con el círculo de la izquierda.
+              {tr("Marca la opción correcta con el círculo de la izquierda.", "Mark the correct option with the circle on the left.")}
             </p>
 
             {(p.options || []).map((opt: string, j: number) => (
@@ -192,12 +195,12 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
                   checked={Number(p.correctAnswer) === j}
                   onChange={() => cambiarPregunta(i, { correctAnswer: j })}
                   className="accent-emerald-600"
-                  title="Marcar como correcta"
+                  title={tr("Marcar como correcta", "Mark as correct")}
                 />
                 <input
                   type="text"
                   required
-                  placeholder={`Opción ${j + 1}`}
+                  placeholder={`${tr("Opción", "Option")} ${j + 1}`}
                   value={opt}
                   onChange={(e) =>
                     cambiarPregunta(i, {
@@ -209,7 +212,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
                 {p.options.length > 2 && (
                   <button
                     type="button"
-                    title="Eliminar opción"
+                    title={tr("Eliminar opción", "Delete option")}
                     onClick={() => {
                       const restantes = p.options.filter((_: string, k: number) => k !== j);
                       const correcta = Number(p.correctAnswer);
@@ -231,7 +234,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
               onClick={() => cambiarPregunta(i, { options: [...(p.options || []), ''] })}
               className="text-[11px] font-bold text-[#4DA6FF] hover:underline flex items-center gap-1"
             >
-              <Plus size={12} /> Añadir opción
+              <Plus size={12} /> {tr("Añadir opción", "Add option")}
             </button>
           </fieldset>
         ))}
@@ -241,7 +244,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
           onClick={() => actualizar([...preguntas, preguntaVacia()])}
           className="w-full py-2 border border-dashed border-[#4DA6FF] text-[#4DA6FF] rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-blue-50"
         >
-          <Plus size={14} /> Añadir pregunta
+          <Plus size={14} /> {tr("Añadir pregunta", "Add question")}
         </button>
       </div>
     );
@@ -257,19 +260,19 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
     return (
       <div className="space-y-3">
         <p className="text-[10px] text-gray-500 font-medium">
-          La comparación ignora mayúsculas, tildes, espacios sobrantes y signos de puntuación.
+          {tr("La comparación ignora mayúsculas, tildes, espacios sobrantes y signos de puntuación.", "Comparison ignores uppercase, accents, extra spaces and punctuation.")}
         </p>
 
         {campos.map((c: any, i: number) => (
           <fieldset key={i} className="border border-gray-200 rounded-xl p-3 space-y-2">
             <legend className="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1">
-              Campo {i + 1}
+              {tr("Campo", "Field")} {i + 1}
             </legend>
             <div className="flex gap-2">
               <input
                 type="text"
                 required
-                placeholder="Etiqueta (p. ej. Nombre completo)"
+                placeholder={tr("Etiqueta (p. ej. Nombre completo)", "Label (e.g. Full name)")}
                 value={c.label || ''}
                 onChange={(e) => cambiarCampo(i, { label: e.target.value })}
                 className="flex-1 border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
@@ -287,7 +290,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
             <input
               type="text"
               required
-              placeholder="Respuesta correcta esperada"
+              placeholder={tr("Respuesta correcta esperada", "Expected correct answer")}
               value={c.expected || ''}
               onChange={(e) => cambiarCampo(i, { expected: e.target.value })}
               className="w-full border border-emerald-200 bg-emerald-50/40 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-emerald-400"
@@ -300,7 +303,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
           onClick={() => actualizar([...campos, campoVacio()])}
           className="w-full py-2 border border-dashed border-[#4DA6FF] text-[#4DA6FF] rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-blue-50"
         >
-          <Plus size={14} /> Añadir campo
+          <Plus size={14} /> {tr("Añadir campo", "Add field")}
         </button>
       </div>
     );
@@ -331,11 +334,14 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
       <div className="space-y-4">
         <div className="space-y-1">
           <label className="block text-[10px] font-bold uppercase tracking-wider text-purple-700">
-            Contenido / Instrucciones de la Actividad
+            {tr("Contenido / Instrucciones de la Actividad", "Content / Activity Instructions")}
           </label>
           <textarea
             rows={2}
-            placeholder="Instrucciones para el estudiante (p. ej.: Voltea las cartas para encontrar cada término médico en inglés con su traducción en español)..."
+            placeholder={tr(
+              "Instrucciones para el estudiante (p. ej.: Voltea las cartas para encontrar cada término médico en inglés con su traducción en español)...",
+              "Student instructions (e.g.: Flip the cards to find each medical term in English with its Spanish translation)..."
+            )}
             value={datos?.description || datos?.instrucciones || datos?.instructions || ''}
             onChange={(e) => actualizar(pairs, { description: e.target.value, instrucciones: e.target.value })}
             className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-purple-400"
@@ -343,19 +349,19 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
         </div>
 
         <p className="text-[10px] text-gray-500 font-medium">
-          Define las parejas de conceptos que el estudiante volteará para emparejar (mínimo 2 parejas).
+          {tr("Define las parejas de conceptos que el estudiante volteará para emparejar (mínimo 2 parejas).", "Define the concept pairs the student will flip to match (minimum 2 pairs).")}
         </p>
 
         {pairs.map((p: any, i: number) => (
           <fieldset key={i} className="border border-purple-200 bg-purple-50/20 rounded-xl p-3 space-y-2">
             <div className="flex items-center justify-between">
               <legend className="text-[10px] font-bold uppercase tracking-wider text-purple-700 px-1">
-                Pareja {i + 1}
+                {tr("Pareja", "Pair")} {i + 1}
               </legend>
               {pairs.length > 2 && (
                 <button
                   type="button"
-                  title="Eliminar pareja"
+                  title={tr("Eliminar pareja", "Delete pair")}
                   onClick={() => actualizar(pairs.filter((_: any, k: number) => k !== i))}
                   className="p-1 text-rose-600 hover:bg-rose-50 rounded-lg"
                 >
@@ -367,7 +373,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
               <input
                 type="text"
                 required
-                placeholder="Término en Inglés (p. ej. Stethoscope)"
+                placeholder={tr("Término en Inglés (p. ej. Stethoscope)", "English term (e.g. Stethoscope)")}
                 value={p.label || p.left || ''}
                 onChange={(e) => cambiarPar(i, { label: e.target.value, left: e.target.value })}
                 className="border border-gray-300 bg-white rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-purple-400"
@@ -375,7 +381,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
               <input
                 type="text"
                 required
-                placeholder="Traducción / Definición en Español (p. ej. Estetoscopio)"
+                placeholder={tr("Traducción / Definición en Español (p. ej. Estetoscopio)", "Translation / Spanish definition (e.g. Estetoscopio)")}
                 value={p.text || p.right || ''}
                 onChange={(e) => cambiarPar(i, { text: e.target.value, right: e.target.value })}
                 className="border border-gray-300 bg-white rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-purple-400"
@@ -389,7 +395,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
           onClick={() => actualizar([...pairs, { label: '', text: '' }])}
           className="w-full py-2 border border-dashed border-purple-400 text-purple-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-purple-50"
         >
-          <Plus size={14} /> Añadir Pareja de Memoria
+          <Plus size={14} /> {tr("Añadir Pareja de Memoria", "Add Memory Pair")}
         </button>
       </div>
     );
@@ -409,19 +415,19 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
     return (
       <div className="space-y-4">
         <p className="text-[10px] text-gray-500 font-medium">
-          Define los elementos de la izquierda y su correspondencia exacta a la derecha.
+          {tr("Define los elementos de la izquierda y su correspondencia exacta a la derecha.", "Define the left-side elements and their exact right-side match.")}
         </p>
 
         {pairs.map((p: any, i: number) => (
           <fieldset key={i} className="border border-blue-200 bg-blue-50/20 rounded-xl p-3 space-y-2">
             <div className="flex items-center justify-between">
               <legend className="text-[10px] font-bold uppercase tracking-wider text-blue-700 px-1">
-                Asociación {i + 1}
+                {tr("Asociación", "Association")} {i + 1}
               </legend>
               {pairs.length > 2 && (
                 <button
                   type="button"
-                  title="Eliminar asociación"
+                  title={tr("Eliminar asociación", "Delete association")}
                   onClick={() => actualizar(pairs.filter((_: any, k: number) => k !== i))}
                   className="p-1 text-rose-600 hover:bg-rose-50 rounded-lg"
                 >
@@ -433,7 +439,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
               <input
                 type="text"
                 required
-                placeholder="Elemento Izquierdo (p. ej. Fever)"
+                placeholder={tr("Elemento Izquierdo (p. ej. Fever)", "Left element (e.g. Fever)")}
                 value={p.left || ''}
                 onChange={(e) => cambiarPar(i, { left: e.target.value })}
                 className="border border-gray-300 bg-white rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-blue-400"
@@ -441,7 +447,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
               <input
                 type="text"
                 required
-                placeholder="Correspondencia Derecha (p. ej. High Body Temperature)"
+                placeholder={tr("Correspondencia Derecha (p. ej. High Body Temperature)", "Right match (e.g. High Body Temperature)")}
                 value={p.right || ''}
                 onChange={(e) => cambiarPar(i, { right: e.target.value })}
                 className="border border-gray-300 bg-white rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-blue-400"
@@ -455,13 +461,12 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
           onClick={() => actualizar([...pairs, { left: '', right: '' }])}
           className="w-full py-2 border border-dashed border-blue-400 text-blue-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-blue-50"
         >
-          <Plus size={14} /> Añadir Asociación
+          <Plus size={14} /> {tr("Añadir Asociación", "Add Association")}
         </button>
       </div>
     );
   }
 
-  // ── 6. Comprensión Auditiva (Listening) ──────────────────────────────
   // ── 6. Comprensión Auditiva (Listening) ──────────────────────────────
   if (tipo === 'listening') {
     const preguntas = Array.isArray(datos?.questions) && datos.questions.length ? datos.questions : [preguntaVacia()];
@@ -471,11 +476,14 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
       <div className="space-y-4">
         <div className="space-y-1">
           <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500">
-            Contenido / Instrucciones de la Actividad (Opcional)
+            {tr("Contenido / Instrucciones de la Actividad (Opcional)", "Content / Activity Instructions (Optional)")}
           </label>
           <textarea
             rows={2}
-            placeholder="Instrucciones para el estudiante (p. ej.: Escucha con atención la conversación entre la enfermera y el paciente y responde las preguntas)..."
+            placeholder={tr(
+              "Instrucciones para el estudiante (p. ej.: Escucha con atención la conversación entre la enfermera y el paciente y responde las preguntas)...",
+              "Student instructions (e.g.: Listen carefully to the conversation between the nurse and the patient and answer the questions)..."
+            )}
             value={datos?.description || datos?.instrucciones || datos?.instructions || ''}
             onChange={(e) => actualizar({ description: e.target.value, instrucciones: e.target.value })}
             className="w-full border border-gray-300 rounded-xl p-2 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
@@ -484,7 +492,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
 
         <div className="space-y-2">
           <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500">
-            Texto del Diálogo Clínico o Transcripción de Audio
+            {tr("Texto del Diálogo Clínico o Transcripción de Audio", "Clinical Dialogue Text or Audio Transcript")}
           </label>
           <textarea
             rows={3}
@@ -498,7 +506,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
 
         <div className="space-y-2">
           <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
-            URL del Audio (Opcional si hay transcripción)
+            {tr("URL del Audio (Opcional si hay transcripción)", "Audio URL (Optional if transcript is provided)")}
           </label>
           <input
             type="url"
@@ -512,21 +520,21 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
-              Preguntas de Comprensión Auditiva
+              {tr("Preguntas de Comprensión Auditiva", "Listening Comprehension Questions")}
             </p>
-            <span className="text-[10px] text-gray-400 font-bold">{preguntas.length} pregunta(s)</span>
+            <span className="text-[10px] text-gray-400 font-bold">{preguntas.length} {tr("pregunta(s)", "question(s)")}</span>
           </div>
 
           {preguntas.map((p: any, i: number) => (
             <fieldset key={i} className="border border-gray-200 rounded-xl p-3 space-y-2">
               <div className="flex items-center justify-between">
                 <legend className="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1">
-                  Pregunta {i + 1}
+                  {tr("Pregunta", "Question")} {i + 1}
                 </legend>
                 {preguntas.length > 1 && (
                   <button
                     type="button"
-                    title="Eliminar pregunta"
+                    title={tr("Eliminar pregunta", "Delete question")}
                     onClick={() => {
                       const q = preguntas.filter((_: any, k: number) => k !== i);
                       actualizar({ questions: q });
@@ -541,7 +549,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
               <input
                 type="text"
                 required
-                placeholder="¿Qué síntoma mencionó el paciente?"
+                placeholder={tr("¿Qué síntoma mencionó el paciente?", "What symptom did the patient mention?")}
                 value={p.question || ''}
                 onChange={(e) => {
                   const q = [...preguntas];
@@ -551,7 +559,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
                 className="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
               />
 
-              <p className="text-[10px] text-gray-500 font-medium">Marca la opción correcta:</p>
+              <p className="text-[10px] text-gray-500 font-medium">{tr("Marca la opción correcta:", "Mark the correct option:")}</p>
               {(p.options || ['', '']).map((opt: string, j: number) => (
                 <div key={j} className="flex items-center gap-2">
                   <input
@@ -568,7 +576,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
                   <input
                     type="text"
                     required
-                    placeholder={`Opción ${j + 1}`}
+                    placeholder={`${tr("Opción", "Option")} ${j + 1}`}
                     value={opt}
                     onChange={(e) => {
                       const q = [...preguntas];
@@ -582,7 +590,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
                   {p.options && p.options.length > 2 && (
                     <button
                       type="button"
-                      title="Eliminar opción"
+                      title={tr("Eliminar opción", "Delete option")}
                       onClick={() => {
                         const q = [...preguntas];
                         const opts = (q[i].options || []).filter((_: string, k: number) => k !== j);
@@ -611,7 +619,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
                 }}
                 className="text-[11px] font-bold text-[#4DA6FF] hover:underline flex items-center gap-1 pt-1"
               >
-                <Plus size={12} /> Añadir opción
+                <Plus size={12} /> {tr("Añadir opción", "Add option")}
               </button>
             </fieldset>
           ))}
@@ -621,7 +629,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
             onClick={() => actualizar({ questions: [...preguntas, preguntaVacia()] })}
             className="w-full py-2 border border-dashed border-[#4DA6FF] text-[#4DA6FF] rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-blue-50"
           >
-            <Plus size={14} /> Añadir pregunta de comprensión
+            <Plus size={14} /> {tr("Añadir pregunta de comprensión", "Add comprehension question")}
           </button>
         </div>
       </div>
@@ -655,16 +663,19 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
     return (
       <div className="space-y-4">
         <p className="text-[10px] text-gray-500 font-medium">
-          El estudiante deberá escribir o armar letra por letra cada palabra médica en inglés.
+          {tr("El estudiante deberá escribir o armar letra por letra cada palabra médica en inglés.", "The student must write or build letter by letter each medical word in English.")}
         </p>
 
         <div>
           <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
-            Contenido / Instrucciones de la Actividad
+            {tr("Contenido / Instrucciones de la Actividad", "Content / Activity Instructions")}
           </label>
           <textarea
             rows={2}
-            placeholder="Instrucciones para el estudiante (p. ej.: Escucha la pronunciación o lee la pista y deletrea cada término médico)..."
+            placeholder={tr(
+              "Instrucciones para el estudiante (p. ej.: Escucha la pronunciación o lee la pista y deletrea cada término médico)...",
+              "Student instructions (e.g.: Listen to the pronunciation or read the hint and spell each medical term)..."
+            )}
             value={datos?.description || datos?.instrucciones || datos?.instructions || ''}
             onChange={(e) => actualizar(rawWords, { description: e.target.value, instrucciones: e.target.value })}
             className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-emerald-400"
@@ -674,21 +685,21 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
-              Palabras a Deletrear
+              {tr("Palabras a Deletrear", "Words to Spell")}
             </span>
-            <span className="text-[10px] text-gray-400 font-bold">{rawWords.length} palabra(s)</span>
+            <span className="text-[10px] text-gray-400 font-bold">{rawWords.length} {tr("palabra(s)", "word(s)")}</span>
           </div>
 
           {rawWords.map((w: any, i: number) => (
             <fieldset key={i} className="border border-emerald-200 bg-emerald-50/20 rounded-xl p-3 space-y-2">
               <div className="flex items-center justify-between">
                 <legend className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 px-1">
-                  Palabra #{i + 1}
+                  {tr("Palabra", "Word")} #{i + 1}
                 </legend>
                 {rawWords.length > 1 && (
                   <button
                     type="button"
-                    title="Eliminar palabra"
+                    title={tr("Eliminar palabra", "Delete word")}
                     onClick={() => actualizar(rawWords.filter((_: any, k: number) => k !== i))}
                     className="p-1 text-rose-600 hover:bg-rose-50 rounded-lg"
                   >
@@ -699,12 +710,12 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
 
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
-                  Palabra correcta en inglés *
+                  {tr("Palabra correcta en inglés *", "Correct word in English *")}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="p. ej. SYRINGE o TEMPERATURE"
+                  placeholder={tr("p. ej. SYRINGE o TEMPERATURE", "e.g. SYRINGE or TEMPERATURE")}
                   value={w.term || w.word || ''}
                   onChange={(e) => cambiarPalabra(i, { term: e.target.value.toUpperCase().trim(), word: e.target.value.toUpperCase().trim() })}
                   className="w-full border border-emerald-300 bg-emerald-50/40 rounded-xl p-2.5 text-xs font-bold uppercase outline-none focus:ring-2 focus:ring-emerald-400"
@@ -713,11 +724,11 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
 
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
-                  Pista o Definición en Español
+                  {tr("Pista o Definición en Español", "Hint or Spanish Definition")}
                 </label>
                 <input
                   type="text"
-                  placeholder="Instrumento médico para inyectar líquidos (Jeringa)"
+                  placeholder={tr("Instrumento médico para inyectar líquidos (Jeringa)", "Medical instrument for injecting liquids (Syringe)")}
                   value={w.hint || ''}
                   onChange={(e) => cambiarPalabra(i, { hint: e.target.value })}
                   className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
@@ -731,7 +742,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
             onClick={() => actualizar([...rawWords, { term: '', hint: '' }])}
             className="w-full py-2 border border-dashed border-emerald-500 text-emerald-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-emerald-50"
           >
-            <Plus size={14} /> Añadir otra palabra a deletrear
+            <Plus size={14} /> {tr("Añadir otra palabra a deletrear", "Add another word to spell")}
           </button>
         </div>
       </div>
@@ -766,7 +777,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
       <div className="space-y-4">
         <div>
           <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
-            Escenario del Caso Clínico (Paciente, Signos Vitales, Síntomas) *
+            {tr("Escenario del Caso Clínico (Paciente, Signos Vitales, Síntomas) *", "Clinical Case Scenario (Patient, Vital Signs, Symptoms) *")}
           </label>
           <textarea
             rows={4}
@@ -781,21 +792,21 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
-              Preguntas de Toma de Decisiones Clínicas
+              {tr("Preguntas de Toma de Decisiones Clínicas", "Clinical Decision-Making Questions")}
             </span>
-            <span className="text-[10px] text-gray-400 font-bold">{rawQuestions.length} pregunta(s)</span>
+            <span className="text-[10px] text-gray-400 font-bold">{rawQuestions.length} {tr("pregunta(s)", "question(s)")}</span>
           </div>
 
           {rawQuestions.map((q: any, i: number) => (
             <fieldset key={i} className="border border-purple-200 bg-purple-50/20 rounded-xl p-3 space-y-2">
               <div className="flex items-center justify-between">
                 <legend className="text-[10px] font-bold uppercase tracking-wider text-purple-700 px-1">
-                  Pregunta #{i + 1}
+                  {tr("Pregunta", "Question")} #{i + 1}
                 </legend>
                 {rawQuestions.length > 1 && (
                   <button
                     type="button"
-                    title="Eliminar pregunta"
+                    title={tr("Eliminar pregunta", "Delete question")}
                     onClick={() => actualizar(rawQuestions.filter((_: any, k: number) => k !== i))}
                     className="p-1 text-rose-600 hover:bg-rose-50 rounded-lg"
                   >
@@ -806,7 +817,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
 
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
-                  Enunciado de la Pregunta *
+                  {tr("Enunciado de la Pregunta *", "Question Statement *")}
                 </label>
                 <input
                   type="text"
@@ -820,7 +831,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
 
               <div className="space-y-2">
                 <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                  Opciones de Decisión (Marca la correcta) *
+                  {tr("Opciones de Decisión (Marca la correcta) *", "Decision Options (Mark the correct one) *")}
                 </label>
                 {(q.options || ['', '']).map((opt: string, j: number) => (
                   <div key={j} className="flex items-center gap-2">
@@ -834,7 +845,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
                     <input
                       type="text"
                       required
-                      placeholder={`Opción de acción ${j + 1}`}
+                      placeholder={`${tr("Opción de acción", "Action option")} ${j + 1}`}
                       value={opt}
                       onChange={(e) => {
                         const opts = [...(q.options || [])];
@@ -846,7 +857,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
                     {(q.options || []).length > 2 && (
                       <button
                         type="button"
-                        title="Eliminar opción"
+                        title={tr("Eliminar opción", "Delete option")}
                         onClick={() => {
                           const opts = (q.options || []).filter((_: string, k: number) => k !== j);
                           const currCorrect = Number(q.correctAnswer ?? 0);
@@ -867,7 +878,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
                   onClick={() => cambiarPregunta(i, { options: [...(q.options || []), ''] })}
                   className="text-[11px] font-bold text-[#4DA6FF] hover:underline flex items-center gap-1 mt-1"
                 >
-                  <Plus size={12} /> Añadir opción de decisión
+                  <Plus size={12} /> {tr("Añadir opción de decisión", "Add decision option")}
                 </button>
               </div>
             </fieldset>
@@ -878,7 +889,7 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
             onClick={() => actualizar([...rawQuestions, { question: '', options: ['', ''], correctAnswer: 0 }])}
             className="w-full py-2 border border-dashed border-purple-400 text-purple-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-purple-50"
           >
-            <Plus size={14} /> Añadir Pregunta al Caso Clínico
+            <Plus size={14} /> {tr("Añadir Pregunta al Caso Clínico", "Add Clinical Case Question")}
           </button>
         </div>
       </div>
@@ -889,19 +900,21 @@ export const EditorActividad: React.FC<Props> = ({ tipo, datos, onChange }) => {
   return (
     <div className="space-y-3">
       <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium">
-        Esta actividad no se califica sola: queda pendiente de tu revisión y no suma
-        progreso al aprendiz hasta que le pongas nota.
+        {tr(
+          "Esta actividad no se califica sola: queda pendiente de tu revisión y no suma progreso al aprendiz hasta que le pongas nota.",
+          "This activity is not self-graded: it remains pending your review and does not add progress to the student until you assign a grade."
+        )}
       </div>
       <textarea
         rows={3}
-        placeholder="Consigna para el aprendiz (qué debe grabar)"
+        placeholder={tr("Consigna para el aprendiz (qué debe grabar)", "Instructions for the student (what to record)")}
         value={datos?.consigna || ''}
         onChange={(e) => onChange({ ...datos, consigna: e.target.value })}
         className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
       />
       <label className="block">
         <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-          Duración máxima en segundos (opcional)
+          {tr("Duración máxima en segundos (opcional)", "Maximum duration in seconds (optional)")}
         </span>
         <input
           type="number"

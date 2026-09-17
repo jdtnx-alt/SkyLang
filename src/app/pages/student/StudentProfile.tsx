@@ -28,7 +28,7 @@ export function StudentProfile() {
 
     fetch(`/api/users/${usuario.id}`, { headers: { Authorization: `Bearer ${token}` } })
       .then(async (r) => {
-        if (!r.ok) throw new Error("No se pudo cargar tu perfil.");
+        if (!r.ok) throw new Error("Could not load your profile.");
         return r.json();
       })
       .then((d) => {
@@ -56,7 +56,7 @@ export function StudentProfile() {
         body: JSON.stringify({ fullName: nombre, email: correo, idNumber: identificacion, phone: telefono })
       });
       const cuerpo = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(cuerpo.error || "No se pudo guardar.");
+      if (!res.ok) throw new Error(cuerpo.error || "Could not save profile.");
 
       const almacenado = localStorage.getItem("user");
       if (almacenado) {
@@ -64,7 +64,7 @@ export function StudentProfile() {
         localStorage.setItem("user", JSON.stringify({ ...usuario, nombre, correo }));
       }
 
-      // ── Evaluar insignia "Expediente Completo" ──────────────────────────
+      // ── Check "Complete Record" Badge ──────────────────────────
       try {
         const badgeRes = await fetch(
           `/api/student/badges/check-profile?studentId=${perfil.id}`,
@@ -76,21 +76,19 @@ export function StudentProfile() {
             soundEffects.playCorrect();
             setMensaje({
               tipo: "ok",
-              texto: "¡Datos actualizados! 🏅 ¡Desbloqueaste la insignia «Expediente Completo»!"
+              texto: "Profile updated! 🏅 You unlocked the «Complete Record» badge!"
             });
-            return; // el mensaje ya está puesto
+            return;
           }
         }
       } catch (_) {
-        // Si falla la evaluación de insignia no bloqueamos el flujo principal
       }
-      // ────────────────────────────────────────────────────────────────────
 
       soundEffects.playCorrect();
-      setMensaje({ tipo: "ok", texto: "¡Tus datos se actualizaron con éxito!" });
+      setMensaje({ tipo: "ok", texto: "Your details were updated successfully!" });
     } catch (err: any) {
       soundEffects.playIncorrect();
-      setMensaje({ tipo: "error", texto: err?.message || "No se pudo guardar." });
+      setMensaje({ tipo: "error", texto: err?.message || "Could not save profile." });
     } finally {
       setGuardando(false);
     }
@@ -123,8 +121,8 @@ export function StudentProfile() {
           <div className="p-8 max-w-4xl mx-auto w-full space-y-6">
             <div className="flex items-center justify-between border-b-2 border-slate-100 pb-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-black text-slate-900">Mi Perfil de Aprendiz</h1>
-                <p className="text-xs sm:text-sm font-bold text-slate-500 mt-0.5">Consulta y actualiza tus datos personales en SkyLang</p>
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900">My Student Profile</h1>
+                <p className="text-xs sm:text-sm font-bold text-slate-500 mt-0.5">View and update your personal details in SkyLang</p>
               </div>
               <BeeMascot size="sm" mood="happy" animate />
             </div>
@@ -132,19 +130,23 @@ export function StudentProfile() {
             {cargando ? (
               <div className="p-16 text-center space-y-3">
                 <div className="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto" />
-                <p className="text-xs font-bold text-slate-400">Cargando perfil...</p>
+                <p className="text-xs font-bold text-slate-400">Loading profile...</p>
               </div>
             ) : perfil ? (
               <div className="space-y-6 max-w-xl">
-                {/* Tarjetas de Información Institucional */}
+                {/* Institutional Information Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="p-4 bg-sky-50 border-2 border-sky-200 rounded-2xl space-y-1">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-sky-700">Ficha SENA</span>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-sky-700">Cohort Code</span>
                     <p className="text-sm font-black text-slate-900">{perfil.numero_ficha || "3142784"}</p>
                   </div>
                   <div className="p-4 bg-purple-50 border-2 border-purple-200 rounded-2xl space-y-1">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-purple-700">Programa de Formación</span>
-                    <p className="text-sm font-black text-slate-900 truncate">{perfil.programa_nombre || "English for Nursing"}</p>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-purple-700">Training Program</span>
+                    <p className="text-sm font-black text-slate-900 truncate">
+                      {perfil.programa_nombre?.toLowerCase().includes('enfermer') || perfil.programa_nombre?.toLowerCase().includes('nursing')
+                        ? 'Nursing - Technical English'
+                        : perfil.programa_nombre || 'English for Nursing'}
+                    </p>
                   </div>
                 </div>
 
@@ -156,15 +158,15 @@ export function StudentProfile() {
                     <div>
                       <h3 className="font-black text-lg text-slate-900">{perfil.nombre}</h3>
                       <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 bg-sky-100 text-sky-800 rounded-full">
-                        {perfil.rol || "Aprendiz"}
+                        {perfil.rol === 'aprendiz' || !perfil.rol ? 'Student' : perfil.rol}
                       </span>
                     </div>
                   </div>
 
-                  {campo("Nombre completo", <User size={18} />, nombre, setNombre, "text", true)}
-                  {campo("Correo electrónico", <Mail size={18} />, correo, setCorreo, "email", true)}
-                  {campo("Número de identificación", <IdCard size={18} />, identificacion, setIdentificacion)}
-                  {campo("Teléfono", <Phone size={18} />, telefono, setTelefono)}
+                  {campo("Full Name", <User size={18} />, nombre, setNombre, "text", true)}
+                  {campo("Email Address", <Mail size={18} />, correo, setCorreo, "email", true)}
+                  {campo("ID Number", <IdCard size={18} />, identificacion, setIdentificacion)}
+                  {campo("Phone Number", <Phone size={18} />, telefono, setTelefono)}
 
                   {mensaje && (
                     <p className={`p-3.5 rounded-2xl text-xs font-bold ${
@@ -182,12 +184,12 @@ export function StudentProfile() {
                     className="btn-duo-3d btn-duo-amber w-full py-3 text-xs flex items-center justify-center gap-2 mt-2"
                   >
                     <Save size={16} />
-                    <span>{guardando ? "Guardando cambios…" : "Guardar Cambios"}</span>
+                    <span>{guardando ? "Saving changes…" : "Save Changes"}</span>
                   </button>
                 </form>
               </div>
             ) : (
-              <p className="text-sm text-slate-400">No pudimos cargar tu perfil.</p>
+              <p className="text-sm text-slate-400">Could not load your profile.</p>
             )}
           </div>
         </div>

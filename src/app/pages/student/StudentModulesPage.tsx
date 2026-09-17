@@ -47,13 +47,13 @@ export function StudentModulesPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-slate-100 pb-6">
               <div>
                 <span className="text-xs font-black uppercase tracking-widest text-sky-600">
-                  Plan de Estudios
+                  Curriculum
                 </span>
                 <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                  Módulos de Formación
+                  Training Modules
                 </h1>
                 <p className="text-xs sm:text-sm font-semibold text-slate-500 mt-1">
-                  Selecciona una unidad para desbloquear lecciones y ejercicios interactivos.
+                  Select a unit to unlock lessons and interactive exercises.
                 </p>
               </div>
 
@@ -63,7 +63,7 @@ export function StudentModulesPage() {
             {loading ? (
               <div className="p-16 text-center space-y-3">
                 <div className="w-8 h-8 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto" />
-                <p className="text-xs font-bold text-slate-400">Cargando módulos...</p>
+                <p className="text-xs font-bold text-slate-400">Loading modules...</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -104,12 +104,19 @@ export function StudentModulesPage() {
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <span className={`text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full border ${scheme.pill}`}>
-                            {mod.fase || `Unidad ${index + 1}`}
+                            {(() => {
+                              const f = (mod.fase || '').toLowerCase();
+                              if (f.includes('análisis') || f.includes('analisis')) return 'Analysis Phase';
+                              if (f.includes('planeación') || f.includes('planeacion')) return 'Planning Phase';
+                              if (f.includes('ejecución') || f.includes('ejecucion')) return 'Execution Phase';
+                              if (f.includes('evaluación') || f.includes('evaluacion')) return 'Evaluation Phase';
+                              return mod.fase || `Unit ${index + 1}`;
+                            })()}
                           </span>
 
                           {isCompleted ? (
                             <span className="flex items-center gap-1 text-[11px] font-black text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                              <Check size={14} strokeWidth={3} /> Completado
+                              <Check size={14} strokeWidth={3} /> Completed
                             </span>
                           ) : isLocked ? (
                             <Lock size={18} className="text-slate-400" />
@@ -146,7 +153,7 @@ export function StudentModulesPage() {
                               : 'btn-duo-sky'
                           }`}
                         >
-                          <span>{isCompleted ? 'Repasar Unidad' : isLocked ? 'Bloqueado' : 'Continuar Unidad'}</span>
+                          <span>{isCompleted ? 'Review Unit' : isLocked ? 'Locked' : 'Continue Unit'}</span>
                           {!isLocked && <ArrowRight size={16} />}
                         </button>
                       </div>

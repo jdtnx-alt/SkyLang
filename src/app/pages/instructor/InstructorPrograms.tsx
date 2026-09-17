@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { Sidebar } from "../../components/Sidebar";
 import { BookOpen, Layers, Users, Search, Calendar, CheckCircle2, ChevronRight, X, User } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface Ficha {
   id: number;
@@ -21,6 +22,7 @@ interface InstructorProgram {
 }
 
 export function InstructorPrograms() {
+  const { tr } = useLanguage();
   const navigate = useNavigate();
   const [programs, setPrograms] = useState<InstructorProgram[]>([]);
   const [filteredPrograms, setFilteredPrograms] = useState<InstructorProgram[]>([]);
@@ -114,8 +116,8 @@ export function InstructorPrograms() {
       <div className="ml-64 flex-1 p-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#111111] mb-2">Programs & Assigned Fichas</h1>
-          <p className="text-gray-600">Overview of assigned training programs and active cohorts under your leadership</p>
+          <h1 className="text-3xl font-bold text-[#111111] mb-2">{tr("Programas y Fichas Asignadas", "Programs & Assigned Fichas")}</h1>
+          <p className="text-gray-600">{tr("Resumen de programas de formación y fichas activas bajo tu liderazgo", "Overview of assigned training programs and active cohorts under your leadership")}</p>
         </div>
 
         {/* Stats */}
@@ -125,9 +127,9 @@ export function InstructorPrograms() {
               <BookOpen size={28} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Assigned Programs</p>
+              <p className="text-sm font-medium text-gray-500">{tr("Programas Asignados", "Assigned Programs")}</p>
               <h3 className="text-2xl font-bold text-gray-900">{totalProgramas}</h3>
-              <p className="text-xs text-blue-600 font-medium">Specialty areas</p>
+              <p className="text-xs text-blue-600 font-medium">{tr("Áreas de especialidad", "Specialty areas")}</p>
             </div>
           </div>
 
@@ -136,9 +138,9 @@ export function InstructorPrograms() {
               <Layers size={28} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Active Fichas</p>
+              <p className="text-sm font-medium text-gray-500">{tr("Fichas Activas", "Active Fichas")}</p>
               <h3 className="text-2xl font-bold text-gray-900">{totalFichas}</h3>
-              <p className="text-xs text-purple-600 font-medium">Active cohorts</p>
+              <p className="text-xs text-purple-600 font-medium">{tr("Cohortes activas", "Active cohorts")}</p>
             </div>
           </div>
 
@@ -147,9 +149,9 @@ export function InstructorPrograms() {
               <Users size={28} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Total Students</p>
+              <p className="text-sm font-medium text-gray-500">{tr("Total Aprendices", "Total Students")}</p>
               <h3 className="text-2xl font-bold text-gray-900">{totalAprendicesEnFichas}</h3>
-              <p className="text-xs text-green-600 font-medium">Enrolled in your fichas</p>
+              <p className="text-xs text-green-600 font-medium">{tr("Inscritos en tus fichas", "Enrolled in your fichas")}</p>
             </div>
           </div>
         </div>
@@ -160,7 +162,7 @@ export function InstructorPrograms() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
-              placeholder="Search by program or ficha number..."
+              placeholder={tr("Buscar por programa o número de ficha...", "Search by program or ficha number...")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
@@ -170,9 +172,9 @@ export function InstructorPrograms() {
 
         {/* Programs List */}
         {isLoading ? (
-          <div className="bg-white rounded-xl p-12 text-center text-gray-500 shadow-md">Loading programs and fichas...</div>
+          <div className="bg-white rounded-xl p-12 text-center text-gray-500 shadow-md">{tr("Cargando programas y fichas...", "Loading programs and fichas...")}</div>
         ) : filteredPrograms.length === 0 ? (
-          <div className="bg-white rounded-xl p-12 text-center text-gray-500 shadow-md">No assigned programs or fichas found.</div>
+          <div className="bg-white rounded-xl p-12 text-center text-gray-500 shadow-md">{tr("No se encontraron programas o fichas asignadas.", "No assigned programs or fichas found.")}</div>
         ) : (
           <div className="space-y-8">
             {filteredPrograms.map((program) => (
@@ -208,7 +210,7 @@ export function InstructorPrograms() {
                               ficha.activo ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-600"
                             }`}
                           >
-                            {ficha.activo ? "Active" : "Completed"}
+                            {ficha.activo ? tr("Activa", "Active") : tr("Completada", "Completed")}
                           </span>
                         </div>
 
@@ -216,13 +218,13 @@ export function InstructorPrograms() {
                           <div className="flex items-center gap-2">
                             <Users size={14} className="text-gray-400" />
                             <span>
-                              <strong>{ficha.totalAprendices}</strong> Enrolled students
+                              <strong>{ficha.totalAprendices}</strong> {tr("Aprendices inscritos", "Enrolled students")}
                             </span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Calendar size={14} className="text-gray-400" />
                             <span>
-                              Start: <strong>{ficha.fechaInicio}</strong> | End: <strong>{ficha.fechaFin}</strong>
+                              {tr("Inicio:", "Start:")} <strong>{ficha.fechaInicio}</strong> | {tr("Fin:", "End:")} <strong>{ficha.fechaFin}</strong>
                             </span>
                           </div>
                         </div>
@@ -232,7 +234,7 @@ export function InstructorPrograms() {
                         onClick={() => navigate(`/instructor/ficha/${ficha.id}`)}
                         className="w-full py-2 bg-[#4DA6FF] hover:bg-blue-600 text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 shadow-xs"
                       >
-                        Gestionar Ficha & Actividades <ChevronRight size={14} />
+                        {tr("Gestionar Ficha y Actividades", "Manage Ficha & Activities")} <ChevronRight size={14} />
                       </button>
                     </motion.div>
                   ))}
@@ -266,35 +268,35 @@ export function InstructorPrograms() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-gray-900">Ficha #{selectedFichaModal.numeroFicha}</h3>
-                  <p className="text-xs text-gray-500">Cohort student group information</p>
+                  <p className="text-xs text-gray-500">{tr("Información del grupo de aprendices", "Cohort student group information")}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6 bg-gray-50 p-4 rounded-xl text-sm">
                 <div>
-                  <p className="text-xs text-gray-500">Ficha Status</p>
-                  <p className="font-semibold text-green-600">{selectedFichaModal.activo ? "Active" : "Inactive"}</p>
+                  <p className="text-xs text-gray-500">{tr("Estado de la Ficha", "Ficha Status")}</p>
+                  <p className="font-semibold text-green-600">{selectedFichaModal.activo ? tr("Activa", "Active") : tr("Inactiva", "Inactive")}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Total Students</p>
-                  <p className="font-semibold text-gray-800">{selectedFichaModal.totalAprendices} Students</p>
+                  <p className="text-xs text-gray-500">{tr("Total Aprendices", "Total Students")}</p>
+                  <p className="font-semibold text-gray-800">{selectedFichaModal.totalAprendices} {tr("aprendices", "students")}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Start Date</p>
+                  <p className="text-xs text-gray-500">{tr("Fecha de Inicio", "Start Date")}</p>
                   <p className="font-semibold text-gray-800">{selectedFichaModal.fechaInicio}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">End Date</p>
+                  <p className="text-xs text-gray-500">{tr("Fecha de Fin", "End Date")}</p>
                   <p className="font-semibold text-gray-800">{selectedFichaModal.fechaFin}</p>
                 </div>
               </div>
 
               <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
                 <div className="flex items-center gap-2 text-[#4DA6FF] font-semibold text-sm mb-1">
-                  <CheckCircle2 size={16} /> Training Phase Status
+                  <CheckCircle2 size={16} /> {tr("Estado de la Fase de Formación", "Training Phase Status")}
                 </div>
                 <p className="text-xs text-gray-600">
-                  Ficha #{selectedFichaModal.numeroFicha} is currently in an active training phase under the Nursing English program curriculum.
+                  {tr(`La Ficha #${selectedFichaModal.numeroFicha} se encuentra en una fase activa de formación dentro del currículo del programa.`, `Ficha #${selectedFichaModal.numeroFicha} is currently in an active training phase under the program curriculum.`)}
                 </p>
               </div>
 
@@ -302,7 +304,7 @@ export function InstructorPrograms() {
                 onClick={() => setSelectedFichaModal(null)}
                 className="w-full py-2.5 bg-gray-900 text-white hover:bg-gray-800 rounded-lg font-semibold text-sm transition-colors"
               >
-                Close
+                {tr("Cerrar", "Close")}
               </button>
             </motion.div>
           </div>

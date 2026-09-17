@@ -106,7 +106,7 @@ export const ListeningGame: React.FC<ListeningGameProps> = ({
               </span>
             </h3>
             <p className="text-xs text-slate-500 font-medium">
-              Escucha el caso clinico, ajusta la velocidad y responde las preguntas.
+              Listen to the clinical case, adjust the speed, and answer the questions.
             </p>
           </div>
         </div>
@@ -116,7 +116,7 @@ export const ListeningGame: React.FC<ListeningGameProps> = ({
           onClick={handleReset}
           className="flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-purple-700 bg-slate-100 hover:bg-purple-50 px-3 py-1.5 rounded-xl transition-all font-bold border border-slate-200"
         >
-          <RotateCcw size={14} /> Reiniciar
+          <RotateCcw size={14} /> Reset
         </button>
       </div>
 
@@ -131,8 +131,8 @@ export const ListeningGame: React.FC<ListeningGameProps> = ({
               {isPlaying ? <Pause size={20} /> : <Play size={20} className="ml-0.5" />}
             </button>
             <div>
-              <span className="text-xs font-extrabold text-purple-900 block">Reproductor clinico</span>
-              <span className="text-[11px] text-slate-500 font-medium block">Reproducciones: {playCount}</span>
+              <span className="text-xs font-extrabold text-purple-900 block">Clinical Player</span>
+              <span className="text-[11px] text-slate-500 font-medium block">Plays: {playCount}</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -162,7 +162,7 @@ export const ListeningGame: React.FC<ListeningGameProps> = ({
                   type="button"
                   onClick={() => handlePlayAudio(q.audioText)}
                   className="shrink-0 text-purple-700 bg-purple-50 rounded-xl p-2 hover:bg-purple-100"
-                  aria-label="Escuchar fragmento"
+                  aria-label="Listen to fragment"
                 >
                   <Headphones size={16} />
                 </button>
@@ -204,7 +204,7 @@ export const ListeningGame: React.FC<ListeningGameProps> = ({
         }`}
       >
         <Send size={15} />
-        {submitted ? 'Respuestas enviadas' : 'Enviar respuestas'}
+        {submitted ? 'Answers submitted' : 'Submit answers'}
       </button>
     </div>
   );

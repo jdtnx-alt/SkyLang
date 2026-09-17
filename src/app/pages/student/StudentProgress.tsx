@@ -10,11 +10,11 @@ import { motion } from "motion/react";
 import { soundEffects } from "../../utils/soundEffects";
 
 const ETIQUETA_ESTADO: Record<string, { texto: string; badge: string; border: string }> = {
-  bloqueado:   { texto: "Bloqueado",   badge: "bg-slate-100 text-slate-500", border: "border-slate-200" },
-  disponible:  { texto: "Disponible",  badge: "bg-sky-100 text-sky-700",   border: "border-sky-200" },
-  en_progreso: { texto: "En progreso", badge: "bg-amber-100 text-amber-800", border: "border-amber-200" },
-  completado:  { texto: "Completado",  badge: "bg-emerald-100 text-emerald-800", border: "border-emerald-200" },
-  excelencia:  { texto: "Excelencia",  badge: "bg-purple-100 text-purple-800", border: "border-purple-200" }
+  bloqueado:   { texto: "Locked",      badge: "bg-slate-100 text-slate-500", border: "border-slate-200" },
+  disponible:  { texto: "Available",   badge: "bg-sky-100 text-sky-700",   border: "border-sky-200" },
+  en_progreso: { texto: "In Progress", badge: "bg-amber-100 text-amber-800", border: "border-amber-200" },
+  completado:  { texto: "Completed",   badge: "bg-emerald-100 text-emerald-800", border: "border-emerald-200" },
+  excelencia:  { texto: "Excellence",  badge: "bg-purple-100 text-purple-800", border: "border-purple-200" }
 };
 
 const colorBarra = (estado: string) =>
@@ -57,7 +57,7 @@ export function StudentProgress() {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(async (r) => {
-        if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || "No se pudo cargar tu progreso.");
+        if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || "Could not load your progress.");
         return r.json();
       })
       .then(setDatos)
@@ -69,7 +69,7 @@ export function StudentProgress() {
     if (cargando) {
       return (
         <div className="p-16 text-center space-y-4">
-          <BeeMascot size="lg" mood="thinking" animate message="Calculando tus estadísticas y logros..." />
+          <BeeMascot size="lg" mood="thinking" animate message="Calculating your stats and achievements..." />
           <div className="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
       );
@@ -78,51 +78,101 @@ export function StudentProgress() {
     if (error) {
       return (
         <div className="max-w-xl p-6 rounded-3xl bg-rose-50 border-2 border-rose-200 text-rose-900 text-center space-y-3">
-          <BeeMascot size="sm" mood="encouraging" message="No pudimos cargar tu progreso." />
+          <BeeMascot size="sm" mood="encouraging" message="We could not load your progress." />
           <p className="text-xs font-semibold">{error}</p>
         </div>
       );
     }
 
-    const { resumen, tiempoSemanal, evolucion, raps, actividadReciente } = datos;
+const DIA_MAP: Record<string, string> = {
+  Lun: "Mon",
+  Mar: "Tue",
+  "Mié": "Wed",
+  Mie: "Wed",
+  Jue: "Thu",
+  Vie: "Fri",
+  "Sáb": "Sat",
+  Sab: "Sat",
+  Dom: "Sun",
+};
+
+const MES_MAP: Record<string, string> = {
+  ene: "Jan",
+  feb: "Feb",
+  mar: "Mar",
+  abr: "Apr",
+  may: "May",
+  jun: "Jun",
+  jul: "Jul",
+  ago: "Aug",
+  sep: "Sep",
+  oct: "Oct",
+  nov: "Nov",
+  dic: "Dec",
+};
+
+function formatActividadTexto(texto: string): string {
+  if (!texto) return "";
+  let res = texto;
+  if (res.startsWith("Aprobaste «")) {
+    res = res.replace("Aprobaste «", "Passed «");
+  } else if (res.startsWith("Intento en «")) {
+    res = res.replace("Intento en «", "Attempt on «");
+  } else if (res.startsWith("Completaste «")) {
+    res = res.replace("Completaste «", "Completed «");
+  } else if (res.startsWith("Se desbloqueó «")) {
+    res = res.replace("Se desbloqueó «", "Unlocked «");
+  }
+  return res;
+}
+
+    const { resumen, tiempoSemanal: rawTiempoSemanal, evolucion: rawEvolucion, raps, actividadReciente } = datos;
+    const tiempoSemanal = (rawTiempoSemanal || []).map((d: any) => ({
+      ...d,
+      dia: DIA_MAP[d.dia] || d.dia,
+    }));
+    const evolucion = (rawEvolucion || []).map((e: any) => ({
+      ...e,
+      mes: MES_MAP[e.mes] || e.mes,
+    }));
     const hayTiempo = tiempoSemanal.some((d: any) => d.horas > 0);
 
     return (
       <div className="space-y-8">
-        {/* Tarjetas de resumen (Duolingo Style) */}
+        {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           <Tarjeta
             icono={<TrendingUp className="text-sky-600" size={24} />} fondo="bg-sky-100"
             border="border-sky-200 border-b-sky-400"
-            etiqueta="Avance general" valor={`${resumen.avanceGeneral}%`}
-            nota="Promedio de todos tus RAP"
+            etiqueta="Overall Progress" valor={`${resumen.avanceGeneral}%`}
+            nota="Average of all your RAPs"
           />
           <Tarjeta
             icono={<BookOpen className="text-emerald-700" size={24} />} fondo="bg-emerald-100"
             border="border-emerald-200 border-b-emerald-400"
-            etiqueta="Módulos completados" valor={`${resumen.modulosCompletados}/${resumen.modulosTotales}`}
-            nota="Unidades de aprendizaje"
+            etiqueta="Completed Modules" valor={`${resumen.modulosCompletados}/${resumen.modulosTotales}`}
+            nota="Learning units"
           />
           <Tarjeta
             icono={<Clock className="text-purple-700" size={24} />} fondo="bg-purple-100"
             border="border-purple-200 border-b-purple-400"
-            etiqueta="Horas esta semana" valor={resumen.horasEstaSemana}
-            nota="Tiempo en actividades"
+            etiqueta="Hours This Week" valor={resumen.horasEstaSemana}
+            nota="Time spent in activities"
           />
           <Tarjeta
             icono={<Trophy className="text-amber-700" size={24} />} fondo="bg-amber-100"
             border="border-amber-200 border-b-amber-400"
-            etiqueta="Nota media"
+            etiqueta="Average Grade"
             valor={resumen.notaMedia !== null ? `${resumen.notaMedia}%` : "—"}
-            nota={resumen.notaMedia === null ? "Sin calificaciones aún" : "De tus mejores notas"}
+            nota={resumen.notaMedia === null ? "No grades yet" : "From your best scores"}
           />
         </div>
 
-        {/* Gráficos */}
+        {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-white rounded-3xl border-2 border-slate-200 border-b-6 p-6 shadow-xs space-y-4">
             <h2 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <Clock size={18} className="text-sky-600" /> Tiempo de estudio semanal
+              <Clock size={18} className="text-sky-600" /> Weekly Study Time
             </h2>
             {hayTiempo ? (
               <ResponsiveContainer width="100%" height={260}>
@@ -130,16 +180,16 @@ export function StudentProgress() {
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eef2f6" />
                   <XAxis dataKey="dia" tick={{ fontSize: 12, fontWeight: 700 }} />
                   <YAxis tick={{ fontSize: 12, fontWeight: 700 }} />
-                  <Tooltip formatter={(v: any) => [`${v} h`, "Tiempo"]} />
+                  <Tooltip formatter={(v: any) => [`${v} hrs`, "Time"]} />
                   <Bar dataKey="horas" fill="#0EA5E9" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
               <div className="h-[260px] flex flex-col items-center justify-center text-center px-6 space-y-2">
                 <Clock className="text-slate-300" size={36} />
-                <p className="text-sm font-extrabold text-slate-700">Sin tiempo registrado esta semana</p>
+                <p className="text-sm font-extrabold text-slate-700">No time recorded this week</p>
                 <p className="text-xs text-slate-400 max-w-xs">
-                  Se contabiliza automáticamente mientras resuelves tus actividades.
+                  Automatically tracked while you complete learning activities.
                 </p>
               </div>
             )}
@@ -147,7 +197,7 @@ export function StudentProgress() {
 
           <div className="bg-white rounded-3xl border-2 border-slate-200 border-b-6 p-6 shadow-xs space-y-4">
             <h2 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <TrendingUp size={18} className="text-emerald-600" /> Evolución de tu avance
+              <TrendingUp size={18} className="text-emerald-600" /> Progress Evolution
             </h2>
             {evolucion.length > 1 ? (
               <ResponsiveContainer width="100%" height={260}>
@@ -155,7 +205,7 @@ export function StudentProgress() {
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eef2f6" />
                   <XAxis dataKey="mes" tick={{ fontSize: 12, fontWeight: 700 }} />
                   <YAxis domain={[0, 100]} tick={{ fontSize: 12, fontWeight: 700 }} />
-                  <Tooltip formatter={(v: any) => [`${v}%`, "Avance"]} />
+                  <Tooltip formatter={(v: any) => [`${v}%`, "Progress"]} />
                   <Line type="monotone" dataKey="avance" stroke="#10B981" strokeWidth={3.5}
                     dot={{ r: 5, fill: "#10B981" }} />
                 </LineChart>
@@ -164,20 +214,20 @@ export function StudentProgress() {
               <div className="h-[260px] flex flex-col items-center justify-center text-center px-6 space-y-2">
                 <TrendingUp className="text-slate-300" size={36} />
                 <p className="text-sm font-extrabold text-slate-700">
-                  {evolucion.length === 1 ? "Llevas un mes de recorrido" : "Aún no hay recorrido histórico"}
+                  {evolucion.length === 1 ? "1 month of study" : "No historical progress yet"}
                 </p>
                 <p className="text-xs text-slate-400 max-w-xs">
-                  La curva de crecimiento se mostrará a medida que apruebes lecciones en diferentes fechas.
+                  Your growth curve will display as you pass lessons across different dates.
                 </p>
               </div>
             )}
           </div>
         </div>
 
-        {/* Progreso por RAP */}
+        {/* Progress by RAP */}
         <div className="bg-white rounded-3xl border-2 border-slate-200 border-b-6 p-6 sm:p-8 shadow-xs space-y-5">
           <h2 className="text-base font-black text-slate-900 flex items-center gap-2">
-            <Award size={20} className="text-amber-500" /> Desglose de RAPs del Programa
+            <Award size={20} className="text-amber-500" /> Program RAPs Breakdown
           </h2>
           <div className="space-y-4">
             {raps.map((rap: any) => {
@@ -210,15 +260,15 @@ export function StudentProgress() {
               );
             })}
             {raps.length === 0 && (
-              <p className="text-sm text-slate-400 text-center py-4">Tu ficha todavía no tiene RAP publicados.</p>
+              <p className="text-sm text-slate-400 text-center py-4">Your class does not have published RAPs yet.</p>
             )}
           </div>
         </div>
 
-        {/* Actividad reciente */}
+        {/* Recent Activity */}
         <div className="bg-white rounded-3xl border-2 border-slate-200 border-b-6 p-6 sm:p-8 shadow-xs space-y-4">
           <h2 className="text-base font-black text-slate-900 flex items-center gap-2">
-            <Sparkles size={18} className="text-sky-500" /> Registro de Actividad Reciente
+            <Sparkles size={18} className="text-sky-500" /> Recent Activity Log
           </h2>
           <div className="space-y-2.5">
             {actividadReciente.map((a: any, i: number) => (
@@ -232,9 +282,9 @@ export function StudentProgress() {
                     <Clock size={18} className="text-slate-400 shrink-0" />
                   )}
                   <div className="min-w-0">
-                    <p className="text-xs sm:text-sm font-black text-slate-800 truncate">{a.texto}</p>
+                    <p className="text-xs sm:text-sm font-black text-slate-800 truncate">{formatActividadTexto(a.texto)}</p>
                     <p className="text-[10px] font-bold text-slate-400">
-                      {new Date(a.fecha).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" })}
+                      {new Date(a.fecha).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}
                     </p>
                   </div>
                 </div>
@@ -246,7 +296,7 @@ export function StudentProgress() {
               </div>
             ))}
             {actividadReciente.length === 0 && (
-              <p className="text-xs text-slate-400 text-center py-4">Todavía no has realizado ninguna actividad.</p>
+              <p className="text-xs text-slate-400 text-center py-4">You have not completed any activities yet.</p>
             )}
           </div>
         </div>
@@ -263,8 +313,8 @@ export function StudentProgress() {
           <div className="p-8 max-w-6xl mx-auto w-full space-y-6">
             <div className="flex items-center justify-between border-b-2 border-slate-100 pb-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-black text-slate-900">Mi Progreso y Estadísticas</h1>
-                <p className="text-xs sm:text-sm font-bold text-slate-500 mt-0.5">Sigue tu avance, constancia y logros académicos en SkyLang</p>
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900">My Progress & Statistics</h1>
+                <p className="text-xs sm:text-sm font-bold text-slate-500 mt-0.5">Track your progress, consistency, and academic achievements in SkyLang</p>
               </div>
               <BeeMascot size="sm" mood="cheering" animate />
             </div>

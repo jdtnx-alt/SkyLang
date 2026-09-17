@@ -36,7 +36,7 @@ export const ContenidoDeEstudio: React.FC<{ contenido: any }> = ({ contenido }) 
         </div>
         <div>
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-            Material de estudio
+            Study Material
           </span>
           <h3 className="font-bold text-sm text-slate-900">{contenido.titulo}</h3>
         </div>
@@ -48,7 +48,7 @@ export const ContenidoDeEstudio: React.FC<{ contenido: any }> = ({ contenido }) 
         </p>
       )}
 
-      {/* Vídeo: enlace, no reproductor incrustado */}
+      {/* Video: external link */}
       {datos.videoUrl && (
         <a
           href={datos.videoUrl}
@@ -58,14 +58,14 @@ export const ContenidoDeEstudio: React.FC<{ contenido: any }> = ({ contenido }) 
         >
           <PlayCircle className="text-[#4DA6FF] shrink-0" size={26} />
           <div className="min-w-0 flex-1">
-            <span className="block text-sm font-bold text-slate-900">Ver el vídeo</span>
+            <span className="block text-sm font-bold text-slate-900">Watch Video</span>
             <span className="block text-[11px] text-slate-500 truncate">{datos.videoUrl}</span>
           </div>
           <ExternalLink className="text-slate-400 group-hover:text-[#4DA6FF] shrink-0" size={16} />
         </a>
       )}
 
-      {/* Imagen incrustada; documento y audio, como archivo */}
+      {/* Image, document and audio */}
       {archivoUrl && esImagen(archivoMime) && (
         <img
           src={archivoUrl}
@@ -76,7 +76,7 @@ export const ContenidoDeEstudio: React.FC<{ contenido: any }> = ({ contenido }) 
 
       {archivoUrl && esAudio(archivoMime) && (
         <audio controls src={archivoUrl} className="w-full">
-          Tu navegador no puede reproducir este audio.
+          Your browser cannot play this audio.
         </audio>
       )}
 
@@ -91,7 +91,7 @@ export const ContenidoDeEstudio: React.FC<{ contenido: any }> = ({ contenido }) 
           <div className="min-w-0 flex-1">
             <span className="block text-sm font-bold text-slate-900 truncate">{archivoNombre}</span>
             <span className="block text-[11px] text-slate-500">
-              {esPdf(archivoMime) ? 'Documento PDF' : 'Archivo adjunto'} · se abre en otra pestaña
+              {esPdf(archivoMime) ? 'PDF Document' : 'Attachment'} · opens in a new tab
             </span>
           </div>
           <Download className="text-slate-400 group-hover:text-[#4DA6FF] shrink-0" size={16} />
@@ -100,7 +100,7 @@ export const ContenidoDeEstudio: React.FC<{ contenido: any }> = ({ contenido }) 
 
       {objetivos && (
         <div className="p-4 bg-blue-50/60 border border-blue-100 rounded-2xl">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 block mb-1">Objetivos</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 block mb-1">Objectives</span>
           <p className="text-xs text-slate-800 font-medium">{objetivos}</p>
         </div>
       )}
@@ -134,7 +134,7 @@ export const ContenidoDeEstudio: React.FC<{ contenido: any }> = ({ contenido }) 
 
       {vocabulario.length > 0 && (
         <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vocabulario</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vocabulary</span>
           {vocabulario.map((v: any, i: number) => (
             <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-slate-200">
               <div>
@@ -149,7 +149,7 @@ export const ContenidoDeEstudio: React.FC<{ contenido: any }> = ({ contenido }) 
 
       {dialogos.length > 0 && (
         <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Diálogo</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Dialogue</span>
           {dialogos.map((d: any, i: number) => (
             <div key={i} className="p-3 rounded-xl bg-slate-50 border border-slate-200">
               <span className="text-[10px] font-bold text-purple-700 block">{d.speaker} · {d.role}</span>

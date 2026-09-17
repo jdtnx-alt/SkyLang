@@ -47,10 +47,10 @@ const iconoMomento = (orden: number) => {
 };
 
 const MOMENTO_NOMBRES: Record<number, string> = {
-  1: 'Momento 1: Comprensión y Teoría',
-  2: 'Momento 2: Escucha y Práctica',
-  3: 'Momento 3: Ejercicios Interactivos',
-  4: 'Momento 4: Consolidación y Logro'
+  1: 'Moment 1: Comprehension & Theory',
+  2: 'Moment 2: Listening & Practice',
+  3: 'Moment 3: Interactive Exercises',
+  4: 'Moment 4: Consolidation & Achievement'
 };
 
 export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
@@ -74,16 +74,16 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
     setError(null);
     try {
       const res = await fetch(`/api/student/modules?studentId=${studentId}`, { headers: cabeceras() });
-      if (!res.ok) throw new Error('No se pudo cargar tu ruta de aprendizaje.');
+      if (!res.ok) throw new Error('Could not load your learning path.');
       const modulos = await res.json();
       const encontrado = Array.isArray(modulos)
         ? modulos.find((m: any) => String(m.id) === String(moduleId))
         : null;
-      if (!encontrado) throw new Error('Este módulo no está disponible para tu ficha.');
+      if (!encontrado) throw new Error('This module is not available for your class.');
       setModulo(encontrado);
       return encontrado;
     } catch (e: any) {
-      setError(e?.message || 'No se pudo cargar tu ruta de aprendizaje.');
+      setError(e?.message || 'Could not load your learning path.');
     } finally {
       setCargando(false);
     }
@@ -101,13 +101,13 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
     try {
       const res = await fetch(`/api/student/rap/${rap.id}/actividades`, { headers: cabeceras() });
       const cuerpo = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(cuerpo.error || 'No se pudieron cargar las actividades.');
+      if (!res.ok) throw new Error(cuerpo.error || 'Could not load activities.');
       setActividades(cuerpo.actividades || []);
       setContenidos(cuerpo.contenidos || []);
     } catch (e: any) {
       setActividades([]);
       setContenidos([]);
-      setErrorRap(e?.message || 'No se pudieron cargar las actividades.');
+      setErrorRap(e?.message || 'Could not load activities.');
     }
   };
 
@@ -129,7 +129,7 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
   if (cargando) {
     return (
       <div className="p-16 text-center space-y-4">
-        <BeeMascot size="lg" mood="thinking" animate message="Preparando tu ruta de aprendizaje..." />
+        <BeeMascot size="lg" mood="thinking" animate message="Preparing your learning path..." />
         <div className="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mt-4" />
       </div>
     );
@@ -138,13 +138,13 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
   if (error) {
     return (
       <div className="max-w-md mx-auto p-6 rounded-3xl bg-rose-50 border-2 border-rose-200 text-rose-900 text-center space-y-4 shadow-sm">
-        <BeeMascot size="md" mood="encouraging" animate message="¡Ups! Hubo un problema al conectar con tu ruta." />
+        <BeeMascot size="md" mood="encouraging" animate message="Oops! There was a problem connecting to your path." />
         <p className="text-xs font-bold text-rose-700">{error}</p>
         <button
           onClick={() => { setCargando(true); cargarModulo(); }}
           className="btn-duo-3d btn-duo-rose px-6 py-2.5 text-xs"
         >
-          Reintentar
+          Retry
         </button>
       </div>
     );
@@ -153,11 +153,11 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
   const raps: RapResumen[] = (modulo?.raps || []).slice().sort((a: any, b: any) => a.orden - b.orden);
   const activeRapIndex = raps.findIndex((r) => r.estado === 'en_progreso' || r.estado === 'disponible');
 
-  // ── Vista de un RAP concreto: sus cuatro momentos ────────────────────
+  // ── Specific RAP View: Four Moments ────────────────────
   if (rapSeleccionado) {
     const porMomento = new Map<number, { nombre: string; actividades: any[]; contenidos: any[] }>();
     const asegurar = (orden: number, nombre: string) => {
-      if (!porMomento.has(orden)) porMomento.set(orden, { nombre: nombre || MOMENTO_NOMBRES[orden] || `Momento ${orden}`, actividades: [], contenidos: [] });
+      if (!porMomento.has(orden)) porMomento.set(orden, { nombre: MOMENTO_NOMBRES[orden] || nombre || `Moment ${orden}`, actividades: [], contenidos: [] });
       return porMomento.get(orden)!;
     };
     contenidos.forEach((c: any) => asegurar(Number(c.momento_orden), c.momento_nombre).contenidos.push(c));
@@ -175,7 +175,7 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
           }}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-slate-600 hover:text-slate-900 bg-white border-2 border-slate-200 border-b-4 hover:bg-slate-50 transition-all cursor-pointer"
         >
-          <ChevronLeft size={16} /> Volver a la Ruta
+          <ChevronLeft size={16} /> Back to Learning Path
         </button>
 
         {/* Header Unit Banner */}
@@ -186,7 +186,7 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
                 RAP {rapSeleccionado.orden}
               </span>
               <span className="text-xs font-bold text-sky-100">
-                {rapSeleccionado.actividadesCompletadas} de {rapSeleccionado.actividadesTotal} actividades aprobadas
+                {rapSeleccionado.actividadesCompletadas} of {rapSeleccionado.actividadesTotal} activities passed
               </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black">{rapSeleccionado.titulo}</h2>
@@ -205,7 +205,7 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
           <div className="p-4 rounded-2xl bg-amber-50 border-2 border-amber-200 text-amber-900 flex items-center gap-3">
             <BeeMascot size="sm" mood="thinking" />
             <div>
-              <p className="font-extrabold text-sm">No puedes acceder a este contenido todavía</p>
+              <p className="font-extrabold text-sm">You cannot access this content yet</p>
               <p className="text-xs font-medium text-amber-700">{errorRap}</p>
             </div>
           </div>
@@ -246,20 +246,20 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
                     </div>
                     <div>
                       <span className="text-[11px] font-black uppercase tracking-wider text-slate-400 block">
-                        Momento {orden}
+                        Moment {orden}
                       </span>
                       <h3 className="font-black text-base text-slate-900">{datos.nombre}</h3>
                       <p className="text-xs font-semibold text-slate-500 mt-0.5">
                         {tieneActividades
-                          ? `${aprobadas}/${datos.actividades.length} actividades completadas`
-                          : `${datos.contenidos.length} materiales de estudio`}
+                          ? `${aprobadas}/${datos.actividades.length} activities completed`
+                          : `${datos.contenidos.length} study materials`}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <button className={`btn-duo-3d px-4 py-2.5 text-xs ${completo ? 'btn-duo-emerald' : 'btn-duo-sky'}`}>
-                      {completo ? 'Repasar' : 'Iniciar'}
+                      {completo ? 'Review' : 'Start'}
                     </button>
                   </div>
                 </motion.div>
@@ -268,7 +268,7 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
 
             {momentos.length === 0 && !errorRap && (
               <div className="p-8 bg-white border-2 border-dashed border-slate-200 rounded-3xl text-center space-y-3">
-                <BeeMascot size="md" mood="thinking" message="Tu instructor pronto publicará las actividades de este RAP." />
+                <BeeMascot size="md" mood="thinking" message="Your instructor will publish activities for this RAP soon." />
               </div>
             )}
           </div>
@@ -284,7 +284,7 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
               }}
               className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-600 hover:text-slate-900 bg-white border-2 border-slate-200 border-b-4 px-4 py-2 rounded-xl"
             >
-              <ChevronLeft size={16} /> Volver a los Momentos del RAP
+              <ChevronLeft size={16} /> Back to RAP Moments
             </button>
 
             {abierto.contenidos.map((c: any) => (
@@ -304,7 +304,7 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
               />
             ) : (
               <div className="p-6 bg-sky-50 border-2 border-sky-200 rounded-3xl text-center space-y-3">
-                <BeeMascot size="sm" mood="happy" message="¡Excelente! Este momento es de lectura y estudio reflexivo." />
+                <BeeMascot size="sm" mood="happy" message="Great! This moment is for reading and reflective study." />
               </div>
             )}
           </div>
@@ -321,18 +321,25 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
           <div>
             <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[11px] font-black uppercase tracking-wider">
-              {modulo?.fase || 'Fase de Formación'}
+              {(() => {
+                const f = (modulo?.fase || '').toLowerCase();
+                if (f.includes('análisis') || f.includes('analisis')) return 'Analysis Phase';
+                if (f.includes('planeación') || f.includes('planeacion')) return 'Planning Phase';
+                if (f.includes('ejecución') || f.includes('ejecucion')) return 'Execution Phase';
+                if (f.includes('evaluación') || f.includes('evaluacion')) return 'Evaluation Phase';
+                return modulo?.fase || 'Training Phase';
+              })()}
             </span>
             <h2 className="text-xl sm:text-2xl font-black mt-2 leading-tight">
-              {modulo?.title || 'Módulo de Inglés'}
+              {modulo?.title || 'English Module'}
             </h2>
             <p className="text-xs text-sky-100 font-semibold mt-1">
-              {raps.filter((r) => r.estado === 'completado' || r.estado === 'excelencia').length} de {raps.length} RAPs dominados
+              {raps.filter((r) => r.estado === 'completado' || r.estado === 'excelencia').length} of {raps.length} RAPs mastered
             </p>
           </div>
 
           <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3 text-center shrink-0">
-            <span className="text-[10px] font-black uppercase tracking-widest text-sky-200 block">Progreso</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-sky-200 block">Progress</span>
             <span className="text-2xl font-black text-amber-300">
               {Math.round(Number(modulo?.progress) || 0)}%
             </span>
@@ -363,7 +370,7 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
                     size="sm"
                     mood="cheering"
                     animate
-                    message="¡Es tu turno! Toca aquí para avanzar."
+                    message="It's your turn! Tap here to advance."
                     messagePosition="top"
                   />
                 </div>
@@ -410,10 +417,10 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
                 </p>
                 <span className="text-[10px] font-bold text-slate-400 block mt-0.5">
                   {isCompleted
-                    ? '100% Completado'
+                    ? '100% Completed'
                     : isLocked
-                    ? 'Bloqueado'
-                    : `${Math.round(Number(rap.progreso) || 0)}% en progreso`}
+                    ? 'Locked'
+                    : `${Math.round(Number(rap.progreso) || 0)}% in progress`}
                 </span>
               </div>
             </div>
@@ -422,7 +429,7 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
 
         {raps.length === 0 && (
           <div className="p-8 bg-white border-2 border-dashed border-slate-200 rounded-3xl text-center">
-            <BeeMascot size="md" mood="thinking" message="No hay RAPs registrados para este módulo." />
+            <BeeMascot size="md" mood="thinking" message="No RAPs registered for this module." />
           </div>
         )}
       </div>
@@ -447,7 +454,7 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
                 </span>
                 <h3 className="text-lg font-black text-slate-900">{modalRapNode.titulo}</h3>
                 <p className="text-xs text-slate-500 font-semibold">
-                  {modalRapNode.actividadesCompletadas} de {modalRapNode.actividadesTotal} actividades obligatorias aprobadas
+                  {modalRapNode.actividadesCompletadas} of {modalRapNode.actividadesTotal} required activities passed
                 </p>
               </div>
 
@@ -457,13 +464,13 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
                   className="btn-duo-3d btn-duo-amber w-full py-3.5 text-sm flex items-center justify-center gap-2"
                 >
                   <Play size={18} className="fill-white" />
-                  <span>{modalRapNode.estado === 'completado' ? 'Repasar RAP' : 'Comenzar Lección'}</span>
+                  <span>{modalRapNode.estado === 'completado' ? 'Review RAP' : 'Start Lesson'}</span>
                 </button>
                 <button
                   onClick={() => setModalRapNode(null)}
                   className="btn-duo-3d btn-duo-white w-full py-2.5 text-xs text-slate-500"
                 >
-                  Cerrar
+                  Close
                 </button>
               </div>
             </motion.div>

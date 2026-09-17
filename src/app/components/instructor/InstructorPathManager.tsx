@@ -3,6 +3,7 @@ import {
   Users, MapPin, CheckCircle2, Lock, Unlock, 
   Sparkles, Award, ArrowRight, ShieldCheck
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface StudentAvatarNode {
   id: number;
@@ -13,6 +14,7 @@ interface StudentAvatarNode {
 }
 
 export const InstructorPathManager: React.FC = () => {
+  const { tr } = useLanguage();
   const [students] = useState<StudentAvatarNode[]>([
     { id: 1, nombre: "Ana Gómez", avatar: "AG", nodoActual: "node_3", porcentaje: 65 },
     { id: 2, nombre: "Carlos Ruiz", avatar: "CR", nodoActual: "node_4", porcentaje: 90 },
@@ -21,10 +23,10 @@ export const InstructorPathManager: React.FC = () => {
   ]);
 
   const nodes = [
-    { id: "node_1", label: "RAP 1: M1 - Preparación", totalStudents: 1 },
-    { id: "node_2", label: "RAP 1: M2 - Absorción", totalStudents: 1 },
-    { id: "node_3", label: "RAP 1: M3 - Práctica Interactiva", totalStudents: 1 },
-    { id: "node_4", label: "RAP 1: M4 - Evaluación Final", totalStudents: 1 }
+    { id: "node_1", label: tr("RAP 1: M1 - Preparación", "RAP 1: M1 - Preparation"), totalStudents: 1 },
+    { id: "node_2", label: tr("RAP 1: M2 - Absorción", "RAP 1: M2 - Absorption"), totalStudents: 1 },
+    { id: "node_3", label: tr("RAP 1: M3 - Práctica Interactiva", "RAP 1: M3 - Interactive Practice"), totalStudents: 1 },
+    { id: "node_4", label: tr("RAP 1: M4 - Evaluación Final", "RAP 1: M4 - Final Assessment"), totalStudents: 1 }
   ];
 
   return (
@@ -36,11 +38,11 @@ export const InstructorPathManager: React.FC = () => {
           </span>
           <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
             <Users size={20} className="text-purple-600" />
-            Radar de Aprendices en la Ruta de RAPs
+            {tr("Radar de Aprendices en la Ruta de RAPs", "Learners Radar on RAP Learning Path")}
           </h3>
         </div>
         <span className="px-3 py-1 bg-purple-100 text-purple-800 font-extrabold text-xs rounded-full">
-          {students.length} Aprendices Monitoreados
+          {students.length} {tr("Aprendices Monitoreados", "Learners Monitored")}
         </span>
       </div>
 
@@ -55,7 +57,7 @@ export const InstructorPathManager: React.FC = () => {
                   {idx + 1}
                 </span>
                 <span className="text-[10px] font-bold text-purple-800 bg-purple-100 px-2 py-0.5 rounded-md">
-                  {nodeStudents.length} Aprendices
+                  {nodeStudents.length} {tr("Aprendices", "Learners")}
                 </span>
               </div>
 
@@ -75,7 +77,7 @@ export const InstructorPathManager: React.FC = () => {
                 ))}
 
                 {nodeStudents.length === 0 && (
-                  <span className="text-[11px] text-slate-400 italic block py-2 text-center">Sin aprendices en este hito</span>
+                  <span className="text-[11px] text-slate-400 italic block py-2 text-center">{tr("Sin aprendices en este hito", "No learners at this milestone")}</span>
                 )}
               </div>
             </div>

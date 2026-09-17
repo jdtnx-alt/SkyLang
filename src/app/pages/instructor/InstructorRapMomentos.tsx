@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { EditorActividad, AvisoDeCalificacion } from "../../components/instructor/EditorActividad";
 import { useParams, useNavigate } from "react-router";
 import { Sidebar } from "../../components/Sidebar";
+import { useLanguage } from "../../context/LanguageContext";
 import {
   ArrowLeft,
   BookOpen,
@@ -55,6 +56,7 @@ interface Modulo {
 export function InstructorRapMomentos() {
   const { fichaId, rapId } = useParams();
   const navigate = useNavigate();
+  const { tr } = useLanguage();
 
   const [loading, setLoading] = useState(true);
   const [fichaInfo, setFichaInfo] = useState<any>(null);
@@ -265,7 +267,7 @@ export function InstructorRapMomentos() {
   };
 
   const handleDeleteContent = async (contenidoId: number) => {
-    if (!window.confirm('¿Eliminar este material de estudio?')) return;
+    if (!window.confirm(tr('¿Eliminar este material de estudio?', 'Delete this study material?'))) return;
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(`/api/instructor/contenidos/${contenidoId}`, {
@@ -275,10 +277,10 @@ export function InstructorRapMomentos() {
       if (res.ok) fetchRapEstructura();
       else {
         const err = await res.json().catch(() => ({}));
-        alert(err.error || "No se pudo eliminar el material.");
+        alert(err.error || tr("No se pudo eliminar el material.", "Could not delete the material."));
       }
     } catch {
-      alert("No se pudo eliminar el material. Revisa tu conexión.");
+      alert(tr("No se pudo eliminar el material. Revisa tu conexión.", "Could not delete the material. Check your connection."));
     }
   };
 
@@ -298,7 +300,7 @@ export function InstructorRapMomentos() {
         setActivityToDelete(null);
         fetchRapEstructura();
       } else {
-        alert("Error deleting activity.");
+        alert(tr("Error al eliminar la actividad.", "Error deleting activity."));
       }
     } catch (err) {
       console.error("Error deleting activity:", err);
@@ -318,13 +320,13 @@ export function InstructorRapMomentos() {
     }
   };
 
-  const getMomentoEnglishTitle = (orden: number, nombre: string) => {
+  const getMomentoTitle = (orden: number, nombre: string) => {
     switch (orden) {
-      case 1: return "Moment 1: Preparation & Context";
-      case 2: return "Moment 2: Knowledge Absorption";
-      case 3: return "Moment 3: Practice & Application";
-      case 4: return "Moment 4: Assessment & Wrap-up";
-      default: return `Moment ${orden}: ${nombre}`;
+      case 1: return tr("Momento 1: Preparación y Contextualización", "Moment 1: Preparation & Context");
+      case 2: return tr("Momento 2: Absorción de Conocimientos", "Moment 2: Knowledge Absorption");
+      case 3: return tr("Momento 3: Práctica y Aplicación", "Moment 3: Practice & Application");
+      case 4: return tr("Momento 4: Evaluación y Cierre", "Moment 4: Assessment & Wrap-up");
+      default: return `${tr("Momento", "Moment")} ${orden}: ${nombre}`;
     }
   };
 
@@ -349,7 +351,7 @@ export function InstructorRapMomentos() {
           onClick={() => navigate(`/instructor/ficha/${fichaId}`)}
           className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#4DA6FF] mb-6 transition-colors font-medium"
         >
-          <ArrowLeft size={16} /> Back to Ficha #{fichaInfo?.numero_ficha || fichaId}
+          <ArrowLeft size={16} /> {tr(`Volver a la Ficha #${fichaInfo?.numero_ficha || fichaId}`, `Back to Ficha #${fichaInfo?.numero_ficha || fichaId}`)}
         </button>
 
         {/* Top Header Card */}
@@ -361,16 +363,16 @@ export function InstructorRapMomentos() {
               </div>
               <div>
                 <span className="text-xs font-bold text-[#4DA6FF] uppercase tracking-wider">
-                  {currentModulo?.titulo || "Academic Module"}
+                  {currentModulo?.titulo || tr("Módulo Académico", "Academic Module")}
                 </span>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  {currentRap?.titulo || "Learning Outcome (RAP)"}
+                  {currentRap?.titulo || tr("Resultado de Aprendizaje (RAP)", "Learning Outcome (RAP)")}
                 </h1>
               </div>
             </div>
 
             <span className="px-3 py-1 bg-blue-50 border border-blue-100 text-[#4DA6FF] rounded-full text-xs font-semibold">
-              Ficha #{fichaInfo?.numero_ficha}
+              {tr("Ficha", "Ficha")} #{fichaInfo?.numero_ficha}
             </span>
           </div>
 
@@ -400,7 +402,7 @@ export function InstructorRapMomentos() {
                               : "bg-gray-100 text-gray-600"
                           }`}
                         >
-                          Moment {mom.orden}
+                          {tr("Momento", "Moment")} {mom.orden}
                         </span>
 
                         <span
@@ -408,12 +410,12 @@ export function InstructorRapMomentos() {
                             isActive ? "text-white/90" : "text-gray-400"
                           }`}
                         >
-                          {mom.actividades.length} Activities
+                          {mom.actividades.length} {tr("Actividades", "Activities")}
                         </span>
                       </div>
 
                       <h3 className="font-bold text-xs leading-snug">
-                        {getMomentoEnglishTitle(mom.orden, mom.nombre)}
+                        {getMomentoTitle(mom.orden, mom.nombre)}
                       </h3>
                     </div>
 
@@ -425,7 +427,7 @@ export function InstructorRapMomentos() {
                             : "border-gray-100 text-amber-600"
                         }`}
                       >
-                        <Award size={12} /> Affects RAP Grade
+                        <Award size={12} /> {tr("Afecta Nota del RAP", "Affects RAP Grade")}
                       </div>
                     )}
                   </button>
@@ -443,17 +445,17 @@ export function InstructorRapMomentos() {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <span className="px-2.5 py-0.5 bg-blue-100 text-blue-800 text-xs font-bold rounded-md uppercase">
-                      Moment {activeMomento.orden}
+                      {tr("Momento", "Moment")} {activeMomento.orden}
                     </span>
                     <h2 className="text-xl font-bold text-gray-900">
-                      {getMomentoEnglishTitle(activeMomento.orden, activeMomento.nombre)}
+                      {getMomentoTitle(activeMomento.orden, activeMomento.nombre)}
                     </h2>
                   </div>
                   <p className="text-xs text-gray-500">
-                    {activeMomento.orden === 1 && "Initial topic awareness and contextualization phase."}
-                    {activeMomento.orden === 2 && "English theory, readings, and knowledge absorption phase."}
-                    {activeMomento.orden === 3 && "Practical application of clinical English concepts (Affects RAP Grade)."}
-                    {activeMomento.orden === 4 && "Final evaluation and learning wrap-up phase (Affects RAP Grade)."}
+                    {activeMomento.orden === 1 && tr("Fase inicial de sensibilización y contextualización del tema.", "Initial topic awareness and contextualization phase.")}
+                    {activeMomento.orden === 2 && tr("Fase de teoría, lecturas y absorción del inglés.", "English theory, readings, and knowledge absorption phase.")}
+                    {activeMomento.orden === 3 && tr("Aplicación práctica de conceptos en inglés clínico (Afecta Nota RAP).", "Practical application of clinical English concepts (Affects RAP Grade).")}
+                    {activeMomento.orden === 4 && tr("Evaluación final y fase de cierre de aprendizaje (Afecta Nota RAP).", "Final evaluation and learning wrap-up phase (Affects RAP Grade).")}
                   </p>
                 </div>
 
@@ -475,7 +477,7 @@ export function InstructorRapMomentos() {
                       : "bg-[#4DA6FF] hover:bg-blue-600 text-white"
                   }`}
                 >
-                  <Plus size={16} /> Crear actividad en el Momento {activeMomento.orden}
+                  <Plus size={16} /> {tr(`Crear actividad en el Momento ${activeMomento.orden}`, `Create activity in Moment ${activeMomento.orden}`)}
                 </button>
 
                 <button
@@ -486,7 +488,7 @@ export function InstructorRapMomentos() {
                   }}
                   className="px-4 py-2 border border-[#4DA6FF] text-[#4DA6FF] hover:bg-blue-50 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5"
                 >
-                  <Plus size={16} /> Subir material de estudio
+                  <Plus size={16} /> {tr("Subir material de estudio", "Upload study material")}
                 </button>
 
                 {politicaMomento && (
@@ -501,7 +503,7 @@ export function InstructorRapMomentos() {
               {(activeMomento.contenidos?.length ?? 0) > 0 && (
                 <div className="space-y-3 mb-6">
                   <h4 className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                    Material de estudio ({activeMomento.contenidos.length})
+                    {tr(`Material de estudio (${activeMomento.contenidos.length})`, `Study material (${activeMomento.contenidos.length})`)}
                   </h4>
                   {activeMomento.contenidos.map((cont: any) => (
                     <div key={cont.id} className="bg-white rounded-xl border border-blue-100 p-4 flex items-start gap-3">
@@ -520,7 +522,7 @@ export function InstructorRapMomentos() {
                           ) : (
                             <a href={cont.recurso_url} target="_blank" rel="noopener noreferrer"
                               className="inline-block mt-1 text-xs font-semibold text-[#4DA6FF] hover:underline">
-                              {cont.recurso_nombre || 'Ver archivo adjunto'}
+                              {cont.recurso_nombre || tr('Ver archivo adjunto', 'View attached file')}
                             </a>
                           )
                         )}
@@ -533,7 +535,7 @@ export function InstructorRapMomentos() {
                       </div>
                       <button
                         onClick={() => handleDeleteContent(cont.id)}
-                        title="Eliminar material"
+                        title={tr("Eliminar material", "Delete material")}
                         className="p-2 text-gray-300 hover:text-rose-600 hover:bg-rose-50 rounded-lg shrink-0"
                       >
                         <Trash2 size={15} />
@@ -549,11 +551,11 @@ export function InstructorRapMomentos() {
                   <BookOpen className="mx-auto text-gray-300 mb-3" size={36} />
                   <p className="text-sm font-semibold text-gray-600">
                     {politicaMomento && !politicaMomento.permiteActividades
-                      ? 'Este momento no lleva actividades'
-                      : 'Sin actividades en este momento'}
+                      ? tr('Este momento no lleva actividades', 'This moment does not have activities')
+                      : tr('Sin actividades en este momento', 'No activities in this moment')}
                   </p>
                   <p className="text-xs text-gray-400 mt-1 max-w-sm mx-auto">
-                    {politicaMomento?.proposito || `Añade actividades para la ficha #${fichaInfo?.numero_ficha}.`}
+                    {politicaMomento?.proposito || tr(`Añade actividades para la ficha #${fichaInfo?.numero_ficha}.`, `Add activities for ficha #${fichaInfo?.numero_ficha}.`)}
                   </p>
                 </div>
               ) : (
@@ -575,7 +577,7 @@ export function InstructorRapMomentos() {
                           <button
                             onClick={() => setActivityToDelete(act.id)}
                             className="text-gray-400 hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50 transition-colors"
-                            title="Delete activity"
+                            title={tr("Eliminar actividad", "Delete activity")}
                           >
                             <Trash2 size={15} />
                           </button>
@@ -589,13 +591,13 @@ export function InstructorRapMomentos() {
                       </div>
 
                       <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-400 font-medium">
-                        <span>Order: #{act.orden || 1}</span>
+                        <span>{tr("Orden", "Order")}: #{act.orden || 1}</span>
                         {act.obligatoria ? (
                           <span className="text-green-600 flex items-center gap-1 font-semibold">
-                            <CheckCircle2 size={12} /> Mandatory
+                            <CheckCircle2 size={12} /> {tr("Obligatoria", "Mandatory")}
                           </span>
                         ) : (
-                          <span className="text-gray-400">Optional</span>
+                          <span className="text-gray-400">{tr("Opcional", "Optional")}</span>
                         )}
                       </div>
                     </div>
@@ -613,30 +615,30 @@ export function InstructorRapMomentos() {
           <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="border-b pb-3">
               <span className="text-[10px] font-bold text-[#4DA6FF] uppercase tracking-wider">
-                Momento {activeMomento.orden}: {activeMomento.nombre}
+                {tr("Momento", "Moment")} {activeMomento.orden}: {getMomentoTitle(activeMomento.orden, activeMomento.nombre)}
               </span>
-              <h3 className="text-lg font-bold text-gray-900">Nuevo material de estudio</h3>
+              <h3 className="text-lg font-bold text-gray-900">{tr("Nuevo material de estudio", "New study material")}</h3>
               <p className="text-[11px] text-gray-500 font-medium mt-1">
-                El material se consulta: no se califica ni cuenta para el porcentaje del RAP.
+                {tr("El material se consulta: no se califica ni cuenta para el porcentaje del RAP.", "The material is for study: it is not graded and does not count toward the RAP percentage.")}
               </p>
             </div>
 
             <form onSubmit={handleSaveContent} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Título *</label>
+                <label className="block text-xs font-medium text-gray-700 mb-1">{tr("Título *", "Title *")}</label>
                 <input
                   type="text" required value={contTitulo}
-                  placeholder="p. ej. Vocabulario de signos vitales"
+                  placeholder={tr("p. ej. Vocabulario de signos vitales", "e.g. Vital signs vocabulary")}
                   onChange={(e) => setContTitulo(e.target.value)}
                   className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Texto</label>
+                <label className="block text-xs font-medium text-gray-700 mb-1">{tr("Texto", "Text")}</label>
                 <textarea
                   rows={6} value={contTexto}
-                  placeholder="Explicación, apuntes, instrucciones de estudio…"
+                  placeholder={tr("Explicación, apuntes, instrucciones de estudio…", "Explanation, notes, study instructions…")}
                   onChange={(e) => setContTexto(e.target.value)}
                   className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
                 />
@@ -644,7 +646,7 @@ export function InstructorRapMomentos() {
 
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Archivo (PDF, imagen o audio)
+                  {tr("Archivo (PDF, imagen o audio)", "File (PDF, image or audio)")}
                 </label>
                 <input
                   type="file"
@@ -652,16 +654,16 @@ export function InstructorRapMomentos() {
                   onChange={(e) => { const f = e.target.files?.[0]; if (f) handleSubirArchivo(f); }}
                   className="w-full text-xs file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#4DA6FF] file:text-white file:text-xs file:font-semibold"
                 />
-                {subiendoArchivo && <p className="text-[11px] text-gray-500 mt-1">Subiendo…</p>}
+                {subiendoArchivo && <p className="text-[11px] text-gray-500 mt-1">{tr("Subiendo…", "Uploading…")}</p>}
                 {contArchivo && (
                   <p className="text-[11px] text-emerald-700 font-semibold mt-1">
-                    Adjuntado: {contArchivo.nombre} ({Math.round((contArchivo.tamano || 0) / 1024)} KB)
+                    {tr("Adjuntado:", "Attached:")} {contArchivo.nombre} ({Math.round((contArchivo.tamano || 0) / 1024)} KB)
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Enlace de vídeo</label>
+                <label className="block text-xs font-medium text-gray-700 mb-1">{tr("Enlace de vídeo", "Video link")}</label>
                 <input
                   type="url" value={contVideo}
                   placeholder="https://www.youtube.com/watch?v=..."
@@ -669,7 +671,7 @@ export function InstructorRapMomentos() {
                   className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
                 />
                 <p className="text-[11px] text-gray-500 mt-1">
-                  Pega el enlace normal de YouTube. El aprendiz lo verá como enlace y lo abrirá allí.
+                  {tr("Pega el enlace normal de YouTube. El aprendiz lo verá como enlace y lo abrirá allí.", "Paste the regular YouTube link. The student will see it as a link and open it there.")}
                 </p>
               </div>
 
@@ -682,11 +684,11 @@ export function InstructorRapMomentos() {
               <div className="flex justify-end gap-3 pt-3 border-t">
                 <button type="button" onClick={() => setShowAddContentModal(false)}
                   className="px-4 py-2 border border-gray-300 rounded-xl text-xs font-medium text-gray-600 hover:bg-gray-50">
-                  Cancelar
+                  {tr("Cancelar", "Cancel")}
                 </button>
                 <button type="submit" disabled={isSavingContent}
                   className="px-4 py-2 bg-[#4DA6FF] hover:bg-blue-600 text-white rounded-xl text-xs font-medium">
-                  {isSavingContent ? "Guardando…" : "Guardar material"}
+                  {isSavingContent ? tr("Guardando…", "Saving…") : tr("Guardar material", "Save material")}
                 </button>
               </div>
             </form>
@@ -700,17 +702,17 @@ export function InstructorRapMomentos() {
           <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="border-b pb-3">
               <span className="text-[10px] font-bold text-[#4DA6FF] uppercase tracking-wider">
-                Moment {activeMomento.orden}: {getMomentoEnglishTitle(activeMomento.orden, activeMomento.nombre)}
+                {tr("Momento", "Moment")} {activeMomento.orden}: {getMomentoTitle(activeMomento.orden, activeMomento.nombre)}
               </span>
               <h3 className="text-lg font-bold text-gray-900">
-                New Activity for Ficha #{fichaInfo?.numero_ficha}
+                {tr(`Nueva Actividad para Ficha #${fichaInfo?.numero_ficha}`, `New Activity for Ficha #${fichaInfo?.numero_ficha}`)}
               </h3>
             </div>
 
             <form onSubmit={handleSaveActivity} className="space-y-4">
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Activity Type
+                  {tr("Tipo de Actividad", "Activity Type")}
                 </label>
                 <select
                   value={actTipo}
@@ -728,12 +730,12 @@ export function InstructorRapMomentos() {
 
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Activity Title *
+                  {tr("Título de la Actividad *", "Activity Title *")}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g., Clinical Evaluation Quiz"
+                  placeholder={tr("p. ej., Cuestionario de evaluación clínica", "e.g., Clinical Evaluation Quiz")}
                   value={actTitulo}
                   onChange={(e) => setActTitulo(e.target.value)}
                   className="w-full border border-gray-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-[#4DA6FF] outline-none"
@@ -742,11 +744,11 @@ export function InstructorRapMomentos() {
 
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Instructions
+                  {tr("Instrucciones", "Instructions")}
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="Student instructions..."
+                  placeholder={tr("Instrucciones para el estudiante...", "Student instructions...")}
                   value={actInstrucciones}
                   onChange={(e) => setActInstrucciones(e.target.value)}
                   className="w-full border border-gray-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-[#4DA6FF] outline-none"
@@ -755,7 +757,7 @@ export function InstructorRapMomentos() {
 
               <div className="border-t pt-3">
                 <label className="block text-xs font-medium text-gray-700 mb-2">
-                  Contenido de la actividad
+                  {tr("Contenido de la actividad", "Activity Content")}
                 </label>
                 <EditorActividad tipo={actTipo} datos={actDatos} onChange={setActDatos} />
               </div>
@@ -775,7 +777,7 @@ export function InstructorRapMomentos() {
                   className="rounded text-[#4DA6FF]"
                 />
                 <label htmlFor="obligatoria" className="text-xs text-gray-700">
-                  Mandatory Activity (Affects RAP Progress)
+                  {tr("Actividad Obligatoria (Afecta Progreso del RAP)", "Mandatory Activity (Affects RAP Progress)")}
                 </label>
               </div>
 
@@ -785,14 +787,14 @@ export function InstructorRapMomentos() {
                   onClick={() => setShowAddActivityModal(false)}
                   className="px-4 py-2 border border-gray-300 rounded-xl text-xs font-medium text-gray-600 hover:bg-gray-50"
                 >
-                  Cancel
+                  {tr("Cancelar", "Cancel")}
                 </button>
                 <button
                   type="submit"
                   disabled={isSavingActivity}
                   className="px-4 py-2 bg-[#4DA6FF] hover:bg-blue-600 text-white rounded-xl text-xs font-medium"
                 >
-                  {isSavingActivity ? "Saving..." : "Create Activity"}
+                  {isSavingActivity ? tr("Guardando...", "Saving...") : tr("Crear Actividad", "Create Activity")}
                 </button>
               </div>
             </form>
@@ -809,9 +811,12 @@ export function InstructorRapMomentos() {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Delete this activity?</h3>
+              <h3 className="text-lg font-bold text-gray-900">{tr("¿Eliminar esta actividad?", "Delete this activity?")}</h3>
               <p className="text-xs text-gray-500 mt-1.5 leading-relaxed">
-                This action is permanent and cannot be undone. All data and history associated with this activity will be removed.
+                {tr(
+                  "Esta acción es permanente y no se puede deshacer. Se eliminarán todos los datos e historial asociados a esta actividad.",
+                  "This action is permanent and cannot be undone. All data and history associated with this activity will be removed."
+                )}
               </p>
             </div>
 
@@ -821,7 +826,7 @@ export function InstructorRapMomentos() {
                 onClick={() => setActivityToDelete(null)}
                 className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-semibold transition-colors"
               >
-                Cancel
+                {tr("Cancelar", "Cancel")}
               </button>
               <button
                 type="button"
@@ -829,7 +834,7 @@ export function InstructorRapMomentos() {
                 onClick={confirmDeleteActivity}
                 className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-xs disabled:opacity-50"
               >
-                {isDeletingActivity ? "Deleting..." : "Yes, delete"}
+                {isDeletingActivity ? tr("Eliminando...", "Deleting...") : tr("Sí, eliminar", "Yes, delete")}
               </button>
             </div>
           </div>

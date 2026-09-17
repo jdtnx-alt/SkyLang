@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Sidebar } from "../../components/Sidebar";
 import { Plus, Edit2, Trash2, Search, UserX, UserCheck } from "lucide-react";
+import { useLanguage } from "../../context/LanguageContext";
 
 export function AdminUsers() {
+  const { tr } = useLanguage();
   const [showModal, setShowModal] = useState(false);
   const [users, setUsers] = useState<any[]>([]);
   const [search, setSearch] = useState("");
@@ -93,11 +95,11 @@ export function AdminUsers() {
     const method = isEditing ? 'PUT' : 'POST';
 
     if (fichasCargando) {
-      alert("Espera a que terminen de cargar las fichas.");
+      alert(tr("Espera a que terminen de cargar las fichas.", "Please wait for fichas to finish loading."));
       return;
     }
     if (newUser.role === "Student" && (!newUser.programa_id || !newUser.ficha_id)) {
-      alert("Por favor seleccione el Programa y la Ficha para el estudiante.");
+      alert(tr("Por favor seleccione el Programa y la Ficha para el estudiante.", "Please select the Program and Ficha for the student."));
       return;
     }
 
@@ -119,7 +121,7 @@ export function AdminUsers() {
           setShowModal(false);
           resetForm();
         } else {
-          alert(data.message || 'Error al guardar el usuario.');
+          alert(data.message || tr('Error al guardar el usuario.', 'Error saving user.'));
         }
       })
       .catch(err => {
@@ -162,7 +164,7 @@ export function AdminUsers() {
           if (data.success) {
             fetchUsers();
           } else {
-            alert(data.message || 'Error al eliminar el usuario.');
+            alert(data.message || tr('Error al eliminar el usuario.', 'Error deleting user.'));
           }
         })
         .catch(err => {
@@ -183,19 +185,19 @@ export function AdminUsers() {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-[#111111] mb-2">Manage Users</h1>
-            <p className="text-gray-600">Create, edit, and manage platform users</p>
+            <h1 className="text-3xl font-bold text-[#111111] mb-2">{tr("Gestión de Usuarios", "Manage Users")}</h1>
+            <p className="text-gray-600">{tr("Crea, edita y administra los usuarios de la plataforma", "Create, edit, and manage platform users")}</p>
           </div>
           <button
             onClick={() => {
               setIsEditing(false);
-              setNewUser({ name: "", email: "", role: "Student", status: "Active", password: "", programa_id: "", ficha_id: "" });
+              setNewUser({ name: "", email: "", role: "Student", status: "Active", password: "", programa_id: "", ficha_id: "", idNumber: "" });
               setShowModal(true);
             }}
             className="flex items-center gap-2 px-6 py-3 bg-[#4DA6FF] text-white rounded-lg font-medium hover:bg-[#3d95ef] transition-colors shadow-lg"
           >
             <Plus size={20} />
-            Add New User
+            {tr("Agregar Nuevo Usuario", "Add New User")}
           </button>
         </div>
 
@@ -472,9 +474,12 @@ export function AdminUsers() {
                   <UserX size={32} />
                 </div>
                 
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Eliminar Usuario</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">{tr('Eliminar Usuario', 'Delete User')}</h3>
                 <p className="text-gray-600 mb-8 px-4">
-                  ¿Estás seguro de que deseas eliminar a este usuario de la plataforma? Esta acción no se puede deshacer y borrará permanentemente sus datos.
+                  {tr(
+                    '¿Estás seguro de que deseas eliminar a este usuario de la plataforma? Esta acción no se puede deshacer y borrará permanentemente sus datos.',
+                    'Are you sure you want to delete this user from the platform? This action cannot be undone and will permanently erase their data.'
+                  )}
                 </p>
                 
                 <div className="flex w-full gap-3">
@@ -485,13 +490,13 @@ export function AdminUsers() {
                     }}
                     className="flex-1 px-4 py-3 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
                   >
-                    Cancelar
+                    {tr('Cancelar', 'Cancel')}
                   </button>
                   <button
                     onClick={confirmDeleteUser}
                     className="flex-1 px-4 py-3 rounded-xl bg-red-500 text-white font-medium hover:bg-red-600 transition-colors shadow-lg shadow-red-500/30"
                   >
-                    Sí, eliminar
+                    {tr('Sí, eliminar', 'Yes, delete')}
                   </button>
                 </div>
               </div>

@@ -1,8 +1,10 @@
 import { Sidebar } from "../../components/Sidebar";
 import { Shield, CheckCircle2 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useLanguage } from "../../context/LanguageContext";
 
 export function AdminRoles() {
+  const { tr } = useLanguage();
   const [counts, setCounts] = useState({
     student: 156,
     instructor: 10,
@@ -32,47 +34,56 @@ export function AdminRoles() {
 
   const roles = [
     {
-      name: "Student",
-      description: "Regular learner with access to RAPS and modules",
+      name: tr("Aprendiz", "Student"),
+      description: tr("Aprendiz regular con acceso a RAPS y módulos", "Regular learner with access to RAPS and modules"),
       userCount: counts.student,
       permissions: [
-        "View assigned RAPS",
-        "Complete modules",
-        "Take quizzes",
-        "View progress",
-        "Earn rewards",
-        "Edit profile",
+        tr("Ver RAPS asignados", "View assigned RAPS"),
+        tr("Completar módulos", "Complete modules"),
+        tr("Realizar cuestionarios", "Take quizzes"),
+        tr("Ver progreso", "View progress"),
+        tr("Ganar recompensas", "Earn rewards"),
+        tr("Editar perfil", "Edit profile"),
       ],
       color: "from-blue-400 to-blue-600",
     },
     {
-      name: "Instructor",
-      description: "Course creator and student manager",
+      name: tr("Instructor", "Instructor"),
+      description: tr("Creador de cursos y gestor de aprendices", "Course creator and student manager"),
       userCount: counts.instructor,
       permissions: [
-        "Create and edit RAPS",
-        "Create and edit modules",
-        "View student results",
-        "Generate reports",
-        "Assign modules",
-        "Grade assessments",
+        tr("Crear y editar RAPS", "Create and edit RAPS"),
+        tr("Crear y editar módulos", "Create and edit modules"),
+        tr("Ver resultados de aprendices", "View student results"),
+        tr("Generar reportes", "Generate reports"),
+        tr("Asignar módulos", "Assign modules"),
+        tr("Calificar evaluaciones", "Grade assessments"),
       ],
       color: "from-purple-400 to-purple-600",
     },
     {
-      name: "Admin",
-      description: "Full platform access and control",
+      name: tr("Administrador", "Admin"),
+      description: tr("Acceso y control total de la plataforma", "Full platform access and control"),
       userCount: counts.admin,
       permissions: [
-        "Manage all users",
-        "Manage roles",
-        "View all content",
-        "System settings",
-        "Platform analytics",
-        "Full content control",
+        tr("Gestionar todos los usuarios", "Manage all users"),
+        tr("Gestionar roles", "Manage roles"),
+        tr("Ver todo el contenido", "View all content"),
+        tr("Configuración del sistema", "System settings"),
+        tr("Analíticas de la plataforma", "Platform analytics"),
+        tr("Control total del contenido", "Full content control"),
       ],
       color: "from-orange-400 to-orange-600",
     },
+  ];
+
+  const permissionRows = [
+    { permission: tr("Ver Contenido", "View Content"), student: true, instructor: true, admin: true },
+    { permission: tr("Crear RAPS", "Create RAPS"), student: false, instructor: true, admin: true },
+    { permission: tr("Gestionar Usuarios", "Manage Users"), student: false, instructor: false, admin: true },
+    { permission: tr("Ver Reportes", "View Reports"), student: false, instructor: true, admin: true },
+    { permission: tr("Configuración del Sistema", "System Settings"), student: false, instructor: false, admin: true },
+    { permission: tr("Editar Perfil", "Edit Profile"), student: true, instructor: true, admin: true },
   ];
 
   return (
@@ -82,8 +93,8 @@ export function AdminRoles() {
       <div className="ml-64 p-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#111111] mb-2">Manage Roles</h1>
-          <p className="text-gray-600">View and configure user role permissions</p>
+          <h1 className="text-3xl font-bold text-[#111111] mb-2">{tr("Gestionar Roles", "Manage Roles")}</h1>
+          <p className="text-gray-600">{tr("Ver y configurar los permisos de roles de usuario", "View and configure user role permissions")}</p>
         </div>
 
         {/* Roles Grid */}
@@ -102,13 +113,13 @@ export function AdminRoles() {
                 
                 <div className="mb-4 p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Total Users</span>
+                    <span className="text-sm text-gray-600">{tr("Total de Usuarios", "Total Users")}</span>
                     <span className="text-lg font-bold text-[#111111]">{role.userCount}</span>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="font-medium text-gray-800 mb-3">Permissions</h4>
+                  <h4 className="font-medium text-gray-800 mb-3">{tr("Permisos", "Permissions")}</h4>
                   <ul className="space-y-2">
                     {role.permissions.map((permission, pIndex) => (
                       <li key={pIndex} className="flex items-start gap-2 text-sm">
@@ -125,26 +136,19 @@ export function AdminRoles() {
 
         {/* Role Comparison */}
         <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-xl font-bold text-[#111111] mb-6">Permission Comparison</h2>
+          <h2 className="text-xl font-bold text-[#111111] mb-6">{tr("Comparación de Permisos", "Permission Comparison")}</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Permission</th>
-                  <th className="text-center py-3 px-4 text-sm font-medium text-gray-600">Student</th>
-                  <th className="text-center py-3 px-4 text-sm font-medium text-gray-600">Instructor</th>
-                  <th className="text-center py-3 px-4 text-sm font-medium text-gray-600">Admin</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">{tr("Permiso", "Permission")}</th>
+                  <th className="text-center py-3 px-4 text-sm font-medium text-gray-600">{tr("Aprendiz", "Student")}</th>
+                  <th className="text-center py-3 px-4 text-sm font-medium text-gray-600">{tr("Instructor", "Instructor")}</th>
+                  <th className="text-center py-3 px-4 text-sm font-medium text-gray-600">{tr("Administrador", "Admin")}</th>
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { permission: "View Content", student: true, instructor: true, admin: true },
-                  { permission: "Create RAPS", student: false, instructor: true, admin: true },
-                  { permission: "Manage Users", student: false, instructor: false, admin: true },
-                  { permission: "View Reports", student: false, instructor: true, admin: true },
-                  { permission: "System Settings", student: false, instructor: false, admin: true },
-                  { permission: "Edit Profile", student: true, instructor: true, admin: true },
-                ].map((row, index) => (
+                {permissionRows.map((row, index) => (
                   <tr key={index} className="border-b border-gray-100">
                     <td className="py-3 px-4 text-gray-800">{row.permission}</td>
                     <td className="py-3 px-4 text-center">

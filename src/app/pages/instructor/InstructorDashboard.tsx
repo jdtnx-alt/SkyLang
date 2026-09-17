@@ -2,26 +2,28 @@ import React from "react";
 import { Sidebar } from "../../components/Sidebar";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Users, BookOpen, TrendingUp, Award } from "lucide-react";
-
-const studentProgressData = [
-  { name: "Week 1", students: 45 },
-  { name: "Week 2", students: 52 },
-  { name: "Week 3", students: 48 },
-  { name: "Week 4", students: 60 },
-];
-
-const rapCompletionData = [
-  { name: "RAP 1", value: 85 },
-  { name: "RAP 2", value: 60 },
-  { name: "RAP 3", value: 30 },
-  { name: "RAP 4", value: 10 },
-];
+import { useLanguage } from "../../context/LanguageContext";
 
 const COLORS = ["#4DA6FF", "#22c55e", "#9333ea", "#f97316"];
 
 export function InstructorDashboard() {
+  const { tr } = useLanguage();
   const [metrics, setMetrics] = React.useState({ totalStudents: 0, totalModules: 0, totalRaps: 0 });
   const [currentInstructor, setCurrentInstructor] = React.useState("");
+
+  const studentProgressData = [
+    { name: tr("Semana 1", "Week 1"), students: 45 },
+    { name: tr("Semana 2", "Week 2"), students: 52 },
+    { name: tr("Semana 3", "Week 3"), students: 48 },
+    { name: tr("Semana 4", "Week 4"), students: 60 },
+  ];
+
+  const rapCompletionData = [
+    { name: "RAP 1", value: 85 },
+    { name: "RAP 2", value: 60 },
+    { name: "RAP 3", value: 30 },
+    { name: "RAP 4", value: 10 },
+  ];
 
   React.useEffect(() => {
     try {
@@ -56,8 +58,8 @@ export function InstructorDashboard() {
           
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#111111] mb-2">Instructor Dashboard</h1>
-          <p className="text-gray-600">Overview of student performance and course analytics</p>
+          <h1 className="text-3xl font-bold text-[#111111] mb-2">{tr("Panel del Instructor", "Instructor Dashboard")}</h1>
+          <p className="text-gray-600">{tr("Resumen del rendimiento de aprendices y analíticas del curso", "Overview of student performance and course analytics")}</p>
         </div>
 
         {/* Stats Cards */}
@@ -68,9 +70,9 @@ export function InstructorDashboard() {
                 <Users className="text-[#4DA6FF]" size={24} />
               </div>
             </div>
-            <h3 className="text-gray-600 text-sm mb-2">Total Students</h3>
+            <h3 className="text-gray-600 text-sm mb-2">{tr("Total Aprendices", "Total Students")}</h3>
             <p className="text-3xl font-bold text-[#111111]">{metrics.totalStudents}</p>
-            <p className="text-sm text-green-600 mt-1">↑ 12% from last month</p>
+            <p className="text-sm text-green-600 mt-1">{tr("↑ 12% desde el mes pasado", "↑ 12% from last month")}</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-6">
@@ -79,9 +81,9 @@ export function InstructorDashboard() {
                 <BookOpen className="text-purple-600" size={24} />
               </div>
             </div>
-            <h3 className="text-gray-600 text-sm mb-2">Active Modules</h3>
+            <h3 className="text-gray-600 text-sm mb-2">{tr("Módulos Activos", "Active Modules")}</h3>
             <p className="text-3xl font-bold text-[#111111]">{metrics.totalModules}</p>
-            <p className="text-sm text-gray-500 mt-1">Across {metrics.totalRaps} RAPS</p>
+            <p className="text-sm text-gray-500 mt-1">{tr(`A lo largo de ${metrics.totalRaps} RAPs`, `Across ${metrics.totalRaps} RAPS`)}</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-6">
@@ -90,9 +92,9 @@ export function InstructorDashboard() {
                 <TrendingUp className="text-green-600" size={24} />
               </div>
             </div>
-            <h3 className="text-gray-600 text-sm mb-2">Avg Completion Rate</h3>
+            <h3 className="text-gray-600 text-sm mb-2">{tr("Tasa Promedio de Finalización", "Avg Completion Rate")}</h3>
             <p className="text-3xl font-bold text-[#111111]">78%</p>
-            <p className="text-sm text-green-600 mt-1">↑ 5% from last month</p>
+            <p className="text-sm text-green-600 mt-1">{tr("↑ 5% desde el mes pasado", "↑ 5% from last month")}</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-6">
@@ -101,9 +103,9 @@ export function InstructorDashboard() {
                 <Award className="text-yellow-600" size={24} />
               </div>
             </div>
-            <h3 className="text-gray-600 text-sm mb-2">Avg Student Score</h3>
+            <h3 className="text-gray-600 text-sm mb-2">{tr("Puntaje Promedio de Aprendiz", "Avg Student Score")}</h3>
             <p className="text-3xl font-bold text-[#111111]">87%</p>
-            <p className="text-sm text-green-600 mt-1">↑ 3% from last month</p>
+            <p className="text-sm text-green-600 mt-1">{tr("↑ 3% desde el mes pasado", "↑ 3% from last month")}</p>
           </div>
         </div>
 
@@ -111,7 +113,7 @@ export function InstructorDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Student Engagement */}
           <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-bold text-[#111111] mb-4">Student Engagement</h2>
+            <h2 className="text-xl font-bold text-[#111111] mb-4">{tr("Participación de Aprendices", "Student Engagement")}</h2>
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={studentProgressData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -125,7 +127,7 @@ export function InstructorDashboard() {
 
           {/* RAP Completion Rates */}
           <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-bold text-[#111111] mb-4">RAP Completion Rates</h2>
+            <h2 className="text-xl font-bold text-[#111111] mb-4">{tr("Tasas de Finalización de RAPs", "RAP Completion Rates")}</h2>
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
@@ -150,24 +152,24 @@ export function InstructorDashboard() {
 
         {/* Recent Student Activity */}
         <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-          <h2 className="text-xl font-bold text-[#111111] mb-4">Recent Student Activity</h2>
+          <h2 className="text-xl font-bold text-[#111111] mb-4">{tr("Actividad Reciente de Aprendices", "Recent Student Activity")}</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Student</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Activity</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">{tr("Aprendiz", "Student")}</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">{tr("Actividad", "Activity")}</th>
                   <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">RAP</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Score</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Date</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">{tr("Puntaje", "Score")}</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">{tr("Fecha", "Date")}</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { name: "Maria Garcia", activity: "Completed Module 3", rap: "RAP 2", score: "95%", date: "2 hours ago" },
-                  { name: "John Smith", activity: "Started Module 5", rap: "RAP 1", score: "N/A", date: "3 hours ago" },
-                  { name: "Ana Lopez", activity: "Completed Quiz", rap: "RAP 2", score: "88%", date: "5 hours ago" },
-                  { name: "Carlos Ruiz", activity: "Completed Module 2", rap: "RAP 1", score: "92%", date: "1 day ago" },
+                  { name: "Maria Garcia", activity: tr("Completó Módulo 3", "Completed Module 3"), rap: "RAP 2", score: "95%", date: tr("Hace 2 horas", "2 hours ago") },
+                  { name: "John Smith", activity: tr("Inició Módulo 5", "Started Module 5"), rap: "RAP 1", score: "N/A", date: tr("Hace 3 horas", "3 hours ago") },
+                  { name: "Ana Lopez", activity: tr("Completó Cuestionario", "Completed Quiz"), rap: "RAP 2", score: "88%", date: tr("Hace 5 horas", "5 hours ago") },
+                  { name: "Carlos Ruiz", activity: tr("Completó Módulo 2", "Completed Module 2"), rap: "RAP 1", score: "92%", date: tr("Hace 1 día", "1 day ago") },
                 ].map((student, index) => (
                   <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
                     <td className="py-3 px-4 font-medium text-gray-800">{student.name}</td>
@@ -190,7 +192,7 @@ export function InstructorDashboard() {
 
         {/* Top Performers */}
         <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-xl font-bold text-[#111111] mb-4">Top Performers This Month</h2>
+          <h2 className="text-xl font-bold text-[#111111] mb-4">{tr("Mejores Desempeños Este Mes", "Top Performers This Month")}</h2>
           <div className="space-y-3">
             {[
               { name: "Maria Garcia", score: 98, modules: 15 },
@@ -203,11 +205,11 @@ export function InstructorDashboard() {
                 </div>
                 <div className="flex-1">
                   <p className="font-bold text-[#111111]">{student.name}</p>
-                  <p className="text-sm text-gray-600">{student.modules} modules completed</p>
+                  <p className="text-sm text-gray-600">{student.modules} {tr("módulos completados", "modules completed")}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-2xl font-bold text-[#4DA6FF]">{student.score}%</p>
-                  <p className="text-xs text-gray-500">avg score</p>
+                  <p className="text-xs text-gray-500">{tr("puntaje prom.", "avg score")}</p>
                 </div>
               </div>
             ))}

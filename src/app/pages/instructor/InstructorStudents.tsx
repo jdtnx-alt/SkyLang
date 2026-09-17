@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Sidebar } from "../../components/Sidebar";
 import { Search, Users, UserCheck, TrendingUp, Filter, Mail, Award, BookOpen, X, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface Student {
   id: number;
@@ -18,6 +19,7 @@ interface Student {
 }
 
 export function InstructorStudents() {
+  const { tr } = useLanguage();
   const [students, setStudents] = useState<Student[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -108,8 +110,8 @@ export function InstructorStudents() {
       <div className="ml-64 flex-1 p-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#111111] mb-2">My Students</h1>
-          <p className="text-gray-600">List and performance tracking of students assigned to your fichas and programs</p>
+          <h1 className="text-3xl font-bold text-[#111111] mb-2">{tr("Mis Aprendices", "My Students")}</h1>
+          <p className="text-gray-600">{tr("Listado y seguimiento del rendimiento de aprendices asignados a tus fichas y programas", "List and performance tracking of students assigned to your fichas and programs")}</p>
         </div>
 
         {/* Metric Cards */}
@@ -119,9 +121,9 @@ export function InstructorStudents() {
               <Users size={28} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Total Students</p>
+              <p className="text-sm font-medium text-gray-500">{tr("Total Aprendices", "Total Students")}</p>
               <h3 className="text-2xl font-bold text-gray-900">{totalAprendices}</h3>
-              <p className="text-xs text-blue-600 font-medium">Assigned to your profile</p>
+              <p className="text-xs text-blue-600 font-medium">{tr("Asignados a tu perfil", "Assigned to your profile")}</p>
             </div>
           </div>
 
@@ -130,9 +132,9 @@ export function InstructorStudents() {
               <UserCheck size={28} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Active Students</p>
+              <p className="text-sm font-medium text-gray-500">{tr("Aprendices Activos", "Active Students")}</p>
               <h3 className="text-2xl font-bold text-gray-900">{activos}</h3>
-              <p className="text-xs text-green-600 font-medium">In active training</p>
+              <p className="text-xs text-green-600 font-medium">{tr("En formación activa", "In active training")}</p>
             </div>
           </div>
 
@@ -141,9 +143,9 @@ export function InstructorStudents() {
               <TrendingUp size={28} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Avg Progress</p>
+              <p className="text-sm font-medium text-gray-500">{tr("Progreso Promedio", "Avg Progress")}</p>
               <h3 className="text-2xl font-bold text-gray-900">{promedioAvance}%</h3>
-              <p className="text-xs text-purple-600 font-medium">Cumulative performance</p>
+              <p className="text-xs text-purple-600 font-medium">{tr("Rendimiento acumulado", "Cumulative performance")}</p>
             </div>
           </div>
         </div>
@@ -154,7 +156,7 @@ export function InstructorStudents() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
-              placeholder="Search by name, email, or ficha..."
+              placeholder={tr("Buscar por nombre, correo o ficha...", "Search by name, email, or ficha...")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
@@ -168,7 +170,7 @@ export function InstructorStudents() {
               onChange={(e) => setSelectedFicha(e.target.value)}
               className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
             >
-              <option value="TODAS">All Fichas</option>
+              <option value="TODAS">{tr("Todas las Fichas", "All Fichas")}</option>
               {fichas.map((f) => (
                 <option key={f} value={f}>
                   Ficha #{f}
@@ -181,20 +183,20 @@ export function InstructorStudents() {
         {/* Students Table */}
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           {isLoading ? (
-            <div className="p-12 text-center text-gray-500">Loading students...</div>
+            <div className="p-12 text-center text-gray-500">{tr("Cargando aprendices...", "Loading students...")}</div>
           ) : filteredStudents.length === 0 ? (
-            <div className="p-12 text-center text-gray-500">No students found matching your search criteria.</div>
+            <div className="p-12 text-center text-gray-500">{tr("No se encontraron aprendices con ese criterio de búsqueda.", "No students found matching your search criteria.")}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    <th className="py-4 px-6">Student</th>
-                    <th className="py-4 px-6">Ficha</th>
-                    <th className="py-4 px-6">Program</th>
-                    <th className="py-4 px-6">Progress</th>
-                    <th className="py-4 px-6">Status</th>
-                    <th className="py-4 px-6 text-right">Action</th>
+                    <th className="py-4 px-6">{tr("Aprendiz", "Student")}</th>
+                    <th className="py-4 px-6">{tr("Ficha", "Ficha")}</th>
+                    <th className="py-4 px-6">{tr("Programa", "Program")}</th>
+                    <th className="py-4 px-6">{tr("Progreso", "Progress")}</th>
+                    <th className="py-4 px-6">{tr("Estado", "Status")}</th>
+                    <th className="py-4 px-6 text-right">{tr("Acción", "Action")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -250,10 +252,10 @@ export function InstructorStudents() {
                             </div>
                             <span className="block text-[10px] text-gray-400 mt-1">
                               {(student as any).rapActual
-                                ? `Cursando el RAP ${(student as any).rapActual}`
+                                ? tr(`Cursando el RAP ${(student as any).rapActual}`, `Taking RAP ${(student as any).rapActual}`)
                                 : (student as any).rapsTotales > 0
-                                  ? 'Programa completo'
-                                  : 'Sin progreso registrado'}
+                                  ? tr('Programa completo', 'Program completed')
+                                  : tr('Sin progreso registrado', 'No registered progress')}
                             </span>
                           </div>
                         </td>
@@ -271,7 +273,7 @@ export function InstructorStudents() {
                                 student.estado === "Activo" || student.estado === "Active" ? "bg-green-500" : "bg-gray-400"
                               }`}
                             />
-                            {student.estado === "Activo" ? "Active" : student.estado === "Inactivo" ? "Inactive" : student.estado}
+                            {student.estado === "Activo" || student.estado === "Active" ? tr("Activo", "Active") : tr("Inactivo", "Inactive")}
                           </span>
                         </td>
 
@@ -280,7 +282,7 @@ export function InstructorStudents() {
                             onClick={() => setSelectedStudent(student)}
                             className="px-3 py-1.5 bg-[#4DA6FF]/10 text-[#4DA6FF] hover:bg-[#4DA6FF] hover:text-white rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1"
                           >
-                            View Profile <ChevronRight size={14} />
+                            {tr("Ver Perfil", "View Profile")} <ChevronRight size={14} />
                           </button>
                         </td>
                       </tr>
@@ -322,28 +324,28 @@ export function InstructorStudents() {
                 <h3 className="text-xl font-bold text-gray-900">{selectedStudent.nombre}</h3>
                 <p className="text-sm text-gray-500">{selectedStudent.email}</p>
                 <span className="mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#4DA6FF] border border-blue-200">
-                  Student - Ficha #{selectedStudent.numeroFicha}
+                  {tr("Aprendiz", "Student")} - Ficha #{selectedStudent.numeroFicha}
                 </span>
               </div>
 
               <div className="space-y-4 text-sm bg-gray-50 p-4 rounded-xl mb-6">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-500 flex items-center gap-2">
-                    <BookOpen size={16} /> Program:
+                    <BookOpen size={16} /> {tr("Programa:", "Program:")}
                   </span>
                   <span className="font-semibold text-gray-800 text-right">{selectedStudent.programaTitulo}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-500 flex items-center gap-2">
-                    <Award size={16} /> Training Status:
+                    <Award size={16} /> {tr("Estado de Formación:", "Training Status:")}
                   </span>
                   <span className="font-semibold text-green-600">
-                    {selectedStudent.estado === "Activo" ? "Active" : selectedStudent.estado}
+                    {selectedStudent.estado === "Activo" || selectedStudent.estado === "Active" ? tr("Activo", "Active") : tr("Inactivo", "Inactive")}
                   </span>
                 </div>
                 <div>
                   <div className="flex justify-between text-xs font-medium text-gray-600 mb-1">
-                    <span>Overall Progress</span>
+                    <span>{tr("Progreso General", "Overall Progress")}</span>
                     <span>{selectedStudent.avance}%</span>
                   </div>
                   <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
@@ -357,7 +359,7 @@ export function InstructorStudents() {
                   onClick={() => setSelectedStudent(null)}
                   className="w-full py-2.5 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg font-medium text-sm transition-colors"
                 >
-                  Close
+                  {tr("Cerrar", "Close")}
                 </button>
               </div>
             </motion.div>

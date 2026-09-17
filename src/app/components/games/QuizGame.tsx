@@ -109,7 +109,7 @@ export const QuizGame: React.FC<QuizGameProps> = ({
               </span>
             </h3>
             <p className="text-xs text-slate-500 font-medium">
-              Responde una pregunta a la vez y avanza hasta completar el reto.
+              Answer one question at a time and advance to complete the challenge.
             </p>
           </div>
         </div>
@@ -119,14 +119,14 @@ export const QuizGame: React.FC<QuizGameProps> = ({
           onClick={handleReset}
           className="flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-purple-700 bg-slate-100 hover:bg-purple-50 px-3 py-1.5 rounded-xl transition-all font-bold border border-slate-200"
         >
-          <RotateCcw size={14} /> Reiniciar
+          <RotateCcw size={14} /> Reset
         </button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="rounded-2xl bg-slate-50 border border-slate-200 p-3">
           <span className="text-[11px] font-extrabold uppercase text-slate-500 flex items-center gap-1.5">
-            <Target size={14} /> Progreso
+            <Target size={14} /> Progress
           </span>
           <div className="mt-2 h-2 rounded-full bg-slate-200 overflow-hidden">
             <div className="h-full bg-purple-600 transition-all" style={{ width: `${progress}%` }} />
@@ -134,15 +134,15 @@ export const QuizGame: React.FC<QuizGameProps> = ({
         </div>
         <div className="rounded-2xl bg-indigo-50 border border-indigo-100 p-3">
           <span className="text-[11px] font-extrabold uppercase text-indigo-700 flex items-center gap-1.5">
-            <Sparkles size={14} /> Racha
+            <Sparkles size={14} /> Streak
           </span>
-          <strong className="text-sm text-indigo-950">{streak} selecciones activas</strong>
+          <strong className="text-sm text-indigo-950">{streak} active selections</strong>
         </div>
         <div className="rounded-2xl bg-emerald-50 border border-emerald-100 p-3">
           <span className="text-[11px] font-extrabold uppercase text-emerald-700 flex items-center gap-1.5">
-            <Timer size={14} /> Ritmo
+            <Timer size={14} /> Pace
           </span>
-          <strong className="text-sm text-emerald-950">{isAllAnswered ? 'Listo para enviar' : 'En progreso'}</strong>
+          <strong className="text-sm text-emerald-950">{isAllAnswered ? 'Ready to submit' : 'In progress'}</strong>
         </div>
       </div>
 
@@ -195,7 +195,7 @@ export const QuizGame: React.FC<QuizGameProps> = ({
           disabled={currentQuestion === 0}
           className="sm:w-32 py-3 rounded-2xl border border-slate-200 bg-white text-xs font-bold text-slate-700 disabled:opacity-40"
         >
-          Anterior
+          Previous
         </button>
         <button
           type="button"
@@ -203,7 +203,7 @@ export const QuizGame: React.FC<QuizGameProps> = ({
           disabled={currentQuestion === questions.length - 1}
           className="sm:w-32 py-3 rounded-2xl border border-slate-200 bg-white text-xs font-bold text-slate-700 disabled:opacity-40"
         >
-          Siguiente
+          Next
         </button>
         <button
           type="button"
@@ -217,11 +217,11 @@ export const QuizGame: React.FC<QuizGameProps> = ({
         >
           {submitted ? (
             <>
-              <CheckCircle2 size={16} className="text-emerald-500" /> Respuestas enviadas
+              <CheckCircle2 size={16} className="text-emerald-500" /> Answers submitted
             </>
           ) : (
             <>
-              <Send size={15} /> Enviar respuestas
+              <Send size={15} /> Submit answers
             </>
           )}
         </button>

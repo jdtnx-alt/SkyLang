@@ -523,7 +523,7 @@ export const Momento3ActivityRunner: React.FC<Momento3ActivityRunnerProps> = ({
               className="btn-duo-3d btn-duo-emerald px-5 py-2 text-xs flex items-center gap-1"
             >
               <Award size={16} />
-              <span>Finalizar</span>
+              <span>Finish</span>
             </button>
           )}
         </div>
@@ -538,7 +538,6 @@ const FillInBlanksRenderer = ({ data, savedState, onEvaluate }: any) => {
   const [inputs, setInputs] = useState<Record<number, string>>(savedState || {});
 
   const handleCheck = () => {
-    // Sin clave de correccion en el cliente: se envian las respuestas tal cual.
     onEvaluate(false, inputs, 0);
   };
 
@@ -547,11 +546,11 @@ const FillInBlanksRenderer = ({ data, savedState, onEvaluate }: any) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {fields.map((f: any, idx: number) => (
           <div key={idx} className="p-3 border border-slate-200 rounded-xl bg-slate-50 space-y-1">
-            <label className="block text-xs font-bold text-slate-700">{f.label || `Espacio ${idx + 1}`}</label>
+            <label className="block text-xs font-bold text-slate-700">{f.label || `Blank ${idx + 1}`}</label>
             <input
               type="text"
               className="w-full p-2 text-xs border rounded-lg bg-white font-medium focus:ring-2 focus:ring-purple-500 outline-none"
-              placeholder={f.placeholder || "Escribe tu respuesta..."}
+              placeholder={f.placeholder || "Type your answer..."}
               value={inputs[idx] || ''}
               onChange={(e) => setInputs({ ...inputs, [idx]: e.target.value })}
             />
@@ -562,16 +561,13 @@ const FillInBlanksRenderer = ({ data, savedState, onEvaluate }: any) => {
         onClick={handleCheck}
         className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2"
       >
-        <Check size={16} /> Verificar Respuestas
+        <Check size={16} /> Check Answers
       </button>
     </div>
   );
 };
 
 // ── RENDERER 2: Multiple Choice ──
-// Recorre todas las preguntas del cuestionario. Antes solo pintaba la primera,
-// de modo que en un test de dos preguntas el máximo alcanzable era 50 y la
-// actividad resultaba imposible de aprobar.
 const MultipleChoiceRenderer = ({ data, savedState, onEvaluate }: any) => {
   const preguntas = Array.isArray(data.questions) && data.questions.length
     ? data.questions
@@ -592,12 +588,12 @@ const MultipleChoiceRenderer = ({ data, savedState, onEvaluate }: any) => {
   return (
     <div className="space-y-6">
       {preguntas.map((p: any, qi: number) => {
-        const opciones = p.options || data.options || ["Opción A", "Opción B"];
+        const opciones = p.options || data.options || ["Option A", "Option B"];
         return (
           <div key={qi} className="space-y-3">
             <h4 className="font-bold text-sm text-slate-900">
               <span className="text-purple-600 mr-1.5">{qi + 1}.</span>
-              {p.question || p.q || 'Selecciona la opción correcta:'}
+              {p.question || p.q || 'Select the correct option:'}
             </h4>
             <div className="space-y-2">
               {opciones.map((opt: string, idx: number) => (
@@ -630,8 +626,8 @@ const MultipleChoiceRenderer = ({ data, savedState, onEvaluate }: any) => {
       >
         <Send size={15} />
         {completo
-          ? 'Enviar respuestas'
-          : `Responde las ${preguntas.length} preguntas (${contestadas}/${preguntas.length})`}
+          ? 'Submit Answers'
+          : `Answer all ${preguntas.length} questions (${contestadas}/${preguntas.length})`}
       </button>
     </div>
   );
@@ -640,8 +636,8 @@ const MultipleChoiceRenderer = ({ data, savedState, onEvaluate }: any) => {
 // ── RENDERER 3: Matching ──
 const MatchingRenderer = ({ data, savedState, onEvaluate }: any) => {
   const pairs = data.pairs || [
-    { left: "Fiebre", right: "Temperatura > 38°C" },
-    { left: "Taquicardia", right: "FC > 100 bpm" }
+    { left: "Fever", right: "Temperature > 38°C" },
+    { left: "Tachycardia", right: "Heart Rate > 100 bpm" }
   ];
   const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
   const [matched, setMatched] = useState<Record<number, number>>(savedState || {});
@@ -659,7 +655,7 @@ const MatchingRenderer = ({ data, savedState, onEvaluate }: any) => {
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-slate-600 font-medium">Selecciona un elemento de la izquierda y luego su correspondencia a la derecha:</p>
+      <p className="text-xs text-slate-600 font-medium">Select an item on the left and then its corresponding match on the right:</p>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           {pairs.map((p: any, idx: number) => (
@@ -700,7 +696,7 @@ const MatchingRenderer = ({ data, savedState, onEvaluate }: any) => {
 
 // ── RENDERER 4 & 5: Drag Words ──
 const DragWordsRenderer = ({ data, savedState, onEvaluate }: any) => {
-  const words = data.targetWords || ["temperatura", "presión", "frecuencia"];
+  const words = data.targetWords || ["temperature", "blood pressure", "pulse"];
   const [placements, setPlacements] = useState<string[]>(savedState || []);
   const [available, setAvailable] = useState<string[]>(words);
 
@@ -733,7 +729,7 @@ const DragWordsRenderer = ({ data, savedState, onEvaluate }: any) => {
           </span>
         ))}
         {placements.length === 0 && (
-          <span className="text-xs text-slate-400 font-medium">Haz clic en los términos para ubicarlos aquí...</span>
+          <span className="text-xs text-slate-400 font-medium">Click on terms to place them here...</span>
         )}
       </div>
 
@@ -753,7 +749,7 @@ const DragWordsRenderer = ({ data, savedState, onEvaluate }: any) => {
         onClick={handleVerify}
         className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2"
       >
-        <Check size={16} /> Comprobar Ubicación
+        <Check size={16} /> Check Placement
       </button>
     </div>
   );
@@ -761,7 +757,7 @@ const DragWordsRenderer = ({ data, savedState, onEvaluate }: any) => {
 
 // ── RENDERER 6: Sentence Ordering ──
 const SentenceOrderingRenderer = ({ data, savedState, onEvaluate }: any) => {
-  const originalItems = data.items || ["Paso 1: Lavado de manos", "Paso 2: Colocación de guantes", "Paso 3: Evaluación del paciente"];
+  const originalItems = data.items || ["Step 1: Wash hands", "Step 2: Put on gloves", "Step 3: Patient assessment"];
   const [items, setItems] = useState<string[]>(savedState || originalItems);
 
   const moveUp = (idx: number) => {
@@ -790,7 +786,7 @@ const SentenceOrderingRenderer = ({ data, savedState, onEvaluate }: any) => {
                 disabled={idx === 0}
                 className="px-2 py-1 bg-white border rounded text-[10px] disabled:opacity-30 hover:bg-slate-100"
               >
-                ▲ Subir
+                ▲ Move Up
               </button>
             </div>
           </div>
@@ -800,7 +796,7 @@ const SentenceOrderingRenderer = ({ data, savedState, onEvaluate }: any) => {
         onClick={handleVerify}
         className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2"
       >
-        <Check size={16} /> Verificar Orden
+        <Check size={16} /> Verify Order
       </button>
     </div>
   );
@@ -847,13 +843,13 @@ const SentenceConstructionRenderer = ({ data, savedState, onEvaluate }: any) => 
           onClick={handleCheck}
           className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2"
         >
-          <Check size={16} /> Validar Oración
+          <Check size={16} /> Validate Sentence
         </button>
         <button
           onClick={() => setSelectedWords([])}
           className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl"
         >
-          Limpiar
+          Clear
         </button>
       </div>
     </div>
@@ -877,7 +873,7 @@ const GrammarExercisesRenderer = ({ data, savedState, onEvaluate }: any) => {
           <input
             type="text"
             className="w-full p-2 border rounded-lg text-xs bg-white font-medium"
-            placeholder="Escribe la forma correcta..."
+            placeholder="Type the correct form..."
             value={answers[idx] || ''}
             onChange={(e) => setAnswers({ ...answers, [idx]: e.target.value })}
           />
@@ -887,7 +883,7 @@ const GrammarExercisesRenderer = ({ data, savedState, onEvaluate }: any) => {
         onClick={handleCheck}
         className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2"
       >
-        <Check size={16} /> Evaluar Gramática
+        <Check size={16} /> Check Grammar
       </button>
     </div>
   );
@@ -903,12 +899,12 @@ const VocabularyRenderer = ({ data, savedState, onEvaluate }: any) => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {terms.map((t: any, idx: number) => (
         <div key={idx} className="p-4 bg-purple-50/70 border border-purple-200 rounded-2xl space-y-2">
-          <span className="text-xs font-extrabold uppercase text-purple-600 tracking-wider">Término #{idx + 1}</span>
+          <span className="text-xs font-extrabold uppercase text-purple-600 tracking-wider">Term #{idx + 1}</span>
           <h4 className="font-extrabold text-base text-purple-950">{t.word}</h4>
           <p className="text-xs text-slate-700 font-medium">{t.definition}</p>
           {t.example && (
             <p className="text-[11px] text-purple-800 italic bg-white p-2 rounded-lg border border-purple-100">
-              Ejemplo: "{t.example}"
+              Example: "{t.example}"
             </p>
           )}
         </div>
@@ -930,7 +926,7 @@ const ReadingComprehensionRenderer = ({ data, savedState, onEvaluate }: any) => 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl max-h-80 overflow-y-auto space-y-2">
-        <h4 className="font-bold text-xs uppercase tracking-wider text-slate-500">Texto de Lectura</h4>
+        <h4 className="font-bold text-xs uppercase tracking-wider text-slate-500">Reading Passage</h4>
         <p className="text-xs text-slate-800 leading-relaxed font-medium whitespace-pre-line">{passage}</p>
       </div>
 
@@ -957,7 +953,7 @@ const ReadingComprehensionRenderer = ({ data, savedState, onEvaluate }: any) => 
           onClick={handleCheck}
           className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2"
         >
-          <Check size={16} /> Enviar Comprensión
+          <Check size={16} /> Submit Answers
         </button>
       </div>
     </div>
@@ -973,15 +969,15 @@ const WritingRenderer = ({ data, savedState, onEvaluate }: any) => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center text-xs">
-        <span className="font-bold text-slate-700">Producción Escrita</span>
+        <span className="font-bold text-slate-700">Written Production</span>
         <span className={`font-bold ${wordCount >= minWords ? 'text-emerald-600' : 'text-amber-600'}`}>
-          Palabras: {wordCount} (Mínimo: {minWords})
+          Words: {wordCount} (Minimum: {minWords})
         </span>
       </div>
       <textarea
         rows={5}
         className="w-full p-3 border border-slate-200 rounded-2xl text-xs bg-white font-medium focus:ring-2 focus:ring-purple-500 outline-none"
-        placeholder="Escribe tu respuesta estructurada aquí..."
+        placeholder="Write your structured response here..."
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
@@ -990,7 +986,7 @@ const WritingRenderer = ({ data, savedState, onEvaluate }: any) => {
         disabled={wordCount < minWords}
         className="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-40 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2"
       >
-        <Send size={16} /> Entregar Respuesta Escrita
+        <Send size={16} /> Submit Written Response
       </button>
     </div>
   );
@@ -1005,14 +1001,14 @@ const InteractiveVideoRenderer = ({ data, savedState, onEvaluate }: any) => {
       <div className="relative rounded-2xl overflow-hidden bg-black aspect-video flex items-center justify-center">
         <video controls className="w-full h-full">
           <source src={videoUrl} type="video/mp4" />
-          Tu navegador no soporta el reproductor de video.
+          Your browser does not support video playback.
         </video>
       </div>
       <button
         onClick={() => onEvaluate(true, { watched: true }, 100)}
         className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2"
       >
-        <Check size={16} /> Confirmar Visualización y Preguntas
+        <Check size={16} /> Confirm Watching and Questions
       </button>
     </div>
   );
@@ -1028,7 +1024,7 @@ const H5PRenderer = ({ data, onComplete }: any) => {
         <iframe
           src={embedUrl}
           className="w-full h-96 border-none"
-          title="Recurso H5P Interactivo"
+          title="Interactive H5P Resource"
           allow="geolocation; microphone; camera; midi; encrypted-media"
         />
       </div>
@@ -1036,16 +1032,13 @@ const H5PRenderer = ({ data, onComplete }: any) => {
         onClick={onComplete}
         className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2"
       >
-        <CheckCircle2 size={16} /> Marcar H5P Completado
+        <CheckCircle2 size={16} /> Mark H5P Completed
       </button>
     </div>
   );
 };
 
-// ── RENDERER 14: Contenido de estudio ──
-// Las actividades de teoría no tienen respuesta correcta: se completan al
-// revisarlas. Antes no existía ningún renderizador para ellas, así que eran
-// obligatorias pero imposibles de realizar, y dejaban el RAP atascado.
+// ── RENDERER 14: Study Content ──
 const ContenidoDeEstudioRenderer = ({ data, onRevisado, yaAprobado }: any) => {
   const objetivos = data.objectives || data.objetivos;
   const pildora = data.grammarPill;
@@ -1057,13 +1050,13 @@ const ContenidoDeEstudioRenderer = ({ data, onRevisado, yaAprobado }: any) => {
     <div className="space-y-5">
       {data.videoUrl && (
         <div className="aspect-video rounded-2xl overflow-hidden border border-slate-200">
-          <iframe src={data.videoUrl} className="w-full h-full" title="Vídeo de la lección" allowFullScreen />
+          <iframe src={data.videoUrl} className="w-full h-full" title="Lesson Video" allowFullScreen />
         </div>
       )}
 
       {objetivos && (
         <div className="p-4 bg-blue-50/60 border border-blue-100 rounded-2xl">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 block mb-1">Objetivos</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 block mb-1">Objectives</span>
           <p className="text-xs text-slate-800 font-medium">{objetivos}</p>
         </div>
       )}
@@ -1097,7 +1090,7 @@ const ContenidoDeEstudioRenderer = ({ data, onRevisado, yaAprobado }: any) => {
 
       {vocabulario.length > 0 && (
         <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vocabulario</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vocabulary</span>
           {vocabulario.map((v: any, i: number) => (
             <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-slate-200">
               <div>
@@ -1112,7 +1105,7 @@ const ContenidoDeEstudioRenderer = ({ data, onRevisado, yaAprobado }: any) => {
 
       {dialogos.length > 0 && (
         <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Diálogo</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Dialogue</span>
           {dialogos.map((d: any, i: number) => (
             <div key={i} className="p-3 rounded-xl bg-slate-50 border border-slate-200">
               <span className="text-[10px] font-bold text-purple-700 block">{d.speaker} · {d.role}</span>
@@ -1126,15 +1119,13 @@ const ContenidoDeEstudioRenderer = ({ data, onRevisado, yaAprobado }: any) => {
         onClick={onRevisado}
         className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2"
       >
-        <CheckCircle2 size={16} /> {yaAprobado ? 'Marcar de nuevo como revisado' : 'He revisado el contenido'}
+        <CheckCircle2 size={16} /> {yaAprobado ? 'Mark again as reviewed' : 'I have reviewed the content'}
       </button>
     </div>
   );
 };
 
-// ── RENDERER 15: Evaluación mixta ──
-// Una sola prueba con preguntas de opción múltiple y de respuesta corta.
-// Las respuestas correctas no llegan al navegador: el veredicto lo da el servidor.
+// ── RENDERER 15: Mixed Evaluation ──
 const EvaluacionMixtaRenderer = ({ data, savedState, onEvaluate }: any) => {
   const items = Array.isArray(data.items) ? data.items : [];
   const [respuestas, setRespuestas] = useState<Record<number, any>>(savedState?.respuestas
@@ -1149,7 +1140,7 @@ const EvaluacionMixtaRenderer = ({ data, savedState, onEvaluate }: any) => {
   const enviar = () => onEvaluate(false, { respuestas: items.map((_: any, i: number) => respuestas[i] ?? null) });
 
   if (items.length === 0) {
-    return <p className="text-xs text-slate-500 font-medium">Esta evaluación todavía no tiene preguntas.</p>;
+    return <p className="text-xs text-slate-500 font-medium">This evaluation has no questions yet.</p>;
   }
 
   return (
@@ -1164,7 +1155,7 @@ const EvaluacionMixtaRenderer = ({ data, savedState, onEvaluate }: any) => {
           {item.tipo === 'respuesta_corta' ? (
             <input
               type="text"
-              placeholder="Escribe tu respuesta"
+              placeholder="Type your answer"
               value={respuestas[i] ?? ''}
               onChange={(e) => setRespuestas({ ...respuestas, [i]: e.target.value })}
               className="w-full p-3 rounded-xl border border-slate-200 text-xs font-semibold outline-none focus:ring-2 focus:ring-purple-400"
@@ -1198,7 +1189,7 @@ const EvaluacionMixtaRenderer = ({ data, savedState, onEvaluate }: any) => {
         }`}
       >
         <Send size={15} />
-        {completo ? 'Enviar evaluación' : `Responde las ${items.length} preguntas (${contestadas}/${items.length})`}
+        {completo ? 'Submit Evaluation' : `Answer all ${items.length} questions (${contestadas}/${items.length})`}
       </button>
     </div>
   );

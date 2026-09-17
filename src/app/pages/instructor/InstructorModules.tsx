@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Sidebar } from "../../components/Sidebar";
 import { Layers, BookOpen, Plus, Search, Edit2, Trash2, X, Check, FileText, Filter, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface RAP {
   id: number;
@@ -25,6 +26,7 @@ interface ProgramOption {
 }
 
 export function InstructorModules() {
+  const { tr } = useLanguage();
   const [modules, setModules] = useState<ModuleItem[]>([]);
   const [filteredModules, setFilteredModules] = useState<ModuleItem[]>([]);
   const [programs, setPrograms] = useState<ProgramOption[]>([]);
@@ -169,7 +171,7 @@ export function InstructorModules() {
         setIsModalOpen(false);
         fetchModules();
       } else {
-        alert("Error guardando el módulo");
+        alert(tr("Error guardando el módulo", "Error saving module"));
       }
     } catch (err) {
       console.error("Save error:", err);
@@ -189,7 +191,7 @@ export function InstructorModules() {
         setDeletingId(null);
         fetchModules();
       } else {
-        alert("Error al eliminar el módulo");
+        alert(tr("Error al eliminar el módulo", "Error deleting module"));
       }
     } catch (err) {
       console.error("Delete error:", err);
@@ -206,15 +208,15 @@ export function InstructorModules() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-[#111111] mb-2">Module Management</h1>
-            <p className="text-gray-600">Manage and organize training modules for your program curriculum and fichas</p>
+            <h1 className="text-3xl font-bold text-[#111111] mb-2">{tr("Gestión de Módulos", "Module Management")}</h1>
+            <p className="text-gray-600">{tr("Administra y organiza los módulos de formación para el currículo de tu programa y fichas", "Manage and organize training modules for your program curriculum and fichas")}</p>
           </div>
 
           <button
             onClick={handleOpenNewModal}
             className="px-5 py-2.5 bg-[#4DA6FF] hover:bg-[#2563eb] text-white rounded-xl font-semibold shadow-md transition-all flex items-center gap-2"
           >
-            <Plus size={20} /> New Module
+            <Plus size={20} /> {tr("Nuevo Módulo", "New Module")}
           </button>
         </div>
 
@@ -225,9 +227,9 @@ export function InstructorModules() {
               <Layers size={28} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Total Modules</p>
+              <p className="text-sm font-medium text-gray-500">{tr("Total Módulos", "Total Modules")}</p>
               <h3 className="text-2xl font-bold text-gray-900">{totalModulos}</h3>
-              <p className="text-xs text-blue-600 font-medium">Registered in platform</p>
+              <p className="text-xs text-blue-600 font-medium">{tr("Registrados en la plataforma", "Registered in platform")}</p>
             </div>
           </div>
 
@@ -236,9 +238,9 @@ export function InstructorModules() {
               <BookOpen size={28} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Assigned Programs</p>
+              <p className="text-sm font-medium text-gray-500">{tr("Programas Asignados", "Assigned Programs")}</p>
               <h3 className="text-2xl font-bold text-gray-900">{programs.length}</h3>
-              <p className="text-xs text-purple-600 font-medium">Assigned to your profile</p>
+              <p className="text-xs text-purple-600 font-medium">{tr("Asignados a tu perfil", "Assigned to your profile")}</p>
             </div>
           </div>
 
@@ -247,9 +249,9 @@ export function InstructorModules() {
               <FileText size={28} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">System Status</p>
-              <h3 className="text-2xl font-bold text-gray-900">Active</h3>
-              <p className="text-xs text-green-600 font-medium">PostgreSQL Database Connected</p>
+              <p className="text-sm font-medium text-gray-500">{tr("Estado del Sistema", "System Status")}</p>
+              <h3 className="text-2xl font-bold text-gray-900">{tr("Activo", "Active")}</h3>
+              <p className="text-xs text-green-600 font-medium">{tr("Base de datos conectada", "PostgreSQL Database Connected")}</p>
             </div>
           </div>
         </div>
@@ -260,7 +262,7 @@ export function InstructorModules() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
-              placeholder="Search module by title or description..."
+              placeholder={tr("Buscar módulo por título o descripción...", "Search module by title or description...")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
@@ -274,7 +276,7 @@ export function InstructorModules() {
               onChange={(e) => setSelectedProgramFilter(e.target.value)}
               className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
             >
-              <option value="TODOS">All Programs</option>
+              <option value="TODOS">{tr("Todos los Programas", "All Programs")}</option>
               {programs.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.title}
@@ -286,10 +288,10 @@ export function InstructorModules() {
 
         {/* Modules List */}
         {isLoading ? (
-          <div className="bg-white rounded-xl p-12 text-center text-gray-500 shadow-md">Loading modules from database...</div>
+          <div className="bg-white rounded-xl p-12 text-center text-gray-500 shadow-md">{tr("Cargando módulos desde la base de datos...", "Loading modules from database...")}</div>
         ) : filteredModules.length === 0 ? (
           <div className="bg-white rounded-xl p-12 text-center text-gray-500 shadow-md">
-            No modules found matching your search criteria.
+            {tr("No se encontraron módulos con ese criterio de búsqueda.", "No modules found matching your search criteria.")}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -303,18 +305,18 @@ export function InstructorModules() {
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="px-3 py-1 bg-blue-50 text-[#4DA6FF] rounded-lg text-xs font-bold border border-blue-200">
-                      Module #{mod.orden}
+                      {tr("Módulo", "Module")} #{mod.orden}
                     </span>
                     <span className="text-xs text-gray-500 font-medium">{mod.programaTitulo}</span>
                   </div>
 
                   <h3 className="text-lg font-bold text-gray-900 mb-2">{mod.titulo}</h3>
-                  <p className="text-sm text-gray-600 mb-4">{mod.descripcion || "No description assigned."}</p>
+                  <p className="text-sm text-gray-600 mb-4">{mod.descripcion || tr("Sin descripción asignada.", "No description assigned.")}</p>
 
                   {/* RAPs chips if any */}
                   {mod.raps && mod.raps.length > 0 && (
                     <div className="mb-4">
-                      <p className="text-xs font-semibold text-gray-500 mb-1.5">Linked RAPs:</p>
+                      <p className="text-xs font-semibold text-gray-500 mb-1.5">{tr("RAPs Vinculados:", "Linked RAPs:")}</p>
                       <div className="flex flex-wrap gap-1.5">
                         {mod.raps.map((r) => (
                           <span
@@ -334,13 +336,13 @@ export function InstructorModules() {
                     onClick={() => handleOpenEditModal(mod)}
                     className="px-3 py-1.5 text-blue-600 hover:bg-blue-50 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
                   >
-                    <Edit2 size={14} /> Edit
+                    <Edit2 size={14} /> {tr("Editar", "Edit")}
                   </button>
                   <button
                     onClick={() => setDeletingId(mod.id)}
                     className="px-3 py-1.5 text-red-600 hover:bg-red-50 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
                   >
-                    <Trash2 size={14} /> Delete
+                    <Trash2 size={14} /> {tr("Eliminar", "Delete")}
                   </button>
                 </div>
               </motion.div>
@@ -367,15 +369,15 @@ export function InstructorModules() {
               </button>
 
               <h2 className="text-xl font-bold text-gray-900 mb-1">
-                {editingModule ? "Edit Module" : "Create New Module"}
+                {editingModule ? tr("Editar Módulo", "Edit Module") : tr("Crear Nuevo Módulo", "Create New Module")}
               </h2>
               <p className="text-xs text-gray-500 mb-6">
-                Fill in the module details to update the curriculum information.
+                {tr("Completa los detalles del módulo para actualizar la información curricular.", "Fill in the module details to update the curriculum information.")}
               </p>
 
               <form onSubmit={handleSaveModule} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Assigned Program</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">{tr("Programa Asignado", "Assigned Program")}</label>
                   <select
                     value={formProgramaId}
                     onChange={(e) => setFormProgramaId(Number(e.target.value))}
@@ -391,11 +393,11 @@ export function InstructorModules() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Module Title</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">{tr("Título del Módulo", "Module Title")}</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. MODULO 1 GETTING TO KNOW OTHER PEOPLE"
+                    placeholder={tr("ej. MÓDULO 1 CONOCIENDO A OTRAS PERSONAS", "e.g. MODULE 1 GETTING TO KNOW OTHER PEOPLE")}
                     value={formTitulo}
                     onChange={(e) => setFormTitulo(e.target.value)}
                     className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
@@ -403,7 +405,7 @@ export function InstructorModules() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Module Order</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">{tr("Orden del Módulo", "Module Order")}</label>
                   <input
                     type="number"
                     min={1}
@@ -414,10 +416,10 @@ export function InstructorModules() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Description</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">{tr("Descripción", "Description")}</label>
                   <textarea
                     rows={3}
-                    placeholder="Write module description or purpose..."
+                    placeholder={tr("Escribe la descripción o propósito del módulo...", "Write module description or purpose...")}
                     value={formDescripcion}
                     onChange={(e) => setFormDescripcion(e.target.value)}
                     className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
@@ -430,14 +432,14 @@ export function InstructorModules() {
                     onClick={() => setIsModalOpen(false)}
                     className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
                   >
-                    Cancel
+                    {tr("Cancelar", "Cancel")}
                   </button>
                   <button
                     type="submit"
                     disabled={isSaving}
                     className="px-5 py-2 bg-[#4DA6FF] hover:bg-[#2563eb] text-white rounded-lg text-sm font-semibold transition-all shadow-md flex items-center gap-1"
                   >
-                    {isSaving ? "Saving..." : "Save Module"}
+                    {isSaving ? tr("Guardando...", "Saving...") : tr("Guardar Módulo", "Save Module")}
                   </button>
                 </div>
               </form>
@@ -459,22 +461,22 @@ export function InstructorModules() {
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 mx-auto mb-4">
                 <AlertTriangle size={24} />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Delete Module?</h3>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">{tr("¿Eliminar Módulo?", "Delete Module?")}</h3>
               <p className="text-xs text-gray-500 mb-6">
-                This action will permanently delete the module from the database. This cannot be undone.
+                {tr("Esta acción eliminará permanentemente el módulo de la base de datos. No se puede deshacer.", "This action will permanently delete the module from the database. This cannot be undone.")}
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setDeletingId(null)}
                   className="flex-1 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-200 transition-colors"
                 >
-                  Cancel
+                  {tr("Cancelar", "Cancel")}
                 </button>
                 <button
                   onClick={() => handleDeleteModule(deletingId)}
                   className="flex-1 py-2 bg-red-600 text-white rounded-lg font-semibold text-sm hover:bg-red-700 transition-colors shadow-md"
                 >
-                  Confirm Delete
+                  {tr("Confirmar Eliminación", "Confirm Delete")}
                 </button>
               </div>
             </motion.div>

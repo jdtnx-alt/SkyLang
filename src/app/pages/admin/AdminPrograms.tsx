@@ -2,6 +2,7 @@ import { Sidebar } from "../../components/Sidebar";
 import { Plus, Book, Edit, Trash2, Loader2, Eye } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface Program {
   id: number;
@@ -15,6 +16,7 @@ interface Program {
 
 export function AdminPrograms() {
   const navigate = useNavigate();
+  const { tr } = useLanguage();
   const [programs, setPrograms] = useState<Program[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -75,7 +77,10 @@ export function AdminPrograms() {
   };
 
   const handleDeleteProgram = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this program? All associated Fichas, RAPs, and Modules will be deleted.")) return;
+    if (!confirm(tr(
+      "¿Estás seguro de que deseas eliminar este programa? Se eliminarán todas las Fichas, RAPs y Módulos asociados.",
+      "Are you sure you want to delete this program? All associated Fichas, RAPs, and Modules will be deleted."
+    ))) return;
     try {
       const token = localStorage.getItem('token');
       const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
@@ -84,7 +89,7 @@ export function AdminPrograms() {
       if (res.ok) {
         fetchPrograms();
       } else {
-        alert("Error deleting program.");
+        alert(tr("Error al eliminar el programa.", "Error deleting program."));
       }
     } catch (error) {
       console.error("Delete error", error);
@@ -118,14 +123,14 @@ export function AdminPrograms() {
       } else {
         try {
           const data = await res.json();
-          alert(data.message || data.error || "Error saving program.");
+          alert(data.message || data.error || tr("Error al guardar el programa.", "Error saving program."));
         } catch(e) {
-          alert("Connection error. Did you restart the backend server? (" + res.status + " " + res.statusText + ")");
+          alert(tr("Error de conexión. ¿Reiniciaste el servidor backend?", "Connection error. Did you restart the backend server?") + ` (${res.status} ${res.statusText})`);
         }
       }
     } catch (error) {
       console.error("Save error", error);
-      alert("Network error while saving. Verify that the backend server is running.");
+      alert(tr("Error de red al guardar. Verifica que el servidor backend esté en ejecución.", "Network error while saving. Verify that the backend server is running."));
     }
   };
 
@@ -137,8 +142,8 @@ export function AdminPrograms() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-[#111111] mb-2">Program Management</h1>
-            <p className="text-gray-600">Create and manage training programs (e.g. ADSO, Nursing)</p>
+            <h1 className="text-3xl font-bold text-[#111111] mb-2">{tr("Gestión de Programas", "Program Management")}</h1>
+            <p className="text-gray-600">{tr("Crea y administra programas de formación (ej. ADSO, Enfermería)", "Create and manage training programs (e.g. ADSO, Nursing)")}</p>
           </div>
           {!isCreating && (
             <button 
@@ -146,7 +151,7 @@ export function AdminPrograms() {
               className="flex items-center gap-2 bg-[#4DA6FF] hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
               <Plus size={20} />
-              Create Program
+              {tr("Crear Programa", "Create Program")}
             </button>
           )}
         </div>
@@ -154,22 +159,25 @@ export function AdminPrograms() {
         {isCreating && (
           <div className="bg-white rounded-xl shadow-md p-6 mb-8 border border-[#4DA6FF]/30">
             <h2 className="text-xl font-bold text-[#111111] mb-4">
-              {editingId ? "Edit Program" : "Create New Program"}
+              {editingId ? tr("Editar Programa", "Edit Program") : tr("Crear Nuevo Programa", "Create New Program")}
             </h2>
             
             {!editingId && (
               <div className="mb-6 bg-blue-50 border border-blue-100 p-4 rounded-lg flex items-start gap-3">
                 <Book className="text-blue-500 mt-0.5" size={20} />
                 <div>
-                  <h3 className="font-medium text-blue-900 mb-1">Default Structure</h3>
+                  <h3 className="font-medium text-blue-900 mb-1">{tr("Estructura Predeterminada", "Default Structure")}</h3>
                   <p className="text-sm text-blue-800">
-                    When creating this program, <strong>4 Modules</strong> and <strong>6 RAPs</strong> will be automatically generated and distributed as follows:
+                    {tr(
+                      "Al crear este programa, se generarán automáticamente 4 Módulos y 6 RAPs distribuidos de la siguiente forma:",
+                      "When creating this program, 4 Modules and 6 RAPs will be automatically generated and distributed as follows:"
+                    )}
                   </p>
                   <ul className="list-disc list-inside text-sm text-blue-800 mt-2 grid grid-cols-2 gap-1">
-                    <li>Module 1: 1 RAP</li>
-                    <li>Module 2: 2 RAPs</li>
-                    <li>Module 3: 2 RAPs</li>
-                    <li>Module 4: 1 RAP</li>
+                    <li>{tr("Módulo 1: 1 RAP", "Module 1: 1 RAP")}</li>
+                    <li>{tr("Módulo 2: 2 RAPs", "Module 2: 2 RAPs")}</li>
+                    <li>{tr("Módulo 3: 2 RAPs", "Module 3: 2 RAPs")}</li>
+                    <li>{tr("Módulo 4: 1 RAP", "Module 4: 1 RAP")}</li>
                   </ul>
                 </div>
               </div>
@@ -177,47 +185,47 @@ export function AdminPrograms() {
 
             <form className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Program Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{tr("Nombre del Programa", "Program Name")}</label>
                 <input 
                   type="text" 
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]" 
-                  placeholder="e.g. ADSO, NURSING, MECHANICS" 
+                  placeholder={tr("ej. ADSO, ENFERMERÍA, MECÁNICA", "e.g. ADSO, NURSING, MECHANICS")} 
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Main Instructor</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{tr("Instructor Principal", "Main Instructor")}</label>
                   <select 
                     value={newInstructor}
                     onChange={(e) => setNewInstructor(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
                   >
-                    <option value="">Select Instructor</option>
+                    <option value="">{tr("Seleccionar Instructor", "Select Instructor")}</option>
                     {instructors.map(instructor => (
                       <option key={instructor.id} value={instructor.name}>{instructor.name}</option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{tr("Estado", "Status")}</label>
                   <select 
                     value={newStatus}
                     onChange={(e) => setNewStatus(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
                   >
-                    <option value="Draft">Draft</option>
-                    <option value="Active">Active</option>
+                    <option value="Draft">{tr("Borrador", "Draft")}</option>
+                    <option value="Active">{tr("Activo", "Active")}</option>
                   </select>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{tr("Descripción", "Description")}</label>
                 <textarea 
                   className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]" 
                   rows={3} 
-                  placeholder="Program description..."
+                  placeholder={tr("Descripción del programa...", "Program description...")}
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
                 ></textarea>
@@ -228,7 +236,7 @@ export function AdminPrograms() {
                   onClick={resetForm}
                   className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
                 >
-                  Cancel
+                  {tr("Cancelar", "Cancel")}
                 </button>
                 <button 
                   type="button" 
@@ -236,7 +244,7 @@ export function AdminPrograms() {
                   disabled={!newTitle}
                   className="px-4 py-2 bg-[#4DA6FF] hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
                 >
-                  {editingId ? "Update Program" : "Save Program"}
+                  {editingId ? tr("Actualizar Programa", "Update Program") : tr("Guardar Programa", "Save Program")}
                 </button>
               </div>
             </form>
@@ -245,7 +253,7 @@ export function AdminPrograms() {
 
         {/* Programs List */}
         <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-xl font-bold text-[#111111] mb-4">All Programs</h2>
+          <h2 className="text-xl font-bold text-[#111111] mb-4">{tr("Todos los Programas", "All Programs")}</h2>
           <div className="overflow-x-auto">
             {isLoading ? (
               <div className="flex justify-center p-8 text-gray-400">
@@ -253,18 +261,18 @@ export function AdminPrograms() {
               </div>
             ) : programs.length === 0 ? (
               <div className="text-center p-8 text-gray-500">
-                No programs available. Create a new one.
+                {tr("No hay programas disponibles. Crea uno nuevo.", "No programs available. Create a new one.")}
               </div>
             ) : (
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Program</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Modules</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">RAPs</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Instructor</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Status</th>
-                    <th className="text-center py-3 px-4 text-sm font-medium text-gray-600">Actions</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">{tr("Programa", "Program")}</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">{tr("Módulos", "Modules")}</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">{tr("RAPs", "RAPs")}</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">{tr("Instructor", "Instructor")}</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">{tr("Estado", "Status")}</th>
+                    <th className="text-center py-3 px-4 text-sm font-medium text-gray-600">{tr("Acciones", "Actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -296,7 +304,7 @@ export function AdminPrograms() {
                               : "bg-yellow-100 text-yellow-700"
                           }`}
                         >
-                          {prog.status}
+                          {prog.status === "Active" ? tr("Activo", "Active") : tr("Borrador", "Draft")}
                         </span>
                       </td>
                       <td className="py-3 px-4">
@@ -304,21 +312,21 @@ export function AdminPrograms() {
                           <button 
                             onClick={() => navigate(`/admin/programs/${prog.id}`)}
                             className="p-1 text-gray-500 hover:text-[#4DA6FF] transition-colors"
-                            title="View Details"
+                            title={tr("Ver Detalles", "View Details")}
                           >
                             <Eye size={18} />
                           </button>
                           <button 
                             onClick={() => handleEditClick(prog)}
                             className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
-                            title="Edit"
+                            title={tr("Editar", "Edit")}
                           >
                             <Edit size={18} />
                           </button>
                           <button 
                             onClick={() => handleDeleteProgram(prog.id)}
                             className="p-1 text-gray-500 hover:text-red-600 transition-colors"
-                            title="Delete"
+                            title={tr("Eliminar", "Delete")}
                           >
                             <Trash2 size={18} />
                           </button>

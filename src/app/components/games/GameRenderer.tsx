@@ -33,7 +33,7 @@ export const GameRenderer: React.FC<GameRendererProps> = ({
   if (!activity) {
     return (
       <div className="p-6 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 text-xs font-semibold">
-        No se pudo cargar la configuración de esta actividad interactiva.
+        Could not load configuration for this interactive activity.
       </div>
     );
   }

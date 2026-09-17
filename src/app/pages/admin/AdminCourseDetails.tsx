@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Sidebar } from "../../components/Sidebar";
+import { useLanguage } from "../../context/LanguageContext";
 import { 
   ArrowLeft, 
   Users, 
@@ -16,6 +17,7 @@ import {
 export function AdminCourseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { tr } = useLanguage();
   const [activeTab, setActiveTab] = useState("overview");
   const [courseData, setCourseData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -56,10 +58,10 @@ export function AdminCourseDetails() {
         <Sidebar role="admin" />
         <div className="ml-64 p-8">
           <button onClick={() => navigate('/admin/programs')} className="flex items-center text-gray-600 hover:text-[#4DA6FF] mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Volver a programas
+            <ArrowLeft className="w-4 h-4 mr-2" /> {tr("Volver a programas", "Back to programs")}
           </button>
           <div className="bg-white rounded-xl shadow-md p-8 text-center">
-            <h2 className="text-2xl font-bold text-gray-800">Course not found</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{tr("Ficha no encontrada", "Course not found")}</h2>
           </div>
         </div>
       </div>
@@ -69,9 +71,9 @@ export function AdminCourseDetails() {
   const { course, students, curriculum } = courseData;
 
   const tabs = [
-    { id: "overview", label: "Overview", icon: Layout },
-    { id: "students", label: "Enrolled Students", icon: Users },
-    { id: "curriculum", label: "Curriculum", icon: BookOpen },
+    { id: "overview", label: tr("Resumen", "Overview"), icon: Layout },
+    { id: "students", label: tr("Aprendices Matriculados", "Enrolled Students"), icon: Users },
+    { id: "curriculum", label: tr("Plan de Estudio", "Curriculum"), icon: BookOpen },
   ];
 
   return (
@@ -85,17 +87,17 @@ export function AdminCourseDetails() {
             onClick={() => navigate(course.program_id ? `/admin/programs/${course.program_id}` : '/admin/programs')}
             className="flex items-center text-sm text-gray-500 hover:text-[#4DA6FF] transition-colors mb-4"
           >
-            <ArrowLeft className="w-4 h-4 mr-1" /> Volver al programa
+            <ArrowLeft className="w-4 h-4 mr-1" /> {tr("Volver al programa", "Back to program")}
           </button>
           
           <div className="flex justify-between items-start">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-[#111111]">Ficha: {course.title}</h1>
+                <h1 className="text-3xl font-bold text-[#111111]">{tr("Ficha:", "Ficha:")} {course.title}</h1>
                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                   course.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                 }`}>
-                  {course.status}
+                  {course.status === 'Active' ? tr("Activo", "Active") : tr("Borrador", "Draft")}
                 </span>
               </div>
               <p className="text-lg text-gray-600 mb-4">{course.program_name}</p>
@@ -103,11 +105,11 @@ export function AdminCourseDetails() {
               <div className="flex items-center gap-6 text-sm text-gray-500">
                 <div className="flex items-center gap-2">
                   <UserIcon className="w-4 h-4" />
-                  <span>Instructor: {course.instructor}</span>
+                  <span>{tr("Instructor:", "Instructor:")} {course.instructor}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span>{course.startDate} to {course.endDate}</span>
+                  <span>{course.startDate} {tr("a", "to")} {course.endDate}</span>
                 </div>
               </div>
             </div>
@@ -115,11 +117,11 @@ export function AdminCourseDetails() {
             <div className="flex gap-4">
               <div className="bg-blue-50 text-blue-700 px-6 py-4 rounded-xl text-center">
                 <div className="text-2xl font-bold">{students.length}</div>
-                <div className="text-sm font-medium">Students</div>
+                <div className="text-sm font-medium">{tr("Aprendices", "Students")}</div>
               </div>
               <div className="bg-purple-50 text-purple-700 px-6 py-4 rounded-xl text-center">
                 <div className="text-2xl font-bold">{curriculum.length}</div>
-                <div className="text-sm font-medium">RAPs</div>
+                <div className="text-sm font-medium">{tr("RAPs", "RAPs")}</div>
               </div>
             </div>
           </div>
@@ -152,19 +154,19 @@ export function AdminCourseDetails() {
           {activeTab === "overview" && (
             <div className="grid grid-cols-3 gap-6">
               <div className="col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Course Description</h3>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">{tr("Descripción de la Ficha", "Course Description")}</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  {course.description || "No description provided for this course."}
+                  {course.description || tr("Sin descripción provista para esta ficha.", "No description provided for this course.")}
                 </p>
                 
-                <h3 className="text-lg font-bold text-gray-800 mt-8 mb-4">Quick Stats</h3>
+                <h3 className="text-lg font-bold text-gray-800 mt-8 mb-4">{tr("Estadísticas Rápidas", "Quick Stats")}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-gray-50 p-4 rounded-lg flex items-center gap-4">
                     <div className="p-3 bg-green-100 text-green-600 rounded-lg">
                       <CheckCircle2 className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Active Students</p>
+                      <p className="text-sm text-gray-500">{tr("Aprendices Activos", "Active Students")}</p>
                       <p className="text-xl font-bold text-gray-800">
                         {students.filter((s:any) => s.status === 'Active').length}
                       </p>
@@ -175,7 +177,7 @@ export function AdminCourseDetails() {
                       <Clock className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Pending Activities</p>
+                      <p className="text-sm text-gray-500">{tr("Actividades Pendientes", "Pending Activities")}</p>
                       <p className="text-xl font-bold text-gray-800">12</p>
                     </div>
                   </div>
@@ -184,14 +186,14 @@ export function AdminCourseDetails() {
 
               <div className="col-span-1 space-y-6">
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                  <h3 className="text-lg font-bold text-gray-800 mb-4">Instructor details</h3>
+                  <h3 className="text-lg font-bold text-gray-800 mb-4">{tr("Detalles del Instructor", "Instructor details")}</h3>
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-[#4DA6FF] text-white rounded-full flex items-center justify-center font-bold text-lg">
                       {course.instructor.charAt(0)}
                     </div>
                     <div>
                       <p className="font-medium text-gray-800">{course.instructor}</p>
-                      <p className="text-sm text-gray-500">Main Facilitator</p>
+                      <p className="text-sm text-gray-500">{tr("Facilitador Principal", "Main Facilitator")}</p>
                     </div>
                   </div>
                 </div>
@@ -205,10 +207,10 @@ export function AdminCourseDetails() {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">Student Name</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">Email</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">Enrollment Date</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">Status</th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">{tr("Nombre del Aprendiz", "Student Name")}</th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">{tr("Correo Electrónico", "Email")}</th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">{tr("Fecha de Matrícula", "Enrollment Date")}</th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">{tr("Estado", "Status")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -221,14 +223,14 @@ export function AdminCourseDetails() {
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                           student.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
                         }`}>
-                          {student.status}
+                          {student.status === "Active" ? tr("Activo", "Active") : tr("Inactivo", "Inactive")}
                         </span>
                       </td>
                     </tr>
                   ))}
                   {students.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="text-center py-8 text-gray-500">No students enrolled in this course yet.</td>
+                      <td colSpan={4} className="text-center py-8 text-gray-500">{tr("No hay aprendices matriculados en esta ficha todavía.", "No students enrolled in this course yet.")}</td>
                     </tr>
                   )}
                 </tbody>
@@ -267,14 +269,14 @@ export function AdminCourseDetails() {
                         </div>
                       ))
                     ) : (
-                      <p className="text-sm text-gray-400 italic">No modules assigned to this RAP yet.</p>
+                      <p className="text-sm text-gray-400 italic">{tr("No hay módulos asignados a este RAP todavía.", "No modules assigned to this RAP yet.")}</p>
                     )}
                   </div>
                 </div>
               ))}
               {curriculum.length === 0 && (
                 <div className="text-center py-12 bg-white rounded-xl border border-gray-100 text-gray-500">
-                  This program has no curriculum defined.
+                  {tr("Este programa no tiene un plan de estudio definido.", "This program has no curriculum defined.")}
                 </div>
               )}
             </div>

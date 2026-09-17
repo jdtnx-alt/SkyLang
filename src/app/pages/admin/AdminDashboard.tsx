@@ -2,24 +2,11 @@ import { Sidebar } from "../../components/Sidebar";
 import { Users, BookOpen, UserCheck, Activity } from "lucide-react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useState, useEffect } from "react";
-const userGrowthData = [
-  { month: "Jan", users: 120 },
-  { month: "Feb", users: 145 },
-  { month: "Mar", users: 156 },
-];
-
-const activityData = [
-  { day: "Mon", logins: 95 },
-  { day: "Tue", logins: 102 },
-  { day: "Wed", logins: 88 },
-  { day: "Thu", logins: 110 },
-  { day: "Fri", logins: 94 },
-  { day: "Sat", logins: 45 },
-  { day: "Sun", logins: 38 },
-];
+import { useLanguage } from "../../context/LanguageContext";
 
 export function AdminDashboard() {
-  const [dbStatus, setDbStatus] = useState({ status: 'Checking...', color: 'bg-yellow-500', textClass: 'text-yellow-600' });
+  const { tr } = useLanguage();
+  const [dbStatus, setDbStatus] = useState({ status: 'checking', color: 'bg-yellow-500', textClass: 'text-yellow-600' });
   const [stats, setStats] = useState({
     totalUsers: 168,
     activeStudents: 156,
@@ -43,7 +30,7 @@ export function AdminDashboard() {
     { day: "Sat", logins: 45 },
     { day: "Sun", logins: 38 },
   ]);
-  const [recentActivity, setRecentActivity] = useState([
+  const [recentActivity, setRecentActivity] = useState<any[]>([
     { text: "New user registered", time: "2 hours ago" },
     { text: "Module published", time: "5 hours ago" },
     { text: "System backup completed", time: "1 day ago" },
@@ -55,13 +42,13 @@ export function AdminDashboard() {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          setDbStatus({ status: 'Connected (PostgreSQL)', color: 'bg-green-600', textClass: 'text-green-600' });
+          setDbStatus({ status: 'connected', color: 'bg-green-600', textClass: 'text-green-600' });
         } else {
-          setDbStatus({ status: 'Error DB', color: 'bg-red-600', textClass: 'text-red-600' });
+          setDbStatus({ status: 'error', color: 'bg-red-600', textClass: 'text-red-600' });
         }
       })
       .catch(() => {
-        setDbStatus({ status: 'Server Offline', color: 'bg-red-600', textClass: 'text-red-600' });
+        setDbStatus({ status: 'offline', color: 'bg-red-600', textClass: 'text-red-600' });
       });
 
     // 2. Fetch Dashboard Real Stats from DB
@@ -98,6 +85,15 @@ export function AdminDashboard() {
       });
   }, []);
 
+  const getDbStatusLabel = () => {
+    switch (dbStatus.status) {
+      case 'connected': return tr("Conectado (PostgreSQL)", "Connected (PostgreSQL)");
+      case 'error': return tr("Error de BD", "Database Error");
+      case 'offline': return tr("Servidor Desconectado", "Server Offline");
+      default: return tr("Comprobando...", "Checking...");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Sidebar role="admin" />
@@ -105,8 +101,8 @@ export function AdminDashboard() {
       <div className="ml-64 p-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#111111] mb-2">Admin Dashboard</h1>
-          <p className="text-gray-600">Platform overview and system statistics</p>
+          <h1 className="text-3xl font-bold text-[#111111] mb-2">{tr("Panel de Administrador", "Admin Dashboard")}</h1>
+          <p className="text-gray-600">{tr("Resumen de la plataforma y estadísticas del sistema", "Platform overview and system statistics")}</p>
         </div>
 
         {/* Stats Cards */}
@@ -117,9 +113,9 @@ export function AdminDashboard() {
                 <Users className="text-[#4DA6FF]" size={24} />
               </div>
             </div>
-            <h3 className="text-gray-600 text-sm mb-2">Total Users</h3>
+            <h3 className="text-gray-600 text-sm mb-2">{tr("Total de Usuarios", "Total Users")}</h3>
             <p className="text-3xl font-bold text-[#111111]">{stats.totalUsers}</p>
-            <p className="text-sm text-green-600 mt-1">↑ 8% from last month</p>
+            <p className="text-sm text-green-600 mt-1">{tr("↑ 8% respecto al mes pasado", "↑ 8% from last month")}</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-6">
@@ -128,9 +124,9 @@ export function AdminDashboard() {
                 <UserCheck className="text-purple-600" size={24} />
               </div>
             </div>
-            <h3 className="text-gray-600 text-sm mb-2">Active Students</h3>
+            <h3 className="text-gray-600 text-sm mb-2">{tr("Aprendices Activos", "Active Students")}</h3>
             <p className="text-3xl font-bold text-[#111111]">{stats.activeStudents}</p>
-            <p className="text-sm text-gray-500 mt-1">{stats.activeRate}% active rate</p>
+            <p className="text-sm text-gray-500 mt-1">{stats.activeRate}% {tr("tasa de actividad", "active rate")}</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-6">
@@ -139,9 +135,9 @@ export function AdminDashboard() {
                 <BookOpen className="text-green-600" size={24} />
               </div>
             </div>
-            <h3 className="text-gray-600 text-sm mb-2">Total RAPS</h3>
+            <h3 className="text-gray-600 text-sm mb-2">{tr("Total de RAPs", "Total RAPs")}</h3>
             <p className="text-3xl font-bold text-[#111111]">{stats.totalRaps}</p>
-            <p className="text-sm text-gray-500 mt-1">{stats.totalModules} modules</p>
+            <p className="text-sm text-gray-500 mt-1">{stats.totalModules} {tr("módulos", "modules")}</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-6">
@@ -150,9 +146,9 @@ export function AdminDashboard() {
                 <Activity className="text-orange-600" size={24} />
               </div>
             </div>
-            <h3 className="text-gray-600 text-sm mb-2">Daily Active</h3>
+            <h3 className="text-gray-600 text-sm mb-2">{tr("Activos Diarios", "Daily Active")}</h3>
             <p className="text-3xl font-bold text-[#111111]">{stats.dailyActive}</p>
-            <p className="text-sm text-green-600 mt-1">↑ 12% from yesterday</p>
+            <p className="text-sm text-green-600 mt-1">{tr("↑ 12% respecto a ayer", "↑ 12% from yesterday")}</p>
           </div>
         </div>
 
@@ -160,7 +156,7 @@ export function AdminDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* User Growth */}
           <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-bold text-[#111111] mb-4">User Growth</h2>
+            <h2 className="text-xl font-bold text-[#111111] mb-4">{tr("Crecimiento de Usuarios", "User Growth")}</h2>
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={growthData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -174,7 +170,7 @@ export function AdminDashboard() {
 
           {/* Daily Activity */}
           <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-bold text-[#111111] mb-4">Daily Activity</h2>
+            <h2 className="text-xl font-bold text-[#111111] mb-4">{tr("Actividad Diaria", "Daily Activity")}</h2>
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={activityData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -190,49 +186,49 @@ export function AdminDashboard() {
         {/* User Breakdown */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-bold text-[#111111] mb-4">Users by Role</h3>
+            <h3 className="text-lg font-bold text-[#111111] mb-4">{tr("Usuarios por Rol", "Users by Role")}</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                <span className="text-gray-700">Students</span>
+                <span className="text-gray-700">{tr("Aprendices", "Students")}</span>
                 <span className="font-bold text-[#4DA6FF]">{stats.usersByRole.students}</span>
               </div>
               <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                <span className="text-gray-700">Instructors</span>
+                <span className="text-gray-700">{tr("Instructores", "Instructors")}</span>
                 <span className="font-bold text-purple-600">{stats.usersByRole.instructors}</span>
               </div>
               <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
-                <span className="text-gray-700">Admins</span>
+                <span className="text-gray-700">{tr("Administradores", "Admins")}</span>
                 <span className="font-bold text-orange-600">{stats.usersByRole.admins}</span>
               </div>
             </div>
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-bold text-[#111111] mb-4">System Health</h3>
+            <h3 className="text-lg font-bold text-[#111111] mb-4">{tr("Salud del Sistema", "System Health")}</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-gray-600">Server Status</span>
+                <span className="text-gray-600">{tr("Estado del Servidor", "Server Status")}</span>
                 <span className="flex items-center gap-2 text-green-600 text-sm font-medium">
                   <span className="w-2 h-2 bg-green-600 rounded-full"></span>
-                  Online
+                  {tr("En Línea", "Online")}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-gray-600">Database</span>
+                <span className="text-gray-600">{tr("Base de Datos", "Database")}</span>
                 <span className={`flex items-center gap-2 ${dbStatus.textClass} text-sm font-medium`}>
                   <span className={`w-2 h-2 ${dbStatus.color} rounded-full`}></span>
-                  {dbStatus.status}
+                  {getDbStatusLabel()}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-gray-600">Storage</span>
-                <span className="text-gray-800 text-sm font-medium">45% used</span>
+                <span className="text-gray-600">{tr("Almacenamiento", "Storage")}</span>
+                <span className="text-gray-800 text-sm font-medium">45% {tr("utilizado", "used")}</span>
               </div>
             </div>
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-bold text-[#111111] mb-4">Recent Activity</h3>
+            <h3 className="text-lg font-bold text-[#111111] mb-4">{tr("Actividad Reciente", "Recent Activity")}</h3>
             <div className="space-y-2 text-sm">
               {recentActivity.map((activity, index) => (
                 <div key={index} className="p-2 bg-gray-50 rounded">

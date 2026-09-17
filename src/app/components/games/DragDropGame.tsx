@@ -104,13 +104,13 @@ export const DragDropGame: React.FC<DragDropGameProps> = ({
       setSelectedDraggable(null);
       setDragOverTarget(null);
       setWrongTarget(null);
-      setFeedbackMsg({ type: 'success', text: `¡Correcto! «${itemText}» coincide con esta definición.` });
+      setFeedbackMsg({ type: 'success', text: `Correct! "${itemText}" matches this definition.` });
       completeIfReady(updated);
     } else {
       setSelectedDraggable(null);
       setDragOverTarget(null);
       setWrongTarget(targetId);
-      setFeedbackMsg({ type: 'error', text: `«${itemText}» no corresponde a esa definición. ¡Intenta de nuevo!` });
+      setFeedbackMsg({ type: 'error', text: `"${itemText}" does not match that definition. Try again!` });
       setTimeout(() => {
         setWrongTarget(null);
       }, 1200);
@@ -148,7 +148,7 @@ export const DragDropGame: React.FC<DragDropGameProps> = ({
               </span>
             </h3>
             <p className="text-xs text-slate-500 font-medium">
-              Arrastra un concepto o tocalo y luego elige una zona objetivo.
+              Drag a concept or tap it, then select a target zone.
             </p>
           </div>
         </div>
@@ -158,26 +158,26 @@ export const DragDropGame: React.FC<DragDropGameProps> = ({
           onClick={handleReset}
           className="flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-purple-700 bg-slate-100 hover:bg-purple-50 px-3 py-1.5 rounded-xl transition-all font-bold border border-slate-200"
         >
-          <RotateCcw size={14} /> Reiniciar
+          <RotateCcw size={14} /> Reset
         </button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="rounded-2xl bg-slate-50 border border-slate-200 p-3">
           <span className="text-[11px] font-extrabold uppercase text-slate-500 flex items-center gap-1.5">
-            <Target size={14} /> Objetivos
+            <Target size={14} /> Targets
           </span>
-          <strong className="text-sm text-slate-950">{placedCount} completados</strong>
+          <strong className="text-sm text-slate-950">{placedCount} completed</strong>
         </div>
         <div className="rounded-2xl bg-indigo-50 border border-indigo-100 p-3">
           <span className="text-[11px] font-extrabold uppercase text-indigo-700 flex items-center gap-1.5">
-            <Grab size={14} /> Seleccionado
+            <Grab size={14} /> Selected
           </span>
-          <strong className="text-sm text-indigo-950">{selectedDraggable || 'Ninguno'}</strong>
+          <strong className="text-sm text-indigo-950">{selectedDraggable || 'None'}</strong>
         </div>
         <div className="rounded-2xl bg-emerald-50 border border-emerald-100 p-3">
           <span className="text-[11px] font-extrabold uppercase text-emerald-700 flex items-center gap-1.5">
-            <Send size={14} /> Movimientos
+            <Send size={14} /> Moves
           </span>
           <strong className="text-sm text-emerald-950">{attempts}</strong>
         </div>
@@ -197,7 +197,7 @@ export const DragDropGame: React.FC<DragDropGameProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-3">
-          <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Zonas objetivo</h4>
+          <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Target Zones</h4>
           {cleanPairs.map((pair) => {
             const placedText = placements[pair.draggable];
             const isDragOver = dragOverTarget === pair.id;
@@ -225,7 +225,7 @@ export const DragDropGame: React.FC<DragDropGameProps> = ({
                 <div className="space-y-2">
                   <span className="text-xs font-semibold text-slate-700 block">{pair.dropzone}</span>
                   {placedText && (
-                    <span className="text-xs font-black text-emerald-700 block">Asignado: {placedText}</span>
+                    <span className="text-xs font-black text-emerald-700 block">Assigned: {placedText}</span>
                   )}
                 </div>
                 {placedText && <CheckCircle2 size={18} className="text-emerald-600 shrink-0" />}
@@ -235,7 +235,7 @@ export const DragDropGame: React.FC<DragDropGameProps> = ({
         </div>
 
         <div className="space-y-3">
-          <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Conceptos disponibles</h4>
+          <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Available Concepts</h4>
           <div className="flex flex-wrap gap-2.5">
             {availableDraggables.map((itemText) => {
               const isSelected = selectedDraggable === itemText;
@@ -263,7 +263,7 @@ export const DragDropGame: React.FC<DragDropGameProps> = ({
 
             {availableDraggables.length === 0 && (
               <div className="w-full p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs font-bold text-center">
-                Todos los conceptos fueron colocados.
+                All concepts have been placed.
               </div>
             )}
           </div>
@@ -272,7 +272,7 @@ export const DragDropGame: React.FC<DragDropGameProps> = ({
 
       {isFinished && (
         <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 text-emerald-900 text-xs font-bold flex items-center gap-2">
-          <CheckCircle2 size={18} /> Secuencia completada y enviada.
+          <CheckCircle2 size={18} /> Sequence completed and submitted.
         </div>
       )}
     </div>

@@ -55,7 +55,7 @@ export function StudentDashboard() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center space-y-4">
-        <BeeMascot size="lg" mood="thinking" animate message="Cargando tu ruta de aprendizaje..." />
+        <BeeMascot size="lg" mood="thinking" animate message="Loading your learning path..." />
         <div className="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
@@ -100,14 +100,14 @@ export function StudentDashboard() {
               >
                 <div className="space-y-3 z-10 text-center sm:text-left">
                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/40 backdrop-blur-md rounded-full text-[11px] font-black uppercase tracking-wider text-amber-950">
-                    <Flame size={14} className="text-amber-800" /> Racha de {streak} días activos
+                    <Flame size={14} className="text-amber-800" /> {streak} day active streak
                   </div>
 
                   <h1 className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
-                    Bienvenido, {user?.nombre ? user.nombre.split(" ")[0] : "Aprendiz"}
+                    Welcome, {user?.nombre ? user.nombre.split(" ")[0] : "Student"}
                   </h1>
                   <p className="text-xs sm:text-sm font-bold text-amber-950/80 max-w-md">
-                    Tu meta diaria está disponible. Continúa tu entrenamiento en inglés clínico y avanza de nivel.
+                    Your daily goal is ready. Continue your clinical English training and level up.
                   </p>
                 </div>
 
@@ -134,24 +134,24 @@ export function StudentDashboard() {
                       <Target size={18} />
                     </div>
                     <h2 className="text-base font-black text-slate-900 uppercase tracking-wide">
-                      Continuar Aprendiendo
+                      Continue Learning
                     </h2>
                   </div>
                   <span className="text-xs font-bold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">
-                    Siguiente Lección
+                    Next Lesson
                   </span>
                 </div>
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 bg-sky-50/60 border-2 border-sky-200 rounded-2xl p-5">
                   <div className="space-y-1.5 min-w-0">
                     <span className="text-[10px] font-black uppercase tracking-wider text-sky-700 bg-white px-2.5 py-0.5 rounded-md border border-sky-200">
-                      Módulo en Curso
+                      Current Module
                     </span>
                     <h3 className="text-base sm:text-lg font-black text-slate-900 truncate">
-                      {currentRap.moduleTitle || "MODULO 1: GETTING TO KNOW OTHER PEOPLE"}
+                      {currentRap.moduleTitle || "MODULE 1: GETTING TO KNOW OTHER PEOPLE"}
                     </h3>
                     <p className="text-xs font-semibold text-slate-600">
-                      Resultado actual: <strong>{currentRap.rapTitle || "RAP 1"}</strong>
+                      Current outcome: <strong>{currentRap.rapTitle || "RAP 1"}</strong>
                     </p>
                   </div>
 
@@ -166,7 +166,7 @@ export function StudentDashboard() {
                     }}
                     className="btn-duo-3d btn-duo-sky px-6 py-3 text-xs shrink-0 flex items-center justify-center gap-2"
                   >
-                    <span>Entrar a la Lección</span>
+                    <span>Enter Lesson</span>
                     <ChevronRight size={16} />
                   </button>
                 </div>
@@ -176,7 +176,7 @@ export function StudentDashboard() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                    <BookOpen size={20} className="text-sky-600" /> Unidades del Programa
+                    <BookOpen size={20} className="text-sky-600" /> Program Units
                   </h2>
                   <button
                     onClick={() => {
@@ -185,7 +185,7 @@ export function StudentDashboard() {
                     }}
                     className="text-xs font-black uppercase tracking-wider text-sky-600 hover:text-sky-800"
                   >
-                    Ver todas las unidades
+                    View all units
                   </button>
                 </div>
 
@@ -210,11 +210,11 @@ export function StudentDashboard() {
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase tracking-wider text-sky-600 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-100">
-                              {mod.fase || `Unidad ${idx + 1}`}
+                              {mod.fase || `Unit ${idx + 1}`}
                             </span>
                             {isModCompleted ? (
                               <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-full flex items-center gap-1">
-                                <Check size={12} strokeWidth={3} /> Completado
+                                <Check size={12} strokeWidth={3} /> Completed
                               </span>
                             ) : (
                               <span className="text-xs font-black text-slate-400">
@@ -250,15 +250,15 @@ export function StudentDashboard() {
               <div className="bg-white rounded-3xl border-2 border-slate-200 border-b-4 p-6 shadow-xs space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
-                    <Trophy size={18} className="text-amber-500" /> Misiones del Día
+                    <Trophy size={18} className="text-amber-500" /> Daily Quests
                   </h3>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase">Hoy</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Today</span>
                 </div>
 
                 <div className="space-y-3">
                   <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2">
                     <div className="flex justify-between text-xs font-bold text-slate-800">
-                      <span>Gana 30 XP de Miel</span>
+                      <span>Earn 30 Honey XP</span>
                       <span className="text-amber-600 font-black">{Math.min(30, levelInfo.pointsInCurrentLevel)}/30</span>
                     </div>
                     <div className="w-full bg-amber-200/60 h-2 rounded-full overflow-hidden">
@@ -271,7 +271,7 @@ export function StudentDashboard() {
 
                   <div className="p-3.5 rounded-2xl bg-sky-50/70 border border-sky-200 space-y-2">
                     <div className="flex justify-between text-xs font-bold text-slate-800">
-                      <span>Completa 1 Actividad</span>
+                      <span>Complete 1 Activity</span>
                       <span className="text-sky-600 font-black">1/1</span>
                     </div>
                     <div className="w-full bg-sky-200/60 h-2 rounded-full overflow-hidden">
@@ -287,7 +287,7 @@ export function StudentDashboard() {
                   size="md"
                   mood="happy"
                   animate
-                  message="Practicar 10 minutos al día ayuda a fijar el vocabulario clínico para siempre."
+                  message="Practicing 10 minutes a day helps lock in clinical vocabulary forever."
                   messagePosition="bottom"
                 />
               </div>
@@ -295,16 +295,16 @@ export function StudentDashboard() {
               {/* Summary Stats */}
               <div className="bg-white rounded-3xl border-2 border-slate-200 border-b-4 p-6 shadow-xs space-y-4">
                 <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
-                  <TrendingUp size={18} className="text-sky-600" /> Resumen de Logros
+                  <TrendingUp size={18} className="text-sky-600" /> Achievement Summary
                 </h3>
 
                 <div className="grid grid-cols-2 gap-3 text-center">
                   <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-black uppercase text-slate-400 block">Nivel Actual</span>
-                    <span className="text-xl font-black text-purple-600">Nivel {levelInfo.level}</span>
+                    <span className="text-[10px] font-black uppercase text-slate-400 block">Current Level</span>
+                    <span className="text-xl font-black text-purple-600">Level {levelInfo.level}</span>
                   </div>
                   <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] font-black uppercase text-slate-400 block">Avance Global</span>
+                    <span className="text-[10px] font-black uppercase text-slate-400 block">Overall Progress</span>
                     <span className="text-xl font-black text-emerald-600">{overallProgress}%</span>
                   </div>
                 </div>

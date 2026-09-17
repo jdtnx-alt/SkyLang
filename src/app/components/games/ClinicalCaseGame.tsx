@@ -96,13 +96,13 @@ export const ClinicalCaseGame: React.FC<ClinicalCaseGameProps> = ({
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              Caso Clínico Interactivo
+              Interactive Clinical Case
               <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700 font-extrabold">
                 {patient.name}
               </span>
             </h3>
             <p className="text-xs text-slate-500 font-medium">
-              Analiza el historial clínico del paciente y toma las decisiones de enfermería adecuadas.
+              Analyze the patient's medical record and make the appropriate nursing decisions.
             </p>
           </div>
         </div>
@@ -111,7 +111,7 @@ export const ClinicalCaseGame: React.FC<ClinicalCaseGameProps> = ({
           onClick={handleReset}
           className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-purple-700 bg-slate-100 hover:bg-purple-50 px-3 py-1.5 rounded-xl transition-all font-bold border border-slate-200"
         >
-          <RotateCcw size={14} /> Reiniciar
+          <RotateCcw size={14} /> Reset
         </button>
       </div>
 
@@ -123,13 +123,13 @@ export const ClinicalCaseGame: React.FC<ClinicalCaseGameProps> = ({
           </div>
           <div>
             <h4 className="font-extrabold text-sm text-slate-900">{patient.name}</h4>
-            <span className="text-xs text-slate-500 font-semibold">Edad: {patient.age} años</span>
+            <span className="text-xs text-slate-500 font-semibold">Age: {patient.age} years old</span>
           </div>
         </div>
 
         {patient.context && (
           <p className="text-xs text-slate-700 font-medium leading-relaxed">
-            <span className="font-bold text-slate-900">Contexto: </span> {patient.context}
+            <span className="font-bold text-slate-900">Context: </span> {patient.context}
           </p>
         )}
 
@@ -137,7 +137,7 @@ export const ClinicalCaseGame: React.FC<ClinicalCaseGameProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           {patient.symptoms && patient.symptoms.length > 0 && (
             <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
-              <span className="text-[11px] font-extrabold text-purple-700 uppercase tracking-wider block">Síntomas</span>
+              <span className="text-[11px] font-extrabold text-purple-700 uppercase tracking-wider block">Symptoms</span>
               <ul className="text-xs text-slate-700 space-y-1">
                 {patient.symptoms.map((s, i) => (
                   <li key={i} className="flex items-center gap-1.5">
@@ -152,7 +152,7 @@ export const ClinicalCaseGame: React.FC<ClinicalCaseGameProps> = ({
           {patient.vitalSigns && (
             <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
               <span className="text-[11px] font-extrabold text-purple-700 uppercase tracking-wider flex items-center gap-1">
-                <Activity size={14} /> Signos Vitales
+                <Activity size={14} /> Vital Signs
               </span>
               <div className="text-xs text-slate-700 grid grid-cols-2 gap-1 font-semibold">
                 {Object.entries(patient.vitalSigns).map(([k, v]) => (
@@ -206,7 +206,7 @@ export const ClinicalCaseGame: React.FC<ClinicalCaseGameProps> = ({
         }`}
       >
         <Send size={15} />
-        {submitted ? 'Caso clínico entregado' : 'Enviar decisiones clínicas'}
+        {submitted ? 'Clinical case submitted' : 'Submit clinical decisions'}
       </button>
     </div>
   );

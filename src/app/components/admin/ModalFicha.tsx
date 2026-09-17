@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 
 /**
  * Alta y edición de una ficha dentro de su programa.
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export const ModalFicha: React.FC<Props> = ({ programaId, ficha, onCerrar, onGuardado }) => {
+  const { tr } = useLanguage();
   const editando = Boolean(ficha?.id);
 
   const [numero, setNumero] = useState(ficha?.title || '');
@@ -41,7 +43,7 @@ export const ModalFicha: React.FC<Props> = ({ programaId, ficha, onCerrar, onGua
     if (!numero.trim()) return;
 
     if (inicio && fin && fin < inicio) {
-      setError('La fecha de fin no puede ser anterior a la de inicio.');
+      setError(tr('La fecha de fin no puede ser anterior a la de inicio.', 'The end date cannot be earlier than the start date.'));
       return;
     }
 
@@ -66,10 +68,10 @@ export const ModalFicha: React.FC<Props> = ({ programaId, ficha, onCerrar, onGua
         }
       );
       const cuerpo = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(cuerpo.message || cuerpo.error || 'No se pudo guardar la ficha.');
+      if (!res.ok) throw new Error(cuerpo.message || cuerpo.error || tr('No se pudo guardar la ficha.', 'Could not save the ficha.'));
       onGuardado();
     } catch (err: any) {
-      setError(err?.message || 'No se pudo guardar la ficha.');
+      setError(err?.message || tr('No se pudo guardar la ficha.', 'Could not save the ficha.'));
     } finally {
       setGuardando(false);
     }
@@ -80,18 +82,18 @@ export const ModalFicha: React.FC<Props> = ({ programaId, ficha, onCerrar, onGua
       <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
         <div className="border-b pb-3">
           <h3 className="text-lg font-bold text-gray-900">
-            {editando ? `Editar ficha ${ficha.title}` : 'Nueva ficha'}
+            {editando ? tr(`Editar ficha ${ficha.title}`, `Edit ficha ${ficha.title}`) : tr('Nueva ficha', 'New Ficha')}
           </h3>
           <p className="text-[11px] text-gray-500 font-medium mt-1">
-            La ficha es una cohorte del programa. Sus actividades y contenidos le pertenecen solo a ella.
+            {tr('La ficha es una cohorte del programa. Sus actividades y contenidos le pertenecen solo a ella.', 'The ficha is a program cohort. Its activities and content belong exclusively to it.')}
           </p>
         </div>
 
         <form onSubmit={guardar} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Número de ficha *</label>
+            <label className="block text-xs font-medium text-gray-700 mb-1">{tr('Número de ficha *', 'Ficha Number *')}</label>
             <input
-              type="text" required value={numero} placeholder="p. ej. 3142784"
+              type="text" required value={numero} placeholder={tr('p. ej. 3142784', 'e.g. 3142784')}
               onChange={(e) => setNumero(e.target.value)}
               className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
             />
@@ -99,12 +101,12 @@ export const ModalFicha: React.FC<Props> = ({ programaId, ficha, onCerrar, onGua
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Inicio</label>
+              <label className="block text-xs font-medium text-gray-700 mb-1">{tr('Inicio', 'Start Date')}</label>
               <input type="date" value={inicio} onChange={(e) => setInicio(e.target.value)}
                 className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Fin</label>
+              <label className="block text-xs font-medium text-gray-700 mb-1">{tr('Fin', 'End Date')}</label>
               <input type="date" value={fin} onChange={(e) => setFin(e.target.value)}
                 className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]" />
             </div>
@@ -112,14 +114,14 @@ export const ModalFicha: React.FC<Props> = ({ programaId, ficha, onCerrar, onGua
 
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">
-              Instructor <span className="text-gray-400 font-normal">(uno por ficha)</span>
+              {tr('Instructor', 'Instructor')} <span className="text-gray-400 font-normal">({tr('uno por ficha', 'one per ficha')})</span>
             </label>
             <select
               value={instructorId}
               onChange={(e) => setInstructorId(e.target.value)}
               className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]"
             >
-              <option value="">Sin asignar</option>
+              <option value="">{tr('Sin asignar', 'Unassigned')}</option>
               {instructores.map((i) => (
                 <option key={i.id} value={i.id}>{i.name} — {i.email}</option>
               ))}
@@ -127,16 +129,16 @@ export const ModalFicha: React.FC<Props> = ({ programaId, ficha, onCerrar, onGua
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Estado</label>
+            <label className="block text-xs font-medium text-gray-700 mb-1">{tr('Estado', 'Status')}</label>
             <select value={estado} onChange={(e) => setEstado(e.target.value)}
               className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]">
-              <option value="Active">Activa</option>
-              <option value="Draft">Borrador</option>
+              <option value="Active">{tr('Activa', 'Active')}</option>
+              <option value="Draft">{tr('Borrador', 'Draft')}</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Descripción</label>
+            <label className="block text-xs font-medium text-gray-700 mb-1">{tr('Descripción', 'Description')}</label>
             <textarea rows={3} value={descripcion} onChange={(e) => setDescripcion(e.target.value)}
               className="w-full border border-gray-300 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-[#4DA6FF]" />
           </div>
@@ -148,11 +150,11 @@ export const ModalFicha: React.FC<Props> = ({ programaId, ficha, onCerrar, onGua
           <div className="flex justify-end gap-3 pt-3 border-t">
             <button type="button" onClick={onCerrar}
               className="px-4 py-2 border border-gray-300 rounded-xl text-xs font-medium text-gray-600 hover:bg-gray-50">
-              Cancelar
+              {tr('Cancelar', 'Cancel')}
             </button>
             <button type="submit" disabled={guardando}
               className="px-4 py-2 bg-[#4DA6FF] hover:bg-blue-600 text-white rounded-xl text-xs font-medium">
-              {guardando ? 'Guardando…' : editando ? 'Guardar cambios' : 'Crear ficha'}
+              {guardando ? tr('Guardando…', 'Saving…') : editando ? tr('Guardar cambios', 'Save changes') : tr('Crear ficha', 'Create Ficha')}
             </button>
           </div>
         </form>
