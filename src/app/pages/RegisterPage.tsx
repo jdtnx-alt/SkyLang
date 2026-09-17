@@ -224,8 +224,8 @@ export function RegisterPage() {
                 >
                   <option value="">Select a cohort</option>
                   {filteredFichas.map((f) => (
-                    <option key={f.id} value={f.codigo || f.numero || f.id}>
-                      Cohort {f.codigo || f.numero || f.id}
+                    <option key={f.id} value={f.id}>
+                      Cohort {f.numero_ficha || f.id}
                     </option>
                   ))}
                 </select>
