@@ -204,7 +204,7 @@ export function InstructorModules() {
     <div className="min-h-screen bg-gray-50 flex">
       <Sidebar role="instructor" />
 
-      <div className="ml-64 flex-1 p-8">
+      <div className="lg:ml-64 flex-1 min-w-0 p-4 sm:p-6 lg:p-8 pt-16 sm:pt-6 lg:pt-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>

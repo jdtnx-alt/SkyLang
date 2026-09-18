@@ -92,10 +92,10 @@ export const TopGamificationBar: React.FC<TopGamificationBarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2 border-slate-100 px-6 py-3 shadow-xs">
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2 border-slate-100 pl-14 pr-3 sm:pl-4 sm:pr-4 lg:px-6 py-2.5 sm:py-3 shadow-xs lg:pl-6">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
         {/* Left: Program badge / Ficha */}
-        <div className="flex items-center gap-3">
+        <div className="hidden sm:flex items-center gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 bg-sky-50 border-2 border-sky-100 rounded-xl">
             <BookOpen size={16} className="text-sky-600" />
             <span className="text-xs font-black text-sky-800 uppercase tracking-wide">
@@ -114,11 +114,11 @@ export const TopGamificationBar: React.FC<TopGamificationBarProps> = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => soundEffects.playPop()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-amber-200 bg-amber-50 cursor-pointer select-none group"
+            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl border-2 border-amber-200 bg-amber-50 cursor-pointer select-none group"
             title="Consecutive streak days"
           >
             <Flame
-              size={20}
+              size={18}
               className={`transition-colors ${
                 streak > 0 ? 'text-amber-500 fill-amber-500 animate-pulse' : 'text-slate-400'
               }`}
@@ -137,7 +137,7 @@ export const TopGamificationBar: React.FC<TopGamificationBarProps> = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => soundEffects.playPop()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-sky-200 bg-sky-50 cursor-pointer select-none"
+            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl border-2 border-sky-200 bg-sky-50 cursor-pointer select-none"
             title="Honey Points / Experience (XP)"
           >
             <Zap size={18} className="text-sky-500 fill-sky-500" />

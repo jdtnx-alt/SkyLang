@@ -126,17 +126,17 @@ export function AdminPrograms() {
     <div className="min-h-screen bg-gray-50">
       <Sidebar role="admin" />
       
-      <div className="ml-64 p-8">
+      <div className="lg:ml-64 p-4 sm:p-6 lg:p-8 pt-16 sm:pt-6 lg:pt-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-[#111111] mb-2">{tr("Gestión de Programas", "Program Management")}</h1>
-            <p className="text-gray-600">{tr("Crea y administra programas de formación (ej. ADSO, Enfermería)", "Create and manage training programs (e.g. ADSO, Nursing)")}</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#111111] mb-2">{tr("Gestión de Programas", "Program Management")}</h1>
+            <p className="text-sm sm:text-base text-gray-600">{tr("Crea y administra programas de formación (ej. ADSO, Enfermería)", "Create and manage training programs (e.g. ADSO, Nursing)")}</p>
           </div>
           {!isCreating && (
             <button 
               onClick={() => setIsCreating(true)}
-              className="flex items-center gap-2 bg-[#4DA6FF] hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              className="flex items-center justify-center gap-2 bg-[#4DA6FF] hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-medium transition-colors w-full sm:w-auto shrink-0"
             >
               <Plus size={20} />
               {tr("Crear Programa", "Create Program")}

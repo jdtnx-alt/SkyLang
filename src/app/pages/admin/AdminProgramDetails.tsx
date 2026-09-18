@@ -76,7 +76,7 @@ export function AdminProgramDetails() {
     return (
       <div className="min-h-screen bg-gray-50 flex">
         <Sidebar role="admin" />
-        <div className="ml-64 flex-1 flex items-center justify-center">
+        <div className="lg:ml-64 flex-1 flex items-center justify-center">
           <div className="w-10 h-10 border-4 border-[#4DA6FF] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </div>
@@ -87,7 +87,7 @@ export function AdminProgramDetails() {
     return (
       <div className="min-h-screen bg-gray-50 flex">
         <Sidebar role="admin" />
-        <div className="ml-64 p-8">
+        <div className="lg:ml-64 p-4 sm:p-6 lg:p-8">
           <button onClick={() => navigate('/admin/programs')} className="flex items-center text-gray-600 hover:text-[#4DA6FF] mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" /> {tr("Volver a Programas", "Back to Programs")}
           </button>
@@ -105,7 +105,7 @@ export function AdminProgramDetails() {
     <div className="min-h-screen bg-gray-50">
       <Sidebar role="admin" />
       
-      <div className="ml-64">
+      <div className="lg:ml-64">
         {/* Header Section */}
         <div className="bg-white border-b border-gray-200 px-8 py-6">
           <button 

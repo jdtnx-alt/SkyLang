@@ -308,9 +308,9 @@ function formatActividadTexto(texto: string): string {
     <PageTransition>
       <div className="min-h-screen bg-[#F8FAFC] flex">
         <Sidebar role="student" />
-        <div className="ml-64 flex-1 flex flex-col min-w-0">
+        <div className="lg:ml-64 flex-1 flex flex-col min-w-0">
           <TopGamificationBar />
-          <div className="p-8 max-w-6xl mx-auto w-full space-y-6">
+          <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto w-full space-y-6">
             <div className="flex items-center justify-between border-b-2 border-slate-100 pb-4">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-black text-slate-900">My Progress & Statistics</h1>

@@ -79,7 +79,7 @@ export function StudentDashboard() {
       <div className="min-h-screen bg-[#F8FAFC] flex">
         <Sidebar role="student" />
 
-        <div className="ml-64 flex-1 flex flex-col min-w-0">
+        <div className="lg:ml-64 flex-1 flex flex-col min-w-0">
           <TopGamificationBar
             streak={streak}
             xp={levelInfo.totalPoints}
@@ -90,7 +90,7 @@ export function StudentDashboard() {
             userName={user?.nombre}
           />
 
-          <div className="p-8 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {/* Main Learning Stream */}
             <div className="lg:col-span-2 space-y-8">
               {/* Hero Banner */}

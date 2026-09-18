@@ -40,10 +40,10 @@ export function StudentModulesPage() {
       <div className="min-h-screen bg-[#F8FAFC] flex">
         <Sidebar role="student" />
 
-        <div className="ml-64 flex-1 flex flex-col min-w-0">
+        <div className="lg:ml-64 flex-1 flex flex-col min-w-0">
           <TopGamificationBar />
 
-          <div className="p-8 max-w-5xl mx-auto w-full space-y-8">
+          <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto w-full space-y-6 lg:space-y-8">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-slate-100 pb-6">
               <div>

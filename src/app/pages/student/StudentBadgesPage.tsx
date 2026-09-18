@@ -324,10 +324,10 @@ export function StudentBadgesPage() {
     <PageTransition>
       <div className="min-h-screen bg-[#F8FAFC] flex">
         <Sidebar role="student" />
-        <div className="ml-64 flex-1 flex flex-col min-w-0">
+        <div className="lg:ml-64 flex-1 flex flex-col min-w-0">
           <TopGamificationBar xp={xp} level={nivel} levelProgress={xpPct} />
 
-          <div className="p-8 max-w-7xl mx-auto w-full space-y-8">
+          <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6 lg:space-y-8">
 
             {/* Header */}
             <div className="flex items-center justify-between border-b-2 border-slate-100 pb-5">

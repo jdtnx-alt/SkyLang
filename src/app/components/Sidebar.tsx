@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router';
 import { 
   Compass, 
@@ -11,9 +11,11 @@ import {
   GraduationCap, 
   Sparkles,
   Award,
-  Languages
+  Languages,
+  Menu,
+  X
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { soundEffects } from '../utils/soundEffects';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -28,9 +30,55 @@ interface SidebarProps {
   role: 'student' | 'instructor' | 'admin';
 }
 
+const MOBILE_BREAKPOINT = 1024; // lg breakpoint
+
 export function Sidebar({ role }: SidebarProps) {
   const location = useLocation();
   const { language, setLanguage, tr } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect viewport and listen for resize
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < MOBILE_BREAKPOINT;
+      setIsMobile(mobile);
+      if (!mobile) setIsOpen(false); // Reset drawer state on desktop
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Auto-close sidebar on route change (mobile)
+  useEffect(() => {
+    if (isMobile) setIsOpen(false);
+  }, [location.pathname, isMobile]);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) setIsOpen(false);
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen]);
+
+  // Prevent body scroll when drawer is open
+  useEffect(() => {
+    if (isOpen && isMobile) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen, isMobile]);
+
+  const toggleSidebar = useCallback(() => {
+    soundEffects.playPop();
+    setIsOpen(prev => !prev);
+  }, []);
 
   const studentNavItems: NavItem[] = [
     { label: 'LEARN', sublabel: 'Study path', icon: <Compass size={22} />, path: '/student' },
@@ -81,43 +129,56 @@ export function Sidebar({ role }: SidebarProps) {
     return language === 'es' ? 'Administrador' : 'Administrator';
   };
 
-  return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r-2 border-slate-200 z-50 flex flex-col justify-between select-none">
+  const sidebarContent = (
+    <>
       {/* 🐝 BRAND LOGO HEADER */}
       <div>
         <div className="p-5 border-b-2 border-slate-100">
-          <Link
-            to={role === 'student' ? '/student' : role === 'instructor' ? '/instructor' : '/admin'}
-            onClick={() => soundEffects.playPop()}
-            className="flex items-center gap-3 group"
-          >
-            <motion.div
-              className="w-12 h-12 relative shrink-0"
-              whileHover={{ rotate: [-5, 5, -5, 0], scale: 1.1 }}
-              transition={{ duration: 0.5 }}
+          <div className="flex items-center justify-between">
+            <Link
+              to={role === 'student' ? '/student' : role === 'instructor' ? '/instructor' : '/admin'}
+              onClick={() => soundEffects.playPop()}
+              className="flex items-center gap-3 group"
             >
-              <img
-                src="/bee-logo.png"
-                alt="SkyLang"
-                className="w-full h-full object-contain filter drop-shadow-sm"
-                onError={(e) => {
-                  e.currentTarget.src =
-                    'https://ui-avatars.com/api/?name=Bee&background=FFB800&color=000&rounded=true&size=150';
-                }}
-              />
-            </motion.div>
-            <div>
-              <div className="flex items-center gap-1">
-                <span className="text-xl font-black tracking-tight text-slate-900 group-hover:text-sky-600 transition-colors">
-                  SkyLang
+              <motion.div
+                className="w-12 h-12 relative shrink-0"
+                whileHover={{ rotate: [-5, 5, -5, 0], scale: 1.1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <img
+                  src="/bee-logo.png"
+                  alt="SkyLang"
+                  className="w-full h-full object-contain filter drop-shadow-sm"
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      'https://ui-avatars.com/api/?name=Bee&background=FFB800&color=000&rounded=true&size=150';
+                  }}
+                />
+              </motion.div>
+              <div>
+                <div className="flex items-center gap-1">
+                  <span className="text-xl font-black tracking-tight text-slate-900 group-hover:text-sky-600 transition-colors">
+                    SkyLang
+                  </span>
+                  <Sparkles size={14} className="text-amber-500 fill-amber-400" />
+                </div>
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-sky-600 block">
+                  Nursing English
                 </span>
-                <Sparkles size={14} className="text-amber-500 fill-amber-400" />
               </div>
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-sky-600 block">
-                Nursing English
-              </span>
-            </div>
-          </Link>
+            </Link>
+
+            {/* Close button visible only on mobile */}
+            {isMobile && (
+              <button
+                onClick={toggleSidebar}
+                className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all lg:hidden"
+                aria-label="Close sidebar"
+              >
+                <X size={22} />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* 🚀 NAVIGATION ITEMS (DUOLINGO 3D STYLE) */}
@@ -244,7 +305,58 @@ export function Sidebar({ role }: SidebarProps) {
           <span>{role === 'student' ? 'Log Out' : tr('Cerrar Sesión', 'Log Out')}</span>
         </Link>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* 📱 MOBILE HAMBURGER BUTTON */}
+      {isMobile && !isOpen && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          onClick={toggleSidebar}
+          className="fixed top-3 left-3 z-[60] p-2.5 bg-white border-2 border-slate-200 border-b-4 border-b-slate-300 rounded-2xl shadow-md text-slate-700 hover:text-sky-600 hover:border-sky-200 transition-all active:translate-y-0.5 active:border-b-2"
+          aria-label="Open menu"
+        >
+          <Menu size={22} />
+        </motion.button>
+      )}
+
+      {/* 🖥️ DESKTOP: Fixed sidebar */}
+      {!isMobile && (
+        <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r-2 border-slate-200 z-50 flex flex-col justify-between select-none">
+          {sidebarContent}
+        </aside>
+      )}
+
+      {/* 📱 MOBILE/TABLET: Drawer overlay */}
+      <AnimatePresence>
+        {isMobile && isOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[55]"
+            />
+
+            {/* Drawer Panel */}
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+              className="fixed left-0 top-0 h-screen w-72 max-w-[85vw] bg-white border-r-2 border-slate-200 z-[60] flex flex-col justify-between select-none shadow-2xl"
+            >
+              {sidebarContent}
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
-

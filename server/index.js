@@ -1,6 +1,6 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import path from 'path';
 
 import {
@@ -13,8 +13,6 @@ import authRoutes       from './routes/auth.routes.js';
 import adminRoutes      from './routes/admin/index.js';
 import instructorRoutes from './routes/instructor/index.js';
 import studentRoutes    from './routes/student/index.js';
-
-dotenv.config();
 
 if (!process.env.JWT_SECRET) {
   console.error('❌ ERROR CRÍTICO: La variable de entorno JWT_SECRET no está definida en el archivo .env.');

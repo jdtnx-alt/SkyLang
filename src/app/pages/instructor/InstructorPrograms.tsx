@@ -113,7 +113,7 @@ export function InstructorPrograms() {
     <div className="min-h-screen bg-gray-50 flex">
       <Sidebar role="instructor" />
 
-      <div className="ml-64 flex-1 p-8">
+      <div className="lg:ml-64 flex-1 min-w-0 p-4 sm:p-6 lg:p-8 pt-16 sm:pt-6 lg:pt-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#111111] mb-2">{tr("Programas y Fichas Asignadas", "Programs & Assigned Fichas")}</h1>

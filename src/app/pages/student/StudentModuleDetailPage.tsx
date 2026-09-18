@@ -26,9 +26,9 @@ export function StudentModuleDetailPage() {
     <PageTransition>
       <div className="min-h-screen bg-[#F8FAFC] flex">
         <Sidebar role="student" />
-        <div className="ml-64 flex-1 flex flex-col min-w-0">
+        <div className="lg:ml-64 flex-1 flex flex-col min-w-0">
           <TopGamificationBar />
-          <div className="p-8">
+          <div className="p-4 sm:p-6 lg:p-8">
             {studentId && id && <StudentRapPath moduleId={id} studentId={studentId} />}
           </div>
         </div>

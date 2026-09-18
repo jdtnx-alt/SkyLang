@@ -82,7 +82,7 @@ export function AdminContent() {
     <div className="min-h-screen bg-gray-50">
       <Sidebar role="admin" />
       
-      <div className="ml-64 p-8">
+      <div className="lg:ml-64 p-4 sm:p-6 lg:p-8 pt-16 sm:pt-6 lg:pt-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#111111] mb-2">{tr("Gestión de Contenido", "Content Management")}</h1>
