@@ -362,7 +362,16 @@ router.get('/api/admin/programs', async (req, res) => {
     const query = `
       SELECT p.id, p.nombre as title, p.activo as status, p.descripcion as description,
              (SELECT COUNT(*) FROM raps r WHERE r.programa_id = p.id) as raps_count,
-             (SELECT COUNT(*) FROM modulos m WHERE m.programa_id = p.id) as modulos_count
+             (SELECT COUNT(*) FROM modulos m WHERE m.programa_id = p.id) as modulos_count,
+             (
+               SELECT u.nombre
+               FROM fichas f
+               JOIN instructor_ficha ifi ON ifi.ficha_id = f.id
+               JOIN usuarios u ON u.id = ifi.instructor_id
+               WHERE f.programa_id = p.id
+               ORDER BY f.id DESC
+               LIMIT 1
+             ) as instructor_nombre
       FROM programas p
       ORDER BY p.id DESC
     `;
@@ -373,7 +382,7 @@ router.get('/api/admin/programs', async (req, res) => {
       modules: parseInt(row.modulos_count || 0),
       raps: parseInt(row.raps_count || 0),
       status: row.status ? 'Active' : 'Draft',
-      instructor: 'Instructor Asignado',
+      instructor: row.instructor_nombre || '',
       description: row.description || ''
     }));
     res.json(programs);

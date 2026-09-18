@@ -54,7 +54,7 @@ export function RegisterPage() {
 
     if (formData.password !== formData.confirmPassword) {
       soundEffects.playIncorrect();
-      setError("Las contraseñas no coinciden");
+      setError("Passwords do not match");
       return;
     }
 
@@ -78,15 +78,15 @@ export function RegisterPage() {
 
       if (data.success) {
         soundEffects.playCelebration();
-        alert("¡Registro exitoso! Ya puedes iniciar sesión con tu cuenta.");
+        alert("Registration successful! You can now sign in with your account.");
         navigate("/");
       } else {
         soundEffects.playIncorrect();
-        setError(data.message || "Error al registrar");
+        setError(data.message || "Registration error");
       }
     } catch (err) {
       soundEffects.playIncorrect();
-      setError("Error de conexión con el servidor");
+      setError("Connection error. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -111,15 +111,15 @@ export function RegisterPage() {
             size="md"
             mood="cheering"
             animate
-            message="¡Únete a SkyLang y domina el inglés clínico!"
+            message="Join SkyLang and master clinical English!"
             messagePosition="top"
           />
 
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-1.5 mt-2">
-            Crear Cuenta de Aprendiz <Sparkles size={20} className="text-amber-500 fill-amber-400" />
+            Create a Student Account <Sparkles size={20} className="text-amber-500 fill-amber-400" />
           </h1>
           <p className="text-xs font-bold text-slate-500">
-            Regístrate con tu ficha del SENA para acceder a tus módulos
+            Register with your SENA cohort code to access your modules
           </p>
         </div>
 
@@ -132,7 +132,7 @@ export function RegisterPage() {
         <form onSubmit={handleRegister} className="space-y-3.5">
           <div className="space-y-1">
             <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
-              Nombre Completo
+              Full Name
             </label>
             <div className="relative">
               <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -141,7 +141,7 @@ export function RegisterPage() {
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
-                placeholder="Juan Pérez"
+                placeholder="John Smith"
                 className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border-2 border-slate-200 rounded-2xl text-xs sm:text-sm font-bold text-slate-800 focus:bg-white focus:border-sky-400 focus:outline-none"
                 required
               />
@@ -151,7 +151,7 @@ export function RegisterPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
               <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
-                Correo Electrónico
+                Email Address
               </label>
               <div className="relative">
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -169,7 +169,7 @@ export function RegisterPage() {
 
             <div className="space-y-1">
               <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
-                N° Documento
+                ID Number
               </label>
               <div className="relative">
                 <Hash className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -189,7 +189,7 @@ export function RegisterPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
               <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
-                Programa
+                Program
               </label>
               <div className="relative">
                 <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -200,7 +200,7 @@ export function RegisterPage() {
                   className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border-2 border-slate-200 rounded-2xl text-xs sm:text-sm font-bold text-slate-800 focus:bg-white focus:border-sky-400 focus:outline-none"
                   required
                 >
-                  <option value="">Seleccionar programa</option>
+                  <option value="">Select a program</option>
                   {programs.map((p) => (
                     <option key={p.id} value={p.id}>{p.nombre}</option>
                   ))}
@@ -210,7 +210,7 @@ export function RegisterPage() {
 
             <div className="space-y-1">
               <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
-                Ficha SENA
+                SENA Cohort (Ficha)
               </label>
               <div className="relative">
                 <Layers className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -222,10 +222,10 @@ export function RegisterPage() {
                   className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border-2 border-slate-200 rounded-2xl text-xs sm:text-sm font-bold text-slate-800 focus:bg-white focus:border-sky-400 focus:outline-none disabled:opacity-50"
                   required
                 >
-                  <option value="">Seleccionar ficha</option>
+                  <option value="">Select a cohort</option>
                   {filteredFichas.map((f) => (
-                    <option key={f.id} value={f.codigo || f.numero || f.id}>
-                      Ficha {f.codigo || f.numero || f.id}
+                    <option key={f.id} value={f.id}>
+                      Cohort {f.numero_ficha || f.id}
                     </option>
                   ))}
                 </select>
@@ -236,7 +236,7 @@ export function RegisterPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
               <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
-                Contraseña
+                Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -254,7 +254,7 @@ export function RegisterPage() {
 
             <div className="space-y-1">
               <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
-                Confirmar Contraseña
+                Confirm Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -277,19 +277,19 @@ export function RegisterPage() {
             className="btn-duo-3d btn-duo-sky w-full py-3.5 text-sm flex items-center justify-center gap-2 mt-4"
           >
             <UserPlus size={18} />
-            <span>{isLoading ? "Creando tu cuenta..." : "Crear mi Cuenta"}</span>
+            <span>{isLoading ? "Creating your account..." : "Create My Account"}</span>
           </button>
         </form>
 
         <div className="text-center pt-2">
           <p className="text-xs font-bold text-slate-500">
-            ¿Ya tienes una cuenta?{" "}
+            Already have an account?{" "}
             <Link
               to="/"
               onClick={() => soundEffects.playPop()}
               className="text-sky-600 font-black hover:underline"
             >
-              Inicia sesión aquí
+              Sign in here
             </Link>
           </p>
         </div>

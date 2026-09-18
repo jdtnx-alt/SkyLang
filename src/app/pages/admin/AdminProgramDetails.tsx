@@ -43,32 +43,34 @@ export function AdminProgramDetails() {
 
   useEffect(() => { recargar(); }, [id]);
 
-  const eliminarFicha = async (ficha: any) => {
-    // Borrar una ficha se lleva por delante su contenido y el progreso de sus
-    // aprendices, así que se avisa de cuántos hay antes de confirmar.
-    const aviso = ficha.aprendices > 0
-      ? tr(
-          `La ficha ${ficha.title} tiene ${ficha.aprendices} aprendiz(ces) matriculados. Al eliminarla se borran sus actividades, contenidos y progreso. ¿Continuar?`,
-          `Ficha ${ficha.title} has ${ficha.aprendices} enrolled student(s). Deleting it removes all its activities, content and progress. Continue?`
-        )
-      : tr(`¿Eliminar la ficha ${ficha.title}?`, `Delete ficha ${ficha.title}?`);
-    if (!window.confirm(aviso)) return;
+  const [fichaToDelete, setFichaToDelete] = useState<any>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
+  const confirmarEliminarFicha = async () => {
+    if (!fichaToDelete) return;
+    setIsDeleting(true);
+    setDeleteError(null);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`/api/admin/courses/${ficha.id}`, {
+      const res = await fetch(`/api/admin/courses/${fichaToDelete.id}`, {
         method: 'DELETE',
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
-      if (res.ok) recargar();
-      else {
+      if (res.ok) {
+        setFichaToDelete(null);
+        recargar();
+      } else {
         const err = await res.json().catch(() => ({}));
-        alert(err.message || err.error || tr('No se pudo eliminar la ficha.', 'Could not delete ficha.'));
+        setDeleteError(err.message || err.error || tr('Could not delete ficha.', 'Could not delete ficha.'));
       }
     } catch {
-      alert(tr('No se pudo eliminar la ficha. Revisa tu conexión.', 'Could not delete ficha. Check your connection.'));
+      setDeleteError(tr('Could not delete ficha. Check your connection.', 'Could not delete ficha. Check your connection.'));
+    } finally {
+      setIsDeleting(false);
     }
   };
+
 
   if (isLoading) {
     return (
@@ -221,7 +223,7 @@ export function AdminProgramDetails() {
                       {tr("Editar", "Edit")}
                     </button>
                     <button
-                      onClick={() => eliminarFicha(course)}
+                      onClick={() => { setDeleteError(null); setFichaToDelete(course); }}
                       className="px-3 py-1.5 border border-gray-200 hover:border-rose-400 hover:text-rose-600 rounded-lg text-xs font-semibold text-gray-600"
                     >
                       {tr("Eliminar", "Delete")}
@@ -249,6 +251,92 @@ export function AdminProgramDetails() {
           onCerrar={() => setMostrarModalFicha(false)}
           onGuardado={() => { setMostrarModalFicha(false); recargar(); }}
         />
+      )}
+
+      {/* Delete Ficha Confirmation Modal */}
+      {fichaToDelete && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+            {/* Red top bar */}
+            <div className="h-1.5 bg-rose-500 w-full" />
+
+            <div className="p-6 space-y-4">
+              {/* Icon + title */}
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
+                  <Book size={22} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">
+                    {tr("Eliminar ficha", "Delete Ficha")}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-0.5">
+                    <span className="font-semibold text-gray-800">{fichaToDelete.title}</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Warning message */}
+              <div className="rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800">
+                {fichaToDelete.aprendices > 0 ? (
+                  <>
+                    <p className="font-semibold mb-1">
+                      {tr(
+                        `Esta ficha tiene ${fichaToDelete.aprendices} aprendiz(ces) matriculado(s).`,
+                        `This ficha has ${fichaToDelete.aprendices} enrolled student(s).`
+                      )}
+                    </p>
+                    <p>
+                      {tr(
+                        "Al eliminarla se borrarán todas sus actividades, contenidos y progreso de aprendices. Esta acción no se puede deshacer.",
+                        "Deleting it will permanently remove all its activities, content and student progress. This action cannot be undone."
+                      )}
+                    </p>
+                  </>
+                ) : (
+                  <p>
+                    {tr(
+                      "Al eliminar esta ficha se borrarán todos sus datos asociados. Esta acción no se puede deshacer.",
+                      "Deleting this ficha will permanently remove all its associated data. This action cannot be undone."
+                    )}
+                  </p>
+                )}
+              </div>
+
+              {/* Error */}
+              {deleteError && (
+                <p className="rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium p-3">
+                  {deleteError}
+                </p>
+              )}
+
+              {/* Actions */}
+              <div className="flex gap-3 pt-1">
+                <button
+                  onClick={() => { setFichaToDelete(null); setDeleteError(null); }}
+                  disabled={isDeleting}
+                  className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-xl font-medium text-sm hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                >
+                  {tr("Cancelar", "Cancel")}
+                </button>
+                <button
+                  onClick={confirmarEliminarFicha}
+                  disabled={isDeleting}
+                  className="flex-1 px-4 py-2.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-medium text-sm disabled:opacity-60 transition-colors flex items-center justify-center gap-2"
+                >
+                  {isDeleting ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      {tr("Eliminando...", "Deleting...")}
+                    </>
+                  ) : (
+                    tr("Sí, eliminar", "Yes, delete")
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

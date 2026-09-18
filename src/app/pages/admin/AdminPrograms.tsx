@@ -24,8 +24,6 @@ export function AdminPrograms() {
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [newTitle, setNewTitle] = useState("");
-  const [newInstructor, setNewInstructor] = useState("");
-  const [instructors, setInstructors] = useState<{id: number, name: string}[]>([]);
   const [newStatus, setNewStatus] = useState("Draft");
   const [newDescription, setNewDescription] = useState("");
 
@@ -35,17 +33,10 @@ export function AdminPrograms() {
       const token = localStorage.getItem('token');
       const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
 
-      const [programsRes, instructorsRes] = await Promise.all([
-        fetch('/api/admin/programs', { headers: authHeaders }),
-        fetch('/api/instructores')
-      ]);
+      const programsRes = await fetch('/api/admin/programs', { headers: authHeaders });
       if (programsRes.ok) {
         const data = await programsRes.json();
         setPrograms(data);
-      }
-      if (instructorsRes.ok) {
-        const data = await instructorsRes.json();
-        setInstructors(data);
       }
     } catch (error) {
       console.error("Error fetching programs", error);
@@ -63,7 +54,6 @@ export function AdminPrograms() {
     setEditingId(null);
     setNewTitle("");
     setNewStatus("Draft");
-    setNewInstructor("");
     setNewDescription("");
   };
 
@@ -71,7 +61,6 @@ export function AdminPrograms() {
     setEditingId(prog.id);
     setNewTitle(prog.title);
     setNewStatus(prog.status);
-    setNewInstructor(prog.instructor || "");
     setNewDescription(prog.description || "");
     setIsCreating(true);
   };
@@ -112,7 +101,6 @@ export function AdminPrograms() {
         body: JSON.stringify({
           title: newTitle.toUpperCase(),
           status: newStatus,
-          instructor: newInstructor,
           description: newDescription
         })
       });
@@ -196,29 +184,16 @@ export function AdminPrograms() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{tr("Instructor Principal", "Main Instructor")}</label>
-                  <select 
-                    value={newInstructor}
-                    onChange={(e) => setNewInstructor(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
-                  >
-                    <option value="">{tr("Seleccionar Instructor", "Select Instructor")}</option>
-                    {instructors.map(instructor => (
-                      <option key={instructor.id} value={instructor.name}>{instructor.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{tr("Estado", "Status")}</label>
-                  <select 
-                    value={newStatus}
-                    onChange={(e) => setNewStatus(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
-                  >
-                    <option value="Draft">{tr("Borrador", "Draft")}</option>
-                    <option value="Active">{tr("Activo", "Active")}</option>
-                  </select>
-                </div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{tr("Estado", "Status")}</label>
+                <select 
+                  value={newStatus}
+                  onChange={(e) => setNewStatus(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#4DA6FF]"
+                >
+                  <option value="Draft">{tr("Borrador", "Draft")}</option>
+                  <option value="Active">{tr("Activo", "Active")}</option>
+                </select>
+              </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{tr("Descripción", "Description")}</label>

@@ -143,9 +143,7 @@ export function StudentProfile() {
                   <div className="p-4 bg-purple-50 border-2 border-purple-200 rounded-2xl space-y-1">
                     <span className="text-[10px] font-black uppercase tracking-wider text-purple-700">Training Program</span>
                     <p className="text-sm font-black text-slate-900 truncate">
-                      {perfil.programa_nombre?.toLowerCase().includes('enfermer') || perfil.programa_nombre?.toLowerCase().includes('nursing')
-                        ? 'Nursing - Technical English'
-                        : perfil.programa_nombre || 'English for Nursing'}
+                      {perfil.programa_nombre || 'No program assigned'}
                     </p>
                   </div>
                 </div>
