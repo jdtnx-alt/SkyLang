@@ -22,7 +22,7 @@ interface InstructorProgram {
 }
 
 export function InstructorPrograms() {
-  const { tr } = useLanguage();
+  const { tr, trPhase, trModule, trProgram } = useLanguage();
   const navigate = useNavigate();
   const [programs, setPrograms] = useState<InstructorProgram[]>([]);
   const [filteredPrograms, setFilteredPrograms] = useState<InstructorProgram[]>([]);
@@ -183,7 +183,7 @@ export function InstructorPrograms() {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#4DA6FF]" />
-                      <h2 className="text-xl font-bold text-gray-900">{program.title}</h2>
+                      <h2 className="text-xl font-bold text-gray-900">{trProgram(program.title)}</h2>
                     </div>
                     <p className="text-sm text-gray-600 max-w-3xl">{program.description}</p>
                   </div>

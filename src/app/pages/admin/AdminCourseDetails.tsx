@@ -17,7 +17,7 @@ import {
 export function AdminCourseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { tr } = useLanguage();
+  const { tr, trPhase, trModule, trProgram } = useLanguage();
   const [activeTab, setActiveTab] = useState("overview");
   const [courseData, setCourseData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -259,11 +259,11 @@ export function AdminCourseDetails() {
                         <div key={mod.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
                           <div className="flex items-center gap-3">
                             <Activity className="text-gray-400 w-4 h-4" />
-                            <span className="font-medium text-gray-700">{mod.title}</span>
+                            <span className="font-medium text-gray-700">{trModule(mod.title)}</span>
                           </div>
                           {mod.fase && (
                             <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                              {mod.fase}
+                              {trPhase(mod.fase)}
                             </span>
                           )}
                         </div>

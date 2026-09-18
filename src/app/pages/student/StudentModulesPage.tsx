@@ -1,3 +1,4 @@
+import { translatePhase, translateModuleTitle } from '../../context/LanguageContext';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Sidebar } from '../../components/Sidebar';
@@ -128,7 +129,7 @@ export function StudentModulesPage() {
                         </div>
 
                         <h2 className="text-lg font-black text-slate-900 leading-snug">
-                          {mod.title}
+                          {translateModuleTitle(mod.title, 'en')}
                         </h2>
                       </div>
 

@@ -21,6 +21,7 @@ import { Momento3ActivityRunner } from './Momento3ActivityRunner';
 import { ContenidoDeEstudio } from './ContenidoDeEstudio';
 import { BeeMascot } from '../BeeMascot';
 import { soundEffects } from '../../utils/soundEffects';
+import { translatePhase, translateModuleTitle } from '../../context/LanguageContext';
 
 interface RapResumen {
   id: number;
@@ -331,7 +332,7 @@ export const StudentRapPath: React.FC<Props> = ({ moduleId, studentId }) => {
               })()}
             </span>
             <h2 className="text-xl sm:text-2xl font-black mt-2 leading-tight">
-              {modulo?.title || 'English Module'}
+              {translateModuleTitle(modulo?.title || 'English Module', 'en')}
             </h2>
             <p className="text-xs text-sky-100 font-semibold mt-1">
               {raps.filter((r) => r.estado === 'completado' || r.estado === 'excelencia').length} of {raps.length} RAPs mastered

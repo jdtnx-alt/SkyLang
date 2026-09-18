@@ -26,7 +26,7 @@ interface ProgramOption {
 }
 
 export function InstructorModules() {
-  const { tr } = useLanguage();
+  const { tr, trPhase, trModule, trProgram } = useLanguage();
   const [modules, setModules] = useState<ModuleItem[]>([]);
   const [filteredModules, setFilteredModules] = useState<ModuleItem[]>([]);
   const [programs, setPrograms] = useState<ProgramOption[]>([]);
@@ -310,7 +310,7 @@ export function InstructorModules() {
                     <span className="text-xs text-gray-500 font-medium">{mod.programaTitulo}</span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{mod.titulo}</h3>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{trModule(mod.titulo)}</h3>
                   <p className="text-sm text-gray-600 mb-4">{mod.descripcion || tr("Sin descripción asignada.", "No description assigned.")}</p>
 
                   {/* RAPs chips if any */}

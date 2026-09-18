@@ -56,7 +56,7 @@ interface Modulo {
 export function InstructorRapMomentos() {
   const { fichaId, rapId } = useParams();
   const navigate = useNavigate();
-  const { tr } = useLanguage();
+  const { tr, trPhase, trModule, trProgram } = useLanguage();
 
   const [loading, setLoading] = useState(true);
   const [fichaInfo, setFichaInfo] = useState<any>(null);
@@ -363,7 +363,7 @@ export function InstructorRapMomentos() {
               </div>
               <div>
                 <span className="text-xs font-bold text-[#4DA6FF] uppercase tracking-wider">
-                  {currentModulo?.titulo || tr("Módulo Académico", "Academic Module")}
+                  {trModule(currentModulo?.titulo) || tr("Módulo Académico", "Academic Module")}
                 </span>
                 <h1 className="text-2xl font-bold text-gray-900">
                   {currentRap?.titulo || tr("Resultado de Aprendizaje (RAP)", "Learning Outcome (RAP)")}

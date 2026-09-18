@@ -1,3 +1,4 @@
+import { translatePhase, translateModuleTitle } from "../../context/LanguageContext";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Sidebar } from "../../components/Sidebar";
@@ -210,7 +211,7 @@ export function StudentDashboard() {
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase tracking-wider text-sky-600 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-100">
-                              {mod.fase || `Unit ${idx + 1}`}
+                              {translatePhase(mod.fase, 'en') || `Unit ${idx + 1}`}
                             </span>
                             {isModCompleted ? (
                               <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-full flex items-center gap-1">
@@ -224,7 +225,7 @@ export function StudentDashboard() {
                           </div>
 
                           <h3 className="font-black text-slate-900 text-sm leading-snug line-clamp-2">
-                            {mod.title}
+                            {translateModuleTitle(mod.title, "en")}
                           </h3>
                         </div>
 

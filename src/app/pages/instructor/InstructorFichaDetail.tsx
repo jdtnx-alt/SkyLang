@@ -60,7 +60,7 @@ interface Student {
 }
 
 export function InstructorFichaDetail() {
-  const { tr } = useLanguage();
+  const { tr, trPhase, trModule, trProgram } = useLanguage();
   const { fichaId } = useParams();
   const navigate = useNavigate();
 
@@ -232,7 +232,7 @@ export function InstructorFichaDetail() {
                   </span>
                 </div>
                 <p className="text-sm text-gray-600">
-                  {tr("Programa:", "Program:")} <strong>{fichaInfo?.programa_nombre || "Nursing English"}</strong>
+                  {tr("Programa:", "Program:")} <strong>{trProgram(fichaInfo?.programa_nombre) || "Nursing English"}</strong>
                 </p>
               </div>
             </div>
@@ -302,9 +302,9 @@ export function InstructorFichaDetail() {
                   <div className="bg-[#4DA6FF]/10 border-b border-[#4DA6FF]/20 px-5 py-3 flex justify-between items-center">
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-[#4DA6FF]">
-                        {mod.fase || tr("Fase de Formación", "Training Phase")}
+                        {trPhase(mod.fase)}
                       </span>
-                      <h2 className="text-base font-bold text-gray-900">{mod.titulo}</h2>
+                      <h2 className="text-base font-bold text-gray-900">{trModule(mod.titulo)}</h2>
                     </div>
                     <span className="px-2.5 py-0.5 bg-white border border-[#4DA6FF]/30 text-[#4DA6FF] rounded-full text-xs font-bold shadow-2xs">
                       {mod.raps.length} RAPs
